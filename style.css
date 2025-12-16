@@ -14,6 +14,7 @@
 
 html {
     scroll-behavior: smooth;
+    height: 100%; /* Ensure html takes full height */
 }
 
 body {
@@ -22,6 +23,11 @@ body {
     color: var(--dark-color);
     background-color: var(--white-color);
     overflow-x: hidden;
+    
+    /* --- STICKY FOOTER FIX --- */
+    min-height: 100vh; /* Minimum height is 100% of viewport */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
 }
 
 /* --- NAVIGATION --- */
@@ -42,6 +48,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    width: 100%; /* Ensure nav spans width */
 }
 
 .logo {
@@ -111,6 +118,7 @@ nav {
     
     /* Default height for Home Page */
     height: 90vh; 
+    width: 100%;
 }
 
 /* Smaller Hero for Sub-pages */
@@ -156,6 +164,7 @@ section {
     padding: 80px 20px;
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%; /* Ensure section takes width */
 }
 
 h2 {
@@ -232,6 +241,7 @@ h2::after {
     color: var(--white-color);
     padding: 60px 20px;
     text-align: center;
+    width: 100%;
 }
 .stats-grid {
     display: flex;
@@ -280,7 +290,7 @@ h2::after {
     height: 150px;
 }
 
-/* --- PHOTO GALLERY (FIXED: MASONRY & AUTO-HEIGHT) --- */
+/* --- PHOTO GALLERY (NUCLEAR FIX) --- */
 .gallery-grid {
     column-count: 4; 
     column-gap: 15px; 
@@ -288,18 +298,21 @@ h2::after {
 }
 
 .gallery-item {
-    /* NO HEIGHT SET HERE - This fixes the gray squares */
+    height: auto !important; 
+    min-height: 0 !important; 
     break-inside: avoid; 
     margin-bottom: 15px; 
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     background: #ccc; 
+    display: inline-block; 
+    width: 100%;
 }
 
 .gallery-item img {
-    width: 100%;
-    height: auto; /* Image calculates its own height */
+    width: 100% !important;
+    height: auto !important; 
     display: block; 
     object-fit: cover; 
     transition: transform 0.4s ease;
@@ -372,6 +385,9 @@ footer {
     color: #999;
     padding: 50px 20px;
     text-align: center;
+    
+    /* --- STICKY FOOTER PART 2 --- */
+    margin-top: auto; /* Pushes footer to bottom */
 }
 
 .hidden {
