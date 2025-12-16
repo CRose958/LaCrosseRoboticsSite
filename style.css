@@ -100,7 +100,7 @@ nav {
     /* Cloudflare Background Image */
     background: linear-gradient(rgba(28, 28, 28, 0.85), rgba(28, 28, 28, 0.7)), 
                 url('https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/25e00e83-ed49-4f42-8e9f-d5cb04cdc700/public'); 
-    background-size: cover; /* Ensures bg image covers area without white space */
+    background-size: cover; 
     background-position: center;
     display: flex;
     justify-content: center;
@@ -193,7 +193,7 @@ h2::after {
 .feature-image {
     width: 100%;
     height: auto;
-    object-fit: cover; /* Ensures image fills space without stretching */
+    object-fit: cover; 
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     display: block;
@@ -260,10 +260,10 @@ h2::after {
 }
 
 .sponsor-logo {
-    width: 100%;           /* Responsive width */
-    max-width: 200px;      /* Maximum limit */
-    height: 120px;         /* Fixed height container for uniformity */
-    object-fit: contain;   /* Fits image inside box without cutting/stretching */
+    width: 100%;           
+    max-width: 200px;      
+    height: 120px;         
+    object-fit: contain;   
     filter: grayscale(100%);
     opacity: 0.7;
     transition: all 0.3s;
@@ -280,7 +280,7 @@ h2::after {
     height: 150px;
 }
 
-/* --- PHOTO GALLERY (MASONRY & AUTO-FIT) --- */
+/* --- PHOTO GALLERY (FIXED: MASONRY & AUTO-HEIGHT) --- */
 .gallery-grid {
     column-count: 4; 
     column-gap: 15px; 
@@ -288,19 +288,20 @@ h2::after {
 }
 
 .gallery-item {
+    /* NO HEIGHT SET HERE - This fixes the gray squares */
     break-inside: avoid; 
     margin-bottom: 15px; 
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    background: #ccc; /* Loading background */
+    background: #ccc; 
 }
 
 .gallery-item img {
     width: 100%;
-    height: auto; 
+    height: auto; /* Image calculates its own height */
     display: block; 
-    object-fit: cover; /* Prevents distortion */
+    object-fit: cover; 
     transition: transform 0.4s ease;
     cursor: pointer;
 }
@@ -334,7 +335,7 @@ h2::after {
     display: block;
     max-width: 90%;
     max-height: 90vh;
-    object-fit: contain; /* Ensures full image is visible on screen */
+    object-fit: contain;
     border-radius: 4px;
     box-shadow: 0 0 20px rgba(255,255,255,0.2);
     animation: zoomIn 0.3s ease;
