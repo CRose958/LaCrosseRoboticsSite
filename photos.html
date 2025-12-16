@@ -7,6 +7,96 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+
+    <style>
+        /* --- Gallery Grid Layout --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px; /* Fixed height for uniformity */
+            object-fit: cover; /* Ensures image fills box without stretching */
+            display: block;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item img:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- Lightbox Styles --- */
+        .lightbox {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .lightbox-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 1000px;
+            max-height: 80vh;
+            object-fit: contain;
+            margin-top: 50px;
+            border-radius: 4px;
+            animation: zoom 0.3s;
+        }
+
+        @keyframes zoom {
+            from {transform:scale(0)} 
+            to {transform:scale(1)}
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Navigation Hint */
+        .nav-hint {
+            text-align: center;
+            color: #ccc;
+            margin-top: 15px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
 
@@ -34,37 +124,23 @@
     <section>
         <div class="gallery-grid">
             
-            <div class="gallery-item">
-                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/0df305b3-d2a9-4ed4-2bbf-76ca3dea4600/public">
-            </div>
-            
-            <div class="gallery-item">
-                <img src="https://placehold.co/600x400?text=Wide+Photo" alt="Team Group">
-            </div>
-
-            <div class="gallery-item">
-                <img src="https://placehold.co/400x400?text=Square+Photo" alt="Competition Match">
-            </div>
-
-            <div class="gallery-item">
-                <img src="https://placehold.co/400x550?text=Tall+Photo+2" alt="Pit Crew">
-            </div>
-
-            <div class="gallery-item">
-                <img src="https://placehold.co/600x350?text=Wide+Photo+2" alt="Award Ceremony">
-            </div>
-
-            <div class="gallery-item">
-                <img src="https://placehold.co/400x700?text=Very+Tall" alt="Climbing Mechanism">
-            </div>
-            
-            <div class="gallery-item">
-                <img src="https://placehold.co/500x500?text=Action+Shot" alt="Field Action">
-            </div>
-
-            <div class="gallery-item">
-                <img src="https://placehold.co/600x400?text=Wide+Photo+3" alt="Drive Team">
-            </div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/4b383238-d569-42f4-ebb6-939a17b26300/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/0df305b3-d2a9-4ed4-2bbf-76ca3dea4600/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/24dc36ec-8187-4d1f-4203-23508a9ab300/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/ca4c5999-f1a9-4127-834c-8e6450c97200/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/9d911dfb-8178-4717-4d76-a72b432c4700/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/e79b5c06-6fc0-4c51-9380-f0568c7f0800/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/678b6f7a-7946-46af-be6e-dee85da23200/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/ea23cdea-b8aa-426f-8e40-7c5626a1d000/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/1242b9c4-b06b-4106-030e-571fda5e1900/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/55696293-47be-4383-c993-d9ff334c2300/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/cb25b024-a017-481c-4115-37b86bf1b200/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/e433bd17-a6ac-44ae-7b3f-1e8bac3db400/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/703b71fd-dadc-43a1-669a-ac9210a5bb00/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/de6800ee-c812-4027-3d28-3c8de1ce5700/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/349a0e7a-7436-4d54-42ab-7741008f4e00/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/b5081598-4871-4f5d-2d68-de2d8ce1d200/public" loading="lazy" alt="Team Photo"></div>
+            <div class="gallery-item"><img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/bef4d028-16af-4489-4d5f-1e7c650a9f00/public" loading="lazy" alt="Team Photo"></div>
 
         </div>
     </section>
@@ -78,7 +154,65 @@
     <div id="lightbox" class="lightbox">
         <span class="close-btn">&times;</span>
         <img class="lightbox-content" id="lightbox-img">
+        <div class="nav-hint">Use Left / Right Arrows to Navigate</div>
     </div>
+
+    <script>
+        // DOM Elements
+        const modal = document.getElementById("lightbox");
+        const modalImg = document.getElementById("lightbox-img");
+        const closeBtn = document.querySelector(".close-btn");
+        
+        // Convert NodeList to Array for easier index navigation
+        const images = Array.from(document.querySelectorAll(".gallery-item img"));
+        let currentIndex = 0;
+
+        // Open Lightbox on Click
+        images.forEach((img, index) => {
+            img.addEventListener('click', function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                currentIndex = index;
+            });
+        });
+
+        // Close Lightbox function
+        function closeLightbox() {
+            modal.style.display = "none";
+        }
+
+        // Close events
+        closeBtn.addEventListener('click', closeLightbox);
+        
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function(e) {
+            if (modal.style.display === "block") {
+                if (e.key === "ArrowLeft") {
+                    showPrev();
+                } else if (e.key === "ArrowRight") {
+                    showNext();
+                } else if (e.key === "Escape") {
+                    closeLightbox();
+                }
+            }
+        });
+
+        function showNext() {
+            currentIndex = (currentIndex + 1) % images.length; // Loops to start
+            modalImg.src = images[currentIndex].src;
+        }
+
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length; // Loops to end
+            modalImg.src = images[currentIndex].src;
+        }
+    </script>
 
 </body>
 </html>
