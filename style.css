@@ -95,20 +95,28 @@ nav {
     transition: 0.4s;
 }
 
-/* --- HERO SECTION --- */
+/* --- HERO SECTIONS --- */
 .hero {
-    /* UPDATED WITH YOUR CLOUDFLARE IMAGE ID */
+    /* Your Cloudflare Image is applied here */
     background: linear-gradient(rgba(28, 28, 28, 0.85), rgba(28, 28, 28, 0.7)), 
                 url('https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/25e00e83-ed49-4f42-8e9f-d5cb04cdc700/public'); 
     background-size: cover;
     background-position: center;
-    height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: var(--white-color);
     padding: 0 20px;
+    
+    /* Default height for Home Page */
+    height: 90vh; 
+}
+
+/* Smaller Hero for Sub-pages */
+.hero.small {
+    height: 50vh;
+    min-height: 300px;
 }
 
 .hero-content h1 {
@@ -133,6 +141,7 @@ nav {
     text-decoration: none;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 1px;
     transition: all 0.3s;
     border: 2px solid var(--primary-color);
 }
@@ -142,7 +151,7 @@ nav {
     color: var(--primary-color);
 }
 
-/* --- SECTIONS --- */
+/* --- GENERAL SECTIONS --- */
 section {
     padding: 80px 20px;
     max-width: 1200px;
@@ -180,19 +189,16 @@ h2::after {
     min-width: 300px;
 }
 
-.placeholder-img {
-    background: var(--dark-color);
+/* Used for "About" section image */
+.feature-image {
     width: 100%;
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--white-color);
-    font-weight: 700;
+    height: auto;
     border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    display: block;
 }
 
-/* --- CARDS --- */
+/* --- CARDS (Startup Model) --- */
 .card-container {
     display: flex;
     gap: 20px;
@@ -214,7 +220,12 @@ h2::after {
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* --- STATS --- */
+.card h3 {
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+/* --- STATS BANNER --- */
 .stats-banner {
     background-color: var(--primary-color);
     color: var(--white-color);
@@ -234,32 +245,10 @@ h2::after {
 .stat-number {
     font-size: 3.5rem;
     font-weight: 700;
-    color: #ffcc00; /* Gold accent */
+    color: #ffcc00; /* Gold */
 }
 
-/* --- FOOTER --- */
-footer {
-    background-color: var(--dark-color);
-    color: #999;
-    padding: 50px 20px;
-    text-align: center;
-}
-
-/* --- ANIMATIONS --- */
-.hidden {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 1s ease-out;
-}
-.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-.regional-hub {
-    background-color: var(--bg-gray);
-}
-
-/* --- SPONSORS & GALLERY --- */
+/* --- SPONSOR GRID --- */
 .sponsor-grid {
     display: flex;
     justify-content: center;
@@ -284,6 +273,7 @@ footer {
     max-width: 300px;
 }
 
+/* --- PHOTO GALLERY --- */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -296,25 +286,41 @@ footer {
     height: 300px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background-color: #ddd; /* Fallback color */
 }
-.gallery-item img, .gallery-item div {
+.gallery-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
 }
-.gallery-item:hover img, .gallery-item:hover div {
+.gallery-item:hover img {
     transform: scale(1.1);
 }
-.feature-image {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    display: block;
+
+/* --- FOOTER & ANIMATIONS --- */
+footer {
+    background-color: var(--dark-color);
+    color: #999;
+    padding: 50px 20px;
+    text-align: center;
 }
 
-/* --- MOBILE --- */
+.hidden {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease-out;
+}
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.regional-hub {
+    background-color: var(--bg-gray);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
     .menu-toggle {
         display: flex;

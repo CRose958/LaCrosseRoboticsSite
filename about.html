@@ -9,9 +9,10 @@
     <script src="script.js" defer></script>
 </head>
 <body>
+
     <header>
         <nav>
-            <div class="logo"><a href="index.html" style="color:white; text-decoration:none;">Team <span>4054</span></a></div>
+            <div class="logo"><a href="index.html">Team <span>4054</span></a></div>
             <div class="menu-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
@@ -22,24 +23,40 @@
             </ul>
         </nav>
     </header>
-    <div class="hero" style="height: 50vh; min-height: 300px;">
+
+    <div class="hero small">
         <div class="hero-content fade-in">
             <h1>About The Aeronauts</h1>
             <p>Our History, Our Mission, and Our Schools.</p>
         </div>
     </div>
-    <section>
+
+    <section class="hidden">
         <h2>Our Mission</h2>
         <p>Team 4054 "The Aeronauts" is more than just a robot-building club. We are a coalition of students from the School District of La Crosse dedicated to mastering STEM skills through the rigors of the FIRST Robotics Competition.</p>
+        <p>Our goal is to prepare students for the future workforce by operating like a technology startup. We have deadlines, budgets, marketing requirements, and engineering constraints.</p>
     </section>
-    <section style="background-color: var(--bg-gray);">
+
+    <section style="background-color: var(--bg-gray);" class="hidden">
         <h2>The Tri-School Alliance</h2>
+        <p>We are unique because we unite students who are normally rivals in sports into one cohesive engineering unit.</p>
+        
         <div class="flex-container">
-            <div class="card"><h3>Central High School</h3><p>Legacy of academic excellence.</p></div>
-            <div class="card"><h3>Logan High School</h3><p>Strong community spirit and innovation.</p></div>
-            <div class="card"><h3>Polytechnic</h3><p>Specialized project-based learning center.</p></div>
+            <div class="card">
+                <h3>Central High School</h3>
+                <p>Located in the heart of the city, bringing a legacy of academic excellence.</p>
+            </div>
+            <div class="card">
+                <h3>Logan High School</h3>
+                <p>From the North Side, bringing strong community spirit and innovation.</p>
+            </div>
+            <div class="card">
+                <h3>Polytechnic</h3>
+                <p>Our project-based learning center, providing specialized hands-on expertise.</p>
+            </div>
         </div>
     </section>
+
     <footer id="contact">
         <h3>La Crosse Robotics | Team 4054</h3>
         <p>&copy; 2025 The Aeronauts. All Rights Reserved.</p>
