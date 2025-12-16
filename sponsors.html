@@ -7,8 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
     <style>
-        /* Page-specific styles */
+        /* --- Page-Specific Styles (Dark Mode) --- */
+        
+        body {
+            background-color: #1c1c1c; /* Dark Background */
+            color: #ffffff; /* White Text */
+        }
+
         .hero.small {
             height: 40vh;
             min-height: 300px;
@@ -24,14 +31,14 @@
 
         .sponsors-section {
             padding: 60px 20px;
-            background-color: #fff;
+            background-color: #1c1c1c; /* Dark Background matches body */
             text-align: center;
         }
 
         .sponsors-section h2 {
             font-size: 2.5rem;
             margin-bottom: 40px;
-            color: #111;
+            color: #ffffff; /* White Text */
         }
 
         .sponsors-grid {
@@ -44,18 +51,32 @@
             align-items: center;
         }
 
+        /* We style the image itself */
         .sponsor-logo {
             max-width: 250px;
             height: auto;
+            
+            /* White background box so dark logos are visible */
+            background-color: #ffffff; 
+            padding: 20px; 
+            border-radius: 8px;
+
             filter: grayscale(100%);
             transition: all 0.3s ease;
-            opacity: 0.7;
+            opacity: 0.8;
+            display: block; /* Helps remove tiny gaps inside the link */
         }
 
         .sponsor-logo:hover {
             filter: grayscale(0%);
             opacity: 1;
             transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        /* Remove default link underline */
+        .sponsors-grid a {
+            text-decoration: none;
         }
 
         @media (max-width: 768px) {
@@ -65,10 +86,10 @@
             }
             .sponsor-logo {
                 max-width: 150px;
+                padding: 10px;
             }
         }
     </style>
-    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
 </head>
 <body>
 
@@ -96,7 +117,7 @@
         <div class="sponsors-grid">
             
             <a href="https://www.hsrassociates.com" target="_blank">
-                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/93c7667d-c3c9-4ef1-a75a-68fac9f84c00/public" alt="HSR Architecture" class="sponsor-logo">
+                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/93c7667d-c3c9-4ef1-a75a-68fac9f84c00/public" alt="HSR Architecture Engineering Interior Design" class="sponsor-logo">
             </a>
             
             <a href="https://dpi.wi.gov" target="_blank">
@@ -125,3 +146,12 @@
 
         </div>
     </section>
+
+    <footer id="contact">
+        <h3>La Crosse Robotics | Team 4054</h3>
+        <p>School District of La Crosse</p>
+        <p>&copy; 2025 The Aeronauts. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
