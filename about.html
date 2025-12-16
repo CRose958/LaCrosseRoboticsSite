@@ -7,6 +7,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    
+    <style>
+        /* --- Dark Mode Overrides for this Page --- */
+        body {
+            background-color: #1c1c1c; /* Requested Dark Background */
+            color: #ffffff; /* Switch text to White for readability */
+        }
+
+        /* Fix the underline under H2s to be white instead of black */
+        h2::after {
+            background: #ffffff; 
+        }
+
+        /* Ensure the text inside the white 'cards' stays dark */
+        .card {
+            color: #1c1c1c;
+        }
+        .card h3 {
+            color: #1c1c1c;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,6 +41,7 @@
                 <li><a href="about.html">About Us</a></li>
                 <li><a href="sponsors.html">Sponsors</a></li>
                 <li><a href="photos.html">Photos</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -37,7 +59,7 @@
         <p>Our goal is to prepare students for the future workforce by operating like a technology startup. We have deadlines, budgets, marketing requirements, and engineering constraints.</p>
     </section>
 
-    <section style="background-color: var(--bg-gray);" class="hidden">
+    <section class="hidden">
         <h2>The Tri-School Alliance</h2>
         <p>We are unique because we unite students who are normally rivals in sports into one cohesive engineering unit.</p>
         
