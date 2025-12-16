@@ -7,8 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
     <style>
-        /* Page-specific styles */
+        /* --- Page-Specific Styles (Dark Mode) --- */
+        
+        body {
+            background-color: #1c1c1c; /* Dark Background */
+            color: #ffffff; /* White Text */
+        }
+
         .hero.small {
             height: 40vh;
             min-height: 300px;
@@ -24,14 +31,14 @@
 
         .sponsors-section {
             padding: 60px 20px;
-            background-color: #fff;
+            background-color: #1c1c1c; /* Dark Background matches body */
             text-align: center;
         }
 
         .sponsors-section h2 {
             font-size: 2.5rem;
             margin-bottom: 40px;
-            color: #111;
+            color: #ffffff; /* White Text */
         }
 
         .sponsors-grid {
@@ -47,9 +54,15 @@
         .sponsor-logo {
             max-width: 250px;
             height: auto;
+            
+            /* ADDED: White background box so dark logos are visible */
+            background-color: #ffffff; 
+            padding: 20px; 
+            border-radius: 8px;
+
             filter: grayscale(100%);
             transition: all 0.3s ease;
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
         .sponsor-logo:hover {
@@ -65,10 +78,10 @@
             }
             .sponsor-logo {
                 max-width: 150px;
+                padding: 10px;
             }
         }
     </style>
-    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
 </head>
 <body>
 
