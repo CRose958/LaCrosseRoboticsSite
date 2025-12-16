@@ -10,6 +10,32 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
+    
+    <style>
+        /* --- Dark Mode Overrides for Home Page --- */
+        body {
+            background-color: #1c1c1c; /* Dark Background */
+            color: #ffffff; /* White Text */
+        }
+
+        /* Make the heading underlines white */
+        h2::after {
+            background: #ffffff;
+        }
+
+        /* Ensure the text inside the 'Startup' cards stays dark/readable */
+        .card {
+            color: #1c1c1c;
+        }
+        .card h3 {
+            color: #1c1c1c;
+        }
+
+        /* Override the light gray background of the Regional Hub section */
+        .regional-hub {
+            background-color: #1c1c1c;
+        }
+    </style>
 </head>
 <body>
 
@@ -30,7 +56,7 @@
     <div class="hero">
         <div class="hero-content fade-in">
             <h1>The Aeronauts</h1>
-            <p>La Crosse Robotics: Engineering the future at for the younger generation.</p>
+            <p>La Crosse Robotics: Engineering the future for the younger generation.</p>
             <a href="about.html" class="btn">Learn More</a>
         </div>
     </div>
@@ -43,7 +69,7 @@
                 <p>Guided by professional mentors, our members design, build, and program industrial-sized robots to solve complex annual challenges.</p>
             </div>
             <div class="flex-item">
-                <div style="background: #1c1c1c; height: 300px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 8px;">
+                <div style="background: #333; height: 300px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 8px; border: 1px solid #555;">
                     [ROBOT IMAGE HERE]
                 </div>
             </div>
