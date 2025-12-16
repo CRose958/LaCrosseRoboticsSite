@@ -273,29 +273,51 @@ h2::after {
     max-width: 300px;
 }
 
-/* --- PHOTO GALLERY --- */
+/* --- COMPACT MASONRY GALLERY --- */
 .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 15px;
-    padding: 20px 0;
+    /* This creates vertical columns like a newspaper */
+    column-count: 4; 
+    column-gap: 10px; /* Small gap between columns */
+    padding: 10px;
 }
+
 .gallery-item {
-    position: relative;
-    overflow: hidden;
-    height: 300px;
+    /* Prevents an image from being cut in half between columns */
+    break-inside: avoid; 
+    margin-bottom: 10px; /* Small gap between rows */
     border-radius: 8px;
+    overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    background-color: #ddd; /* Fallback color */
 }
+
 .gallery-item img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto; /* Lets the image keep its natural height */
+    display: block; /* Removes tiny white space under images */
     transition: transform 0.4s ease;
 }
+
 .gallery-item:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
+}
+
+/* Responsive: Less columns on smaller screens */
+@media (max-width: 1024px) {
+    .gallery-grid {
+        column-count: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-grid {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        column-count: 1;
+    }
 }
 
 /* --- FOOTER & ANIMATIONS --- */
