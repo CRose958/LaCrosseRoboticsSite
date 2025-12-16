@@ -51,11 +51,12 @@
             align-items: center;
         }
 
+        /* We style the image itself */
         .sponsor-logo {
             max-width: 250px;
             height: auto;
             
-            /* ADDED: White background box so dark logos are visible */
+            /* White background box so dark logos are visible */
             background-color: #ffffff; 
             padding: 20px; 
             border-radius: 8px;
@@ -63,12 +64,19 @@
             filter: grayscale(100%);
             transition: all 0.3s ease;
             opacity: 0.8;
+            display: block; /* Helps remove tiny gaps inside the link */
         }
 
         .sponsor-logo:hover {
             filter: grayscale(0%);
             opacity: 1;
             transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        /* Remove default link underline */
+        .sponsors-grid a {
+            text-decoration: none;
         }
 
         @media (max-width: 768px) {
@@ -107,19 +115,35 @@
 
     <section class="sponsors-section">
         <div class="sponsors-grid">
-            <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/93c7667d-c3c9-4ef1-a75a-68fac9f84c00/public" alt="ISG Architecture Engineering Interior Design" class="sponsor-logo">
             
-            <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/85a4cf92-fa1c-4824-3f7b-730d94a3fd00/public" alt="Wisconsin Department of Public Instruction" class="sponsor-logo">
+            <a href="https://www.hsrassociates.com" target="_blank">
+                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/93c7667d-c3c9-4ef1-a75a-68fac9f84c00/public" alt="HSR Architecture Engineering Interior Design" class="sponsor-logo">
+            </a>
             
-            <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/76fbb143-97ea-400d-a926-84ce41538f00/public" alt="AMS" class="sponsor-logo">
+            <a href="https://dpi.wi.gov" target="_blank">
+                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/85a4cf92-fa1c-4824-3f7b-730d94a3fd00/public" alt="Wisconsin Department of Public Instruction" class="sponsor-logo">
+            </a>
             
-            <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/1e28b205-db8f-41dc-974f-749361e6f200/public" alt="Kwik Trip" class="sponsor-logo">
+            <a href="https://www.amsmetals.com" target="_blank">
+                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/76fbb143-97ea-400d-a926-84ce41538f00/public" alt="AMS" class="sponsor-logo">
+            </a>
             
-            <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/b8fc1882-3d2e-4f87-8aac-5111822ce900/public" alt="Ashley Homestore" class="sponsor-logo">
+            <a href="https://www.kwiktrip.com" target="_blank">
+                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/1e28b205-db8f-41dc-974f-749361e6f200/public" alt="Kwik Trip" class="sponsor-logo">
+            </a>
             
-            <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/76c86e7b-359b-4151-71a3-3f3a605b1a00/public" alt="Western Technical College" class="sponsor-logo">
+            <a href="https://www.ashleyfurniture.com" target="_blank">
+                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/b8fc1882-3d2e-4f87-8aac-5111822ce900/public" alt="Ashley Homestore" class="sponsor-logo">
+            </a>
             
-            <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/464f6db3-9042-49ec-af55-9accf2ffbe00/public" alt="La Crosse Soup" class="sponsor-logo">
+            <a href="https://www.westerntc.edu" target="_blank">
+                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/76c86e7b-359b-4151-71a3-3f3a605b1a00/public" alt="Western Technical College" class="sponsor-logo">
+            </a>
+            
+            <a href="https://www.soupnation.org" target="_blank">
+                <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/464f6db3-9042-49ec-af55-9accf2ffbe00/public" alt="La Crosse Soup" class="sponsor-logo">
+            </a>
+
         </div>
     </section>
 
