@@ -3,20 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Crosse Robotics | Team 4054 The Aeronauts</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <title>Home | La Crosse Robotics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- RESET & BASIC STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- NAVIGATION --- */
+        header {
+            background: #111;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo a {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: #fca311; /* Team Orange/Gold */
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-list a {
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-list a:hover {
+            color: #fca311;
+        }
+
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+        }
+
+        .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            background-color: white;
+            transition: 0.3s;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://placehold.co/1920x1080/222/555?text=Team+4054+Robot+Action');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        .hero-content h1 span { color: #fca311; }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #fca311;
+            color: #111;
+            padding: 12px 30px;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .btn:hover { background: #e08e0b; }
+
+        /* --- STATS COUNTER SECTION --- */
+        .stats-section {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .stats-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+        }
+
+        .stat-item h2 {
+            font-size: 4rem;
+            margin: 0;
+            color: #fca311;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .stat-item p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ccc;
+        }
+
+        /* --- CONTENT SECTION --- */
+        .content-section {
+            padding: 60px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .content-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #111;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #111;
+            color: #888;
+            text-align: center;
+            padding: 2rem;
+            margin-top: auto;
+        }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .nav-list {
+                position: fixed;
+                right: -100%;
+                top: 70px; /* Below header */
+                flex-direction: column;
+                background-color: #111;
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 20px 0;
+                box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+            }
+
+            .nav-list.active { right: 0; }
+            .nav-list li { margin: 15px 0; }
+            .menu-toggle { display: block; }
+            
+            .hero-content h1 { font-size: 2.5rem; }
+            .stat-item h2 { font-size: 3rem; }
+        }
+    </style>
 </head>
 <body>
 
     <header>
         <nav>
             <div class="logo"><a href="index.html">La Crosse <span>Robotics</span></a></div>
-            
-            <div class="menu-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About Us</a></li>
@@ -28,67 +236,40 @@
     </header>
 
     <div class="hero">
-        <div class="hero-content fade-in">
-            <h1>The Aeronauts</h1>
-            <p>La Crosse Robotics: Engineering the future at Central, Logan, and Polytechnic High Schools.</p>
+        <div class="hero-content">
+            <h1>We Are The <span>Aeronauts</span></h1>
+            <p>Building Robots. Building Leaders. Building the Future.</p>
             <a href="about.html" class="btn">Learn More</a>
         </div>
     </div>
 
-    <section class="hidden">
-        <div class="flex-container">
-            <div class="flex-item">
-                <h2>Who We Are</h2>
-                <p>La Crosse Robotics is a high school engineering community centered on the School District of La Crosse’s FIRST Robotics Competition (FRC) team, <strong>Team 4054 "The Aeronauts."</strong></p>
-                <p>Guided by professional mentors, our members design, build, and program industrial-sized robots to solve complex annual challenges.</p>
+    <section class="stats-section">
+        <div class="stats-container">
+            
+            <div class="stat-item">
+                <h2 class="counter" data-target="3">0</h2>
+                <p>High Schools</p>
             </div>
-            <div class="flex-item">
-                <div style="background: #1c1c1c; height: 300px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 8px;">
-                    [ROBOT IMAGE HERE]
-                </div>
+
+            <div class="stat-item">
+                <h2 class="counter" data-target="4054">0</h2>
+                <p>Team Number</p>
             </div>
+
+            <div class="stat-item">
+                <h2 class="counter" data-target="14">0</h2>
+                <p>Years Active</p>
+            </div>
+
         </div>
     </section>
 
-    <div class="stats-banner hidden">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number" data-target="3">0</div>
-                <div class="stat-label">High Schools</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" data-target="4054">0</div>
-                <div class="stat-label">Team Number</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" data-target="1">0</div>
-                <div class="stat-label">Mission</div>
-            </div>
-        </div>
-    </div>
-
-    <section class="hidden">
-        <h2>We Operate Like a Startup</h2>
-        <div class="card-container">
-            <div class="card">
-                <h3>Engineering</h3>
-                <p>Designing and fabricating industrial-sized robots capable of competing in high-intensity arenas.</p>
-            </div>
-            <div class="card">
-                <h3>Computer Science</h3>
-                <p>Developing code for autonomous operation and driver control systems using industry-standard languages.</p>
-            </div>
-            <div class="card">
-                <h3>Business</h3>
-                <p>Managing budgets, marketing the team brand, and securing sponsorship to sustain operations.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="regional-hub hidden">
-        <h2>A Regional STEM Hub</h2>
-        <p>Beyond the local team, La Crosse Robotics serves as a pillar for STEM in the region.</p>
-        <p>We host the major <strong>Seven Rivers Regional</strong> tournament at the La Crosse Center and foster the <strong>Seven Rivers Robotics Coalition</strong> to support cooperative competition across the tri-state area.</p>
+    <section class="content-section">
+        <h2>About Team 4054</h2>
+        <p>
+            Based in La Crosse, Wisconsin, we are a FIRST Robotics Competition team comprised of students from Central, Logan, and Aquinas High Schools. 
+            We combine engineering, programming, and business skills to compete at the highest level.
+        </p>
     </section>
 
     <footer id="contact">
@@ -96,6 +277,68 @@
         <p>School District of La Crosse</p>
         <p>&copy; 2025 The Aeronauts. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        // --- 1. Mobile Menu Logic ---
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.querySelector('.nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+        });
+
+        // --- 2. Scroll Counter Logic ---
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // The lower the slower
+
+        // Create an Intersection Observer (detects when you scroll to the numbers)
+        const observerOptions = {
+            threshold: 0.7 // Trigger when 70% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        
+                        // We calculate the increment step.
+                        // For small numbers (like 3), we want it to go 1 by 1 very slowly.
+                        // For big numbers (like 4054), we want it to jump by chunks.
+                        
+                        let inc = target / speed; 
+
+                        // FORCE SLOW COUNT FOR SMALL NUMBERS
+                        // If the target is small (less than 20), make it count strictly by 1
+                        if (target < 20) {
+                            inc = 1; 
+                        }
+
+                        if (count < target) {
+                            // If it's a small number, we add a longer delay (setTimeout)
+                            // If it's a big number, we run it fast (1ms)
+                            let timeDelay = (target < 20) ? 600 : 10; 
+
+                            counter.innerText = Math.ceil(count + inc);
+                            setTimeout(updateCount, timeDelay);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+
+                    updateCount();
+                    observer.unobserve(counter); // Stop watching once started
+                }
+            });
+        }, observerOptions);
+
+        counters.forEach(counter => {
+            observer.observe(counter);
+        });
+    </script>
 
 </body>
 </html>

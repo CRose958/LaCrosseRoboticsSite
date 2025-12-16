@@ -1,104 +1,159 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 1. MOBILE MENU TOGGLE ---
+
+    /* =========================================
+       1. MOBILE MENU TOGGLE (Runs on all pages)
+       ========================================= */
     const mobileMenu = document.getElementById('mobile-menu');
     const navList = document.querySelector('.nav-list');
 
-    if(mobileMenu){
+    if (mobileMenu && navList) {
         mobileMenu.addEventListener('click', () => {
             navList.classList.toggle('active');
+            
+            // Optional: Animate hamburger bars to an X
+            // You can add a .toggle class in CSS to rotate bars if desired
+            mobileMenu.classList.toggle('toggle');
         });
     }
 
 
-    // --- 2. SCROLL ANIMATIONS (FADE IN) ---
-    const observerOptions = {
-        threshold: 0.1 // Trigger when 10% of element is visible
-    };
+    /* =========================================
+       2. STATS COUNTER (Home Page Only)
+       ========================================= */
+    const counters = document.querySelectorAll('.counter');
+    
+    // Only run this if we actually found counters on the page
+    if (counters.length > 0) {
+        
+        const speed = 200; // Base speed divisor
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('show');
-            }
-        });
-    }, observerOptions);
+        const observerOptions = {
+            threshold: 0.5 // Start animation when 50% of the section is visible
+        };
 
-    const hiddenElements = document.querySelectorAll('.hidden');
-    hiddenElements.forEach((el) => observer.observe(el));
+        const statsObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        
+                        // Calculate step size
+                        let inc = target / speed;
 
+                        // SPECIAL RULE: For small numbers (like 3), force increment to be 1
+                        if (target < 20) {
+                            inc = 1; 
+                        }
 
-    // --- 3. NUMBER COUNTER ANIMATION ---
-    const statsSection = document.querySelector('.stats-banner');
-    let statsAnimated = false; // Ensure it only runs once
+                        if (count < target) {
+                            // Determine delay: slow for small numbers, fast for big numbers
+                            let timeDelay = (target < 20) ? 600 : 10; 
 
-    const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !statsAnimated) {
-                animateNumbers();
-                statsAnimated = true;
-            }
-        });
-    });
+                            counter.innerText = Math.ceil(count + inc);
+                            setTimeout(updateCount, timeDelay);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
 
-    if (statsSection) {
-        statsObserver.observe(statsSection);
-    }
-
-    function animateNumbers() {
-        const counters = document.querySelectorAll('.stat-number');
-        const speed = 200; // The lower the slower
+                    updateCount();
+                    observer.unobserve(counter); // Run only once
+                }
+            });
+        }, observerOptions);
 
         counters.forEach(counter => {
-            const updateCount = () => {
-                const target = +counter.getAttribute('data-target');
-                const count = +counter.innerText;
-                const inc = target / speed;
-
-                if (count < target) {
-                    counter.innerText = Math.ceil(count + inc);
-                    setTimeout(updateCount, 15);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            updateCount();
+            statsObserver.observe(counter);
         });
     }
 
-    // --- 4. LIGHTBOX GALLERY FUNCTIONALITY ---
-    const lightbox = document.getElementById('lightbox');
+
+    /* =========================================
+       3. GALLERY LIGHTBOX (Photos Page Only)
+       ========================================= */
+    const lightbox = document.getElementById("lightbox");
     
-    // Check if lightbox exists on this page before running the code
+    // Only run if the lightbox exists on this page
     if (lightbox) {
-        const lightboxImg = document.getElementById('lightbox-img');
-        const closeBtn = document.querySelector('.close-btn');
-        // Select all images inside gallery-items
-        const galleryImages = document.querySelectorAll('.gallery-item img');
+        const lightboxImg = document.getElementById("lightbox-img");
+        const closeBtn = document.querySelector(".close-btn");
+        const prevBtn = document.querySelector(".prev-btn");
+        const nextBtn = document.querySelector(".next-btn");
+        
+        // Grab all images inside the gallery grid
+        const images = Array.from(document.querySelectorAll(".gallery-item img"));
+        let currentIndex = 0;
 
-        // Add click event to all gallery images
-        galleryImages.forEach(image => {
-            image.addEventListener('click', () => {
-                // 1. Show the lightbox container
-                lightbox.classList.add('active');
-                // 2. Set the lightbox image source to the clicked image source
-                lightboxImg.src = image.src;
-                // Optional: use the alt text as a caption if you want later
-                lightboxImg.alt = image.alt; 
-            });
+        // --- Functions ---
+        
+        function openLightbox(index) {
+            lightbox.style.display = "block";
+            lightboxImg.src = images[index].src;
+            currentIndex = index;
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
+        }
+
+        function closeLightbox() {
+            lightbox.style.display = "none";
+            document.body.style.overflow = 'auto'; // Restore background scrolling
+        }
+
+        function showNext() {
+            currentIndex = (currentIndex + 1) % images.length; // Loop back to start
+            
+            // Add a quick fade effect
+            lightboxImg.style.opacity = 0;
+            setTimeout(() => {
+                lightboxImg.src = images[currentIndex].src;
+                lightboxImg.style.opacity = 1;
+            }, 100);
+        }
+
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length; // Loop to end
+            
+            // Add a quick fade effect
+            lightboxImg.style.opacity = 0;
+            setTimeout(() => {
+                lightboxImg.src = images[currentIndex].src;
+                lightboxImg.style.opacity = 1;
+            }, 100);
+        }
+
+        // --- Event Listeners ---
+
+        // 1. Click on grid images to open
+        images.forEach((img, index) => {
+            img.addEventListener('click', () => openLightbox(index));
         });
 
-        // Close Lightbox when clicking the 'X'
-        closeBtn.addEventListener('click', () => {
-            lightbox.classList.remove('active');
-        });
+        // 2. Click X button to close
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeLightbox);
+        }
 
-        // Close Lightbox when clicking the dark background overlay
+        // 3. Click outside image (on black background) to close
         lightbox.addEventListener('click', (e) => {
-            // If the target clicked IS the background container (not the image itself)
-            if (e.target === lightbox) {
-                lightbox.classList.remove('active');
+            if (e.target === lightbox || e.target.classList.contains('lightbox-content-wrapper')) {
+                closeLightbox();
+            }
+        });
+
+        // 4. On-Screen Navigation Buttons
+        if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+        if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+
+        // 5. Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.style.display === "block") {
+                if (e.key === "ArrowLeft") showPrev();
+                else if (e.key === "ArrowRight") showNext();
+                else if (e.key === "Escape") closeLightbox();
             }
         });
     }
+
 });
