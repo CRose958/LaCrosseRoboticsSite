@@ -1,351 +1,430 @@
-/* =========================================
-   1. GLOBAL RESET & TYPOGRAPHY
-   ========================================= */
+/* --- CSS VARIABLES & RESET --- */
+:root {
+    --primary-color: #8f2b40; /* Maroon/Cranberry */
+    --dark-color: #1c1c1c;    /* Dark Gray/Black */
+    --white-color: #ffffff;
+    --bg-gray: #f0f0f0;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
     line-height: 1.6;
-    overflow-x: hidden; /* Prevents side-scroll on mobile */
+    color: var(--dark-color);
+    background-color: var(--white-color);
+    overflow-x: hidden;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-ul {
-    list-style: none;
-}
-
-/* =========================================
-   2. NAVIGATION BAR
-   ========================================= */
+/* --- NAVIGATION --- */
 header {
-    background: #111;
-    color: white;
-    padding: 1rem 2rem;
+    background-color: var(--dark-color);
+    color: var(--white-color);
+    padding: 1rem 0;
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-bottom: 3px solid var(--primary-color);
 }
 
 nav {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 0 20px;
 }
 
-.logo a {
+.logo {
     font-size: 1.5rem;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.logo a {
+    color: var(--white-color);
+    text-decoration: none;
 }
 
 .logo span {
-    color: #fca311; /* Robotics Orange/Gold */
+    color: var(--primary-color);
 }
 
 .nav-list {
+    list-style: none;
     display: flex;
-    gap: 2rem;
+}
+
+.nav-list li {
+    margin-left: 25px;
 }
 
 .nav-list a {
+    color: var(--white-color);
+    text-decoration: none;
+    font-weight: 400;
     transition: color 0.3s;
-    font-weight: 500;
 }
 
 .nav-list a:hover {
-    color: #fca311;
+    color: var(--primary-color);
 }
 
-/* Mobile Hamburger Menu */
+/* Hamburger Menu Icon */
 .menu-toggle {
-    display: none; /* Hidden on desktop */
+    display: none;
+    flex-direction: column;
     cursor: pointer;
 }
 
 .bar {
-    display: block;
-    width: 25px;
     height: 3px;
-    margin: 5px auto;
+    width: 25px;
     background-color: white;
-    transition: 0.3s;
+    margin: 3px 0;
+    transition: 0.4s;
 }
 
-/* =========================================
-   3. HERO SECTIONS
-   ========================================= */
-/* Default Hero (Home Page) */
+/* --- HERO SECTIONS --- */
 .hero {
-    height: 80vh;
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://placehold.co/1920x1080/222/555?text=Team+4054+Robot+Action');
-    background-size: cover;
+    /* Cloudflare Background Image */
+    background: linear-gradient(rgba(28, 28, 28, 0.85), rgba(28, 28, 28, 0.7)), 
+                url('https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/25e00e83-ed49-4f42-8e9f-d5cb04cdc700/public'); 
+    background-size: cover; 
     background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: white;
+    color: var(--white-color);
+    padding: 0 20px;
+    
+    /* Default height for Home Page */
+    height: 90vh; 
 }
 
-/* Small Hero (Gallery, About, Sponsors Pages) */
+/* Smaller Hero for Sub-pages */
 .hero.small {
-    height: 40vh; /* Shorter height for subpages */
+    height: 50vh;
+    min-height: 300px;
 }
 
 .hero-content h1 {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    font-weight: 900;
-}
-
-.hero-content h1 span {
-    color: #fca311;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .hero-content p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+    font-size: 1.3rem;
     font-weight: 300;
+    max-width: 700px;
+    margin: 0 auto 35px auto;
 }
 
-/* Standard Button */
 .btn {
     display: inline-block;
-    background: #fca311;
-    color: #111;
-    padding: 12px 30px;
-    font-weight: bold;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: 15px 35px;
     border-radius: 4px;
-    transition: 0.3s;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    border: 2px solid var(--primary-color);
 }
 
 .btn:hover {
-    background: #e08e0b;
+    background-color: transparent;
+    color: var(--primary-color);
 }
 
-/* =========================================
-   4. HOME PAGE: STATS COUNTERS
-   ========================================= */
-.stats-section {
-    background-color: #1a1a1a;
-    color: white;
-    padding: 60px 20px;
-    text-align: center;
-}
-
-.stats-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 30px;
-}
-
-.stat-item {
-    flex: 1;
-    min-width: 200px;
-    padding: 20px;
-}
-
-.stat-item h2 {
-    font-size: 4rem;
-    margin: 0;
-    color: #fca311;
-    font-weight: 900;
-    line-height: 1;
-}
-
-.stat-item p {
-    font-size: 1.2rem;
-    margin-top: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #ccc;
-}
-
-/* =========================================
-   5. GALLERY PAGE: PUZZLE GRID
-   ========================================= */
-.gallery-grid {
-    /* CSS Columns create the masonry/puzzle effect */
-    column-count: 3;
-    column-gap: 15px;
-    padding: 40px 20px;
+/* --- GENERAL SECTIONS --- */
+section {
+    padding: 80px 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    position: relative;
+    display: inline-block;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 50%;
+    height: 4px;
+    background: var(--dark-color);
+    margin-top: 5px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    margin-top: 30px;
+    align-items: center;
+}
+
+.flex-item {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* Used for "About" section image */
+.feature-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover; 
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    display: block;
+}
+
+/* --- CARDS (Startup Model) --- */
+.card-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.card {
+    background-color: var(--bg-gray);
+    padding: 30px;
+    flex: 1;
+    min-width: 250px;
+    border-top: 5px solid var(--primary-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+/* --- STATS BANNER --- */
+.stats-banner {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: 60px 20px;
+    text-align: center;
+}
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.stat-item {
+    margin: 20px;
+}
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #ffcc00; /* Gold */
+}
+
+/* --- SPONSOR GRID --- */
+.sponsor-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.sponsor-logo {
+    width: 100%;           
+    max-width: 200px;      
+    height: 120px;         
+    object-fit: contain;   
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: all 0.3s;
+}
+
+.sponsor-logo:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.sponsor-logo.platinum {
+    max-width: 300px;
+    height: 150px;
+}
+
+/* --- PHOTO GALLERY (FIXED: MASONRY & AUTO-HEIGHT) --- */
+.gallery-grid {
+    column-count: 4; 
+    column-gap: 15px; 
+    padding: 10px;
+}
+
 .gallery-item {
-    break-inside: avoid-column; /* Don't cut images in half */
-    margin-bottom: 15px;
+    /* NO HEIGHT SET HERE - This fixes the gray squares */
+    break-inside: avoid; 
+    margin-bottom: 15px; 
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    background: #eee;
+    background: #ccc; 
 }
 
 .gallery-item img {
     width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.3s ease;
+    height: auto; /* Image calculates its own height */
+    display: block; 
+    object-fit: cover; 
+    transition: transform 0.4s ease;
     cursor: pointer;
 }
 
-.gallery-item img:hover {
-    transform: scale(1.03);
+.gallery-item:hover img {
+    transform: scale(1.05);
 }
 
-/* =========================================
-   6. GALLERY LIGHTBOX (MODAL)
-   ========================================= */
+/* --- LIGHTBOX (ENLARGED IMAGES) --- */
 .lightbox {
-    display: none; /* Hidden by default */
+    display: none; 
     position: fixed;
-    z-index: 2000;
+    z-index: 9999; 
+    padding-top: 50px; 
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: rgba(0,0,0,0.95);
-    backdrop-filter: blur(5px);
+    width: 100%; 
+    height: 100%; 
+    overflow: hidden; 
+    background-color: rgba(0, 0, 0, 0.95);
+    align-items: center;
+    justify-content: center;
 }
 
-.lightbox-content-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
+.lightbox.active {
     display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .lightbox-content {
+    margin: auto;
+    display: block;
     max-width: 90%;
-    max-height: 85vh;
+    max-height: 90vh;
     object-fit: contain;
     border-radius: 4px;
-    animation: zoom 0.3s;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    animation: zoomIn 0.3s ease;
 }
 
-@keyframes zoom {
-    from {transform:scale(0.9); opacity: 0;} 
+@keyframes zoomIn {
+    from {transform:scale(0.9); opacity: 0;}
     to {transform:scale(1); opacity: 1;}
 }
 
-/* Lightbox UI Buttons */
 .close-btn {
     position: absolute;
     top: 20px;
-    right: 30px;
+    right: 35px;
     color: #f1f1f1;
-    font-size: 45px;
+    font-size: 50px;
     font-weight: bold;
+    transition: 0.3s;
+    z-index: 10000;
     cursor: pointer;
-    z-index: 2002;
     line-height: 1;
 }
 
-.nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.4);
-    color: white;
-    border: none;
-    font-size: 2rem;
-    padding: 15px 20px;
-    cursor: pointer;
-    z-index: 2001;
-    transition: 0.3s;
-    border-radius: 8px;
-    user-select: none;
+.close-btn:hover,
+.close-btn:focus {
+    color: var(--primary-color);
+    text-decoration: none;
 }
 
-.nav-btn:hover { background-color: rgba(255, 255, 255, 0.2); }
-.prev-btn { left: 20px; }
-.next-btn { right: 20px; }
 
-/* =========================================
-   7. GENERAL CONTENT & FOOTER
-   ========================================= */
-.content-section {
-    padding: 60px 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.content-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #111;
-}
-
+/* --- FOOTER & ANIMATIONS --- */
 footer {
-    background: #111;
-    color: #888;
+    background-color: var(--dark-color);
+    color: #999;
+    padding: 50px 20px;
     text-align: center;
-    padding: 2rem;
-    margin-top: 50px;
 }
 
-/* =========================================
-   8. MEDIA QUERIES (RESPONSIVE)
-   ========================================= */
+.hidden {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease-out;
+}
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-/* Tablet & Mobile Styles */
-@media (max-width: 900px) {
-    /* Change gallery to 2 columns */
-    .gallery-grid { column-count: 2; }
+.regional-hub {
+    background-color: var(--bg-gray);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 1024px) {
+    .gallery-grid {
+        column-count: 3;
+    }
 }
 
 @media (max-width: 768px) {
-    /* --- Mobile Navigation --- */
-    .nav-list {
-        position: fixed;
-        right: -100%;
-        top: 70px;
-        flex-direction: column;
-        background-color: #111;
-        width: 100%;
-        text-align: center;
-        transition: 0.3s;
-        padding: 20px 0;
-        box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+    .menu-toggle {
+        display: flex;
     }
-    .nav-list.active { right: 0; }
-    .nav-list li { margin: 15px 0; }
-    .menu-toggle { display: block; } /* Show hamburger */
-    
-    /* --- Typography Adjustments --- */
-    .hero-content h1 { font-size: 2.5rem; }
-    .stat-item h2 { font-size: 3rem; }
+    .nav-list {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: var(--dark-color);
+        text-align: center;
+    }
+    .nav-list.active {
+        display: flex;
+    }
+    .nav-list li {
+        margin: 15px 0;
+    }
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    .gallery-grid {
+        column-count: 2;
+    }
 }
 
-@media (max-width: 600px) {
-    /* --- Mobile Gallery --- */
-    .gallery-grid { column-count: 1; }
-    
-    /* --- Mobile Lightbox Buttons --- */
-    .nav-btn { padding: 10px 15px; font-size: 1.5rem; }
-    .prev-btn { left: 5px; }
-    .next-btn { right: 5px; }
-    .close-btn { right: 15px; top: 15px; }
+@media (max-width: 480px) {
+    .gallery-grid {
+        column-count: 1;
+    }
 }
