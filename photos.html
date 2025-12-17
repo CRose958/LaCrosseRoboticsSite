@@ -7,11 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
 
     <style>
+        /* --- Dark Mode Styles --- */
+        body {
+            background-color: #1c1c1c; /* Dark Background */
+            color: #ffffff; /* White Text */
+        }
+
         /* --- "Puzzle" (Masonry) Gallery Layout --- */
         .gallery-grid {
-            /* Use CSS columns for masonry look */
             column-count: 3;
             column-gap: 15px;
             padding: 20px;
@@ -28,18 +34,17 @@
         }
 
         .gallery-item {
-            /* Ensure items don't get cut off between columns */
             break-inside: avoid-column;
-            margin-bottom: 15px; /* Space between vertical items */
+            margin-bottom: 15px; 
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            background: #eee; /* Placeholder color while loading */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Slightly darker shadow for dark mode */
+            background: #333; /* Darker placeholder color while loading */
         }
 
         .gallery-item img {
             width: 100%;
-            height: auto; /* Allow natural height for puzzle look */
+            height: auto; 
             display: block;
             transition: transform 0.3s ease;
             cursor: pointer;
@@ -97,7 +102,7 @@
             line-height: 1;
         }
 
-        /* Navigation Buttons (for mobile/mouse) */
+        /* Navigation Buttons */
         .nav-btn {
             position: absolute;
             top: 50%;
@@ -118,7 +123,6 @@
         .prev-btn { left: 10px; }
         .next-btn { right: 10px; }
 
-        /* On small screens, make buttons smaller and tighter to edge */
         @media (max-width: 600px) {
              .nav-btn { padding: 10px 15px; font-size: 1.5rem; }
              .prev-btn { left: 5px; }
@@ -126,7 +130,6 @@
              .close-btn { right: 15px; top: 10px;}
         }
     </style>
-    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
 </head>
 <body>
 
