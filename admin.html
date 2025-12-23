@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Team 4054</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* --- ADMIN SPECIFIC STYLES --- */
+        body {
+            background-color: #1c1c1c;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* LOGIN SCREEN */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: #2a2a2a;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            border-top: 4px solid var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #333;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-box button:hover {
+            opacity: 0.9;
+        }
+
+        #error-msg {
+            color: #ff5555;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* DASHBOARD CONTENT (Hidden by default) */
+        #dashboard-content {
+            display: none; /* Locked! */
+            flex: 1;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+
+        .logout-btn {
+            background: #333;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* KPI CARDS */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+
+        .kpi-label {
+            color: #999;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* CHART CONTAINER */
+        .chart-container {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            height: 400px;
+            margin-bottom: 40px;
+        }
+
+        /* GOOGLE ANALYTICS LINK */
+        .ga-link {
+            display: block;
+            background: #2a2a2a;
+            padding: 30px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+            border: 1px dashed #555;
+            transition: 0.3s;
+        }
+        .ga-link:hover {
+            background: #333;
+            border-color: var(--primary-color);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>Restricted Access</h2>
+            <p style="margin-bottom: 20px; color: #999;">Enter password to decrypt analytics.</p>
+            <input type="password" id="password-input" placeholder="Enter Password">
+            <button id="login-btn">UNLOCK</button>
+            <div id="error-msg">Access Denied: Invalid Hash</div>
+        </div>
+    </div>
+
+    <header id="admin-header" style="display:none;">
+        <nav>
+            <div class="logo"><a href="index.html">Admin <span>Console</span></a></div>
+            <ul class="nav-list">
+                <li><a href="index.html">Back to Site</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="dashboard-content">
+        
+        <div class="dash-header">
+            <h1>Site Analytics</h1>
+            <button class="logout-btn" onclick="logout()">Lock Console</button>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Visits</div>
+                <div class="kpi-value">1,240</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Unique Users</div>
+                <div class="kpi-value">856</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Avg. Time</div>
+                <div class="kpi-value">2m 14s</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Active Now</div>
+                <div class="kpi-value" style="color: #00ff00;">3</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="trafficChart"></canvas>
+        </div>
+
+        <a href="https://analytics.google.com/" target="_blank" class="ga-link">
+            <h3>View Full Report on Google Analytics 4</h3>
+            <p style="color:#999; margin-top:5px;">Click here to access G-Tag: G-REBLDRBN4N Data</p>
+        </a>
+
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        
+        // This is the SHA-256 Hash for the password "robots"
+        // If you want to change the password, you need to generate a new hash.
+        // See console logs for instructions when you load the page.
+        const STORED_HASH = "05c7b398017c13a0280eb4df6560942475141026040854291845873737220317";
+
+        const loginOverlay = document.getElementById('login-overlay');
+        const dashboard = document.getElementById('dashboard-content');
+        const adminHeader = document.getElementById('admin-header');
+        const passInput = document.getElementById('password-input');
+        const errorMsg = document.getElementById('error-msg');
+        const loginBtn = document.getElementById('login-btn');
+
+        // --- CRYPTO FUNCTIONS ---
+
+        async function hashString(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        async function attemptLogin() {
+            const userPass = passInput.value;
+            const userHash = await hashString(userPass);
+
+            // Log the hash to console so you can copy it if you want to change the password
+            console.log("Input Hash:", userHash);
+
+            if (userHash === STORED_HASH) {
+                // Success
+                sessionStorage.setItem('admin_unlocked', 'true');
+                unlockPage();
+            } else {
+                // Fail
+                errorMsg.style.display = 'block';
+                passInput.value = '';
+                passInput.focus();
+            }
+        }
+
+        function unlockPage() {
+            loginOverlay.style.display = 'none';
+            dashboard.style.display = 'block';
+            adminHeader.style.display = 'block';
+            
+            // Initialize Chart only after visible
+            initChart();
+        }
+
+        function logout() {
+            sessionStorage.removeItem('admin_unlocked');
+            location.reload();
+        }
+
+        // --- EVENT LISTENERS ---
+
+        loginBtn.addEventListener('click', attemptLogin);
+        passInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') attemptLogin();
+        });
+
+        // Check if already logged in this session
+        if (sessionStorage.getItem('admin_unlocked') === 'true') {
+            unlockPage();
+        }
+
+
+        // --- DUMMY CHART DATA (Visuals only) ---
+        function initChart() {
+            const ctx = document.getElementById('trafficChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Weekly Visitors',
+                        data: [12, 19, 3, 5, 2, 3, 15], // Fake numbers
+                        borderColor: '#8f2b40',
+                        backgroundColor: 'rgba(143, 43, 64, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: '#444' },
+                            ticks: { color: '#ccc' }
+                        },
+                        x: {
+                            grid: { color: '#444' },
+                            ticks: { color: '#ccc' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
