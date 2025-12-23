@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // LIST B: ARCHIVE IDs (Past Years)
     // REPLACE these IDs with your older photos when you have them!
     const archiveImageIds = [
-        "bbee9c6b-d0e7-41cb-fb05-bf5ca781e500", 
-        "6cf892f3-a7c5-46ec-2ecf-40b7565da400",
-        "ef6dd922-b884-4a58-be66-37265ae70200",
-        "29968b1a-d617-42a3-d408-04b7af92ef00"
+        "5af60ec2-34f7-47a5-9894-02a327c79700", 
+        "95e22222-d128-43fd-7004-6f68f4fcc800",
+        "1892658d-e6bd-4f2a-6774-619f11a9de00",
+        "3517fcc7-6ccd-429b-dfc2-d8754579cc00"
     ];
 
     // --- HELPER FUNCTION TO BUILD GRIDS ---
