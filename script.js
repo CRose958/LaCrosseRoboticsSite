@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. CONFIGURATION: IMAGE GALLERY ---
-    // Your Cloudflare Account Hash (This is constant for all your images)
+    // --- 1. CONFIGURATION: IMAGE GALLERIES ---
     const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg"; 
     
-    // LIST OF IMAGE IDs: Add new IDs here to update the gallery!
-    const imageIds = [
+    // LIST A: MAIN GALLERY IDs (Current Year / Competition)
+    const galleryImageIds = [
         "bbee9c6b-d0e7-41cb-fb05-bf5ca781e500",
         "6cf892f3-a7c5-46ec-2ecf-40b7565da400",
         "ef6dd922-b884-4a58-be66-37265ae70200",
@@ -21,62 +20,62 @@ document.addEventListener('DOMContentLoaded', () => {
         "552c3898-b1fe-452c-04e7-a131b84e7c00",
         "dce2bf84-5795-4a2a-66f6-94fc6a926200",
         "35123e97-ec69-4433-58b6-2830a886a600"
-       
     ];
 
-    // --- GENERATE GALLERY HTML ---
-    const galleryContainer = document.getElementById('gallery-container');
-    
-    // Only run this logic if the container exists (i.e., we are on the Photos page)
-    if (galleryContainer) {
-        imageIds.forEach(id => {
-            // Create the wrapper div
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            
-            // Create the img element
-            const img = document.createElement('img');
-            // Construct the Cloudflare URL automatically
-            img.src = `https://imagedelivery.net/${ACCOUNT_HASH}/${id}/public`;
-            img.loading = 'lazy';
-            img.alt = 'Team Photo'; 
-            
-            // Put image inside div, and div inside container
-            div.appendChild(img);
-            galleryContainer.appendChild(div);
-        });
+    // LIST B: ARCHIVE IDs (Past Years)
+    // I put duplicates here for now. Replace these with your actual old photos!
+    const archiveImageIds = [
+        "bbee9c6b-d0e7-41cb-fb05-bf5ca781e500", 
+        "6cf892f3-a7c5-46ec-2ecf-40b7565da400",
+        "ef6dd922-b884-4a58-be66-37265ae70200",
+        "29968b1a-d617-42a3-d408-04b7af92ef00"
+    ];
+
+    // --- HELPER FUNCTION TO BUILD GRIDS ---
+    function buildGrid(containerId, ids, itemClass) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            ids.forEach(id => {
+                const div = document.createElement('div');
+                div.className = itemClass; // e.g. 'gallery-item' or 'archive-item'
+                
+                const img = document.createElement('img');
+                img.src = `https://imagedelivery.net/${ACCOUNT_HASH}/${id}/public`;
+                img.loading = 'lazy';
+                img.alt = 'Team Photo'; 
+                
+                div.appendChild(img);
+                container.appendChild(div);
+            });
+        }
     }
+
+    // --- GENERATE THE GALLERIES ---
+    buildGrid('gallery-container', galleryImageIds, 'gallery-item');
+    buildGrid('archive-container', archiveImageIds, 'archive-item');
+
 
     // --- 2. MOBILE MENU TOGGLE ---
     const mobileMenu = document.getElementById('mobile-menu');
     const navList = document.querySelector('.nav-list');
-
     if(mobileMenu){
         mobileMenu.addEventListener('click', () => {
             navList.classList.toggle('active');
         });
     }
 
-    // --- 3. SCROLL ANIMATIONS (FADE IN) ---
-    const observerOptions = {
-        threshold: 0.1 // Trigger when 10% of element is visible
-    };
-
+    // --- 3. SCROLL ANIMATIONS ---
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('show');
-            }
+            if (entry.isIntersecting) entry.target.classList.add('show');
         });
-    }, observerOptions);
-
-    const hiddenElements = document.querySelectorAll('.hidden');
-    hiddenElements.forEach((el) => observer.observe(el));
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
 
 
     // --- 4. NUMBER COUNTER ANIMATION ---
     const statsSection = document.querySelector('.stats-banner');
-    let statsAnimated = false; // Ensure it only runs once
+    let statsAnimated = false; 
 
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -86,21 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    if (statsSection) {
-        statsObserver.observe(statsSection);
-    }
+    if (statsSection) statsObserver.observe(statsSection);
 
     function animateNumbers() {
         const counters = document.querySelectorAll('.stat-number');
-        const speed = 200; // The lower the slower
-
+        const speed = 200; 
         counters.forEach(counter => {
             const updateCount = () => {
                 const target = +counter.getAttribute('data-target');
                 const count = +counter.innerText;
                 const inc = target / speed;
-
                 if (count < target) {
                     counter.innerText = Math.ceil(count + inc);
                     setTimeout(updateCount, 15);
@@ -112,62 +106,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 5. LIGHTBOX GALLERY FUNCTIONALITY ---
+    // --- 5. LIGHTBOX FUNCTIONALITY (UPDATED FOR BOTH GALLERIES) ---
     const modal = document.getElementById("lightbox");
     
-    // Check if lightbox exists on this page
     if (modal) {
         const modalImg = document.getElementById("lightbox-img");
         const closeBtn = document.querySelector(".close-btn");
         const prevBtn = document.querySelector(".prev-btn");
         const nextBtn = document.querySelector(".next-btn");
         
-        // RE-SELECT images now that JS has created them!
-        const images = Array.from(document.querySelectorAll(".gallery-item img"));
+        // SELECT ALL IMAGES (Both Main Gallery AND Archive)
+        // This effectively creates one big slideshow of everything on the page
+        const images = Array.from(document.querySelectorAll(".gallery-item img, .archive-item img"));
         let currentIndex = 0;
 
         function openLightbox(index) {
             modal.style.display = "block";
             modalImg.src = images[index].src;
             currentIndex = index;
-            document.body.style.overflow = 'hidden'; // Disable background scroll
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeLightbox() {
             modal.style.display = "none";
-            document.body.style.overflow = 'auto'; // Re-enable scroll
+            document.body.style.overflow = 'auto'; 
         }
 
         function showNext() {
-            currentIndex = (currentIndex + 1) % images.length; // Loops to start
+            currentIndex = (currentIndex + 1) % images.length;
             modalImg.src = images[currentIndex].src;
         }
 
         function showPrev() {
-            currentIndex = (currentIndex - 1 + images.length) % images.length; // Loops to end
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
             modalImg.src = images[currentIndex].src;
         }
 
-        // Add Click Events to the newly generated images
+        // Add Click Events
         images.forEach((img, index) => {
             img.addEventListener('click', () => openLightbox(index));
         });
 
-        // Close events
         closeBtn.addEventListener('click', closeLightbox);
         
-        // Close when clicking outside the image wrapper
         modal.addEventListener('click', function(e) {
             if (e.target === modal || e.target.classList.contains('lightbox-content-wrapper')) {
                  closeLightbox();
             }
         });
 
-        // Navigation Button Clicks
         nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
         prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
 
-        // Keyboard Navigation
         document.addEventListener('keydown', function(e) {
             if (modal.style.display === "block") {
                 if (e.key === "ArrowLeft") showPrev();
