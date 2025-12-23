@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // LIST B: ARCHIVE IDs (Past Years)
-    // I put duplicates here for now. Replace these with your actual old photos!
+    // REPLACE these IDs with your older photos when you have them!
     const archiveImageIds = [
         "bbee9c6b-d0e7-41cb-fb05-bf5ca781e500", 
         "6cf892f3-a7c5-46ec-2ecf-40b7565da400",
@@ -117,53 +117,56 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // SELECT ALL IMAGES (Both Main Gallery AND Archive)
         // This effectively creates one big slideshow of everything on the page
-        const images = Array.from(document.querySelectorAll(".gallery-item img, .archive-item img"));
-        let currentIndex = 0;
+        // Use a short timeout to ensure the grid is built before selecting images
+        setTimeout(() => {
+            const images = Array.from(document.querySelectorAll(".gallery-item img, .archive-item img"));
+            let currentIndex = 0;
 
-        function openLightbox(index) {
-            modal.style.display = "block";
-            modalImg.src = images[index].src;
-            currentIndex = index;
-            document.body.style.overflow = 'hidden'; 
-        }
-
-        function closeLightbox() {
-            modal.style.display = "none";
-            document.body.style.overflow = 'auto'; 
-        }
-
-        function showNext() {
-            currentIndex = (currentIndex + 1) % images.length;
-            modalImg.src = images[currentIndex].src;
-        }
-
-        function showPrev() {
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            modalImg.src = images[currentIndex].src;
-        }
-
-        // Add Click Events
-        images.forEach((img, index) => {
-            img.addEventListener('click', () => openLightbox(index));
-        });
-
-        closeBtn.addEventListener('click', closeLightbox);
-        
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal || e.target.classList.contains('lightbox-content-wrapper')) {
-                 closeLightbox();
+            function openLightbox(index) {
+                modal.style.display = "block";
+                modalImg.src = images[index].src;
+                currentIndex = index;
+                document.body.style.overflow = 'hidden'; 
             }
-        });
 
-        nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
-        prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
-
-        document.addEventListener('keydown', function(e) {
-            if (modal.style.display === "block") {
-                if (e.key === "ArrowLeft") showPrev();
-                else if (e.key === "ArrowRight") showNext();
-                else if (e.key === "Escape") closeLightbox();
+            function closeLightbox() {
+                modal.style.display = "none";
+                document.body.style.overflow = 'auto'; 
             }
-        });
+
+            function showNext() {
+                currentIndex = (currentIndex + 1) % images.length;
+                modalImg.src = images[currentIndex].src;
+            }
+
+            function showPrev() {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                modalImg.src = images[currentIndex].src;
+            }
+
+            // Add Click Events
+            images.forEach((img, index) => {
+                img.addEventListener('click', () => openLightbox(index));
+            });
+
+            closeBtn.addEventListener('click', closeLightbox);
+            
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal || e.target.classList.contains('lightbox-content-wrapper')) {
+                     closeLightbox();
+                }
+            });
+
+            nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+            prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+
+            document.addEventListener('keydown', function(e) {
+                if (modal.style.display === "block") {
+                    if (e.key === "ArrowLeft") showPrev();
+                    else if (e.key === "ArrowRight") showNext();
+                    else if (e.key === "Escape") closeLightbox();
+                }
+            });
+        }, 100); // Small delay to ensure DOM is ready
     }
 });
