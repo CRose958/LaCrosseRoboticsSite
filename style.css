@@ -454,3 +454,89 @@ footer {
         column-count: 1;
     }
 }
+/* --- POPUP STYLES --- */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex; /* Displayed by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: 'Roboto', sans-serif; /* Matches body font in [3] */
+}
+
+.popup-container {
+    background-color: var(--dark-color); /* Matches existing dark theme [3] */
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 8px;
+    position: relative;
+    text-align: center;
+    color: var(--white-color); /* Matches existing white var [3] */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border: 1px solid #333;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    color: #aaaaaa;
+    cursor: pointer;
+    line-height: 1;
+}
+.close-btn:hover {
+    color: var(--primary-color); /* Matches your Maroon/Cranberry [3] */
+}
+
+.popup-title {
+    font-size: 24px;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.popup-subtitle {
+    color: #999;
+    font-size: 12px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.popup-image-wrapper {
+    margin-bottom: 20px;
+}
+.popup-image {
+    width: 100%;
+    border-radius: 4px;
+    display: block;
+}
+
+.popup-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #ddd;
+    margin-bottom: 25px;
+}
+
+.popup-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--white-color);
+    color: var(--dark-color);
+    border: none;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s;
+}
+.popup-btn:hover {
+    background-color: var(--bg-gray); /* Matches existing gray var [3] */
+}

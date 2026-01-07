@@ -170,3 +170,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100); // Small delay to ensure DOM is ready
     }
 });
+// --- POPUP LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+    const popupOverlay = document.getElementById('popup-overlay');
+    const closeBtn = document.getElementById('popup-close-btn');
+
+    if (popupOverlay && closeBtn) {
+        // Close on X click
+        closeBtn.addEventListener('click', () => {
+            popupOverlay.style.display = 'none';
+        });
+
+        // Close on click outside box
+        window.addEventListener('click', (e) => {
+            if (e.target === popupOverlay) {
+                popupOverlay.style.display = 'none';
+            }
+        });
+    }
+});
