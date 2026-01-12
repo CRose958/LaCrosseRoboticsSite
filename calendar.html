@@ -658,17 +658,22 @@
             const nextMonthBtn = document.getElementById('next-month');
             const filterButtons = document.querySelectorAll('.event-filter-btn');
             
-            // Current date - Set to April 2025 to show our events
-            let currentDate = new Date(2026, 0, 1); // April 2025 (months are 0-based)
+            // Current date - Set to January 2025 to show our events
+            let currentDate = new Date(2026, 0, 1); // January 2025 (months are 0-based)
             
-            // Sample events data - dates that exist in April 2025
+            // Sample events data - dates that exist in January 2025
+            // Format: 'YYYY-M-D': { category: 'CategoryName' }
+            // Tuesdays
             const sampleEvents = {
-                '2026-1-6': { category: 'Robotics' },     // Robotics event on April 5
-                '2026-1-13': { category: 'Robotics' },    // Robotics event on April 12
-                '2026-1-20': { category: 'Robotics' },    // Robotics event on April 19
-                '2026-1-27': { category: 'Robotics' },        // FIRST event on April 26
-                '2026-2-3': { category: 'Robotics' },        // FIRST event on April 15
-                '2026-2-10': { category: 'Robotics' },      // Robotics event on April 8
+                '2026-1-6': { category: 'Robotics' },     // january 6, 2026
+                '2026-1-13': { category: 'Robotics' },    // january 13, 2026
+                '2026-1-20': { category: 'Robotics' },    // january 20, 2026
+                '2026-1-27': { category: 'Robotics' },        // january 27, 2026
+                '2026-2-3': { category: 'Robotics' },        // february 3, 2026
+                '2026-2-10': { category: 'Robotics' },      // february 10, 2026
+                '2026-2-17': { category: 'Robotics' },      // february 17, 2026
+                '2026-2-24': { category: 'Robotics' },      //february 24, 2026
+                '2026-3-20': { category: 'FIRST' },        // march 20-22, 2026
             };
             
             // Event filtering functionality
