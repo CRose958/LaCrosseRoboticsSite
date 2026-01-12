@@ -12,6 +12,7 @@
             --dark-color: #1c1c1c;    /* Dark Gray/Black */
             --white-color: #ffffff;
             --bg-gray: #f0f0f0;
+            --gold-color: #ffcc00; /* For FIRST events */
         }
         * {
             margin: 0;
@@ -157,7 +158,7 @@
                 width: 100%;
             }
         }
-
+        
         /* Calendar Container Styles */
         .calendar-container {
             background: #2a2a2a;
@@ -166,7 +167,7 @@
             overflow: hidden;
             transition: all 0.3s ease;
         }
-
+        
         .calendar-header {
             background: linear-gradient(135deg, var(--primary-color) 0%, #6d1f30 100%);
             color: white;
@@ -176,7 +177,7 @@
             align-items: center;
             position: relative;
         }
-
+        
         .calendar-header::after {
             content: '';
             position: absolute;
@@ -186,7 +187,7 @@
             height: 4px;
             background: rgba(255, 255, 255, 0.2);
         }
-
+        
         .calendar-nav-btn {
             background: rgba(255, 255, 255, 0.15);
             border: none;
@@ -201,26 +202,26 @@
             font-size: 1.1rem;
             transition: all 0.3s;
         }
-
+        
         .calendar-nav-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: scale(1.1);
         }
-
+        
         .calendar-title {
             font-size: 1.4rem;
             font-weight: 600;
             text-align: center;
             letter-spacing: 0.5px;
         }
-
+        
         .calendar-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             background-color: #333;
             padding: 12px 0;
         }
-
+        
         .calendar-weekday {
             text-align: center;
             font-weight: 600;
@@ -229,7 +230,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
+        
         .calendar-days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -237,7 +238,7 @@
             background-color: #444;
             padding: 1px;
         }
-
+        
         .calendar-day {
             background-color: #2a2a2a;
             aspect-ratio: 1;
@@ -251,18 +252,18 @@
             position: relative;
             user-select: none;
         }
-
+        
         .calendar-day:hover {
             background-color: #333;
         }
-
+        
         .calendar-day-number {
             font-weight: 600;
             font-size: 1rem;
             margin-bottom: 2px;
             color: var(--white-color);
         }
-
+        
         .calendar-day.today .calendar-day-number {
             background-color: var(--primary-color);
             color: white;
@@ -273,9 +274,9 @@
             justify-content: center;
             align-items: center;
         }
-
+        
         .calendar-day.selected .calendar-day-number {
-            background-color: #ff9900;
+            background-color: var(--gold-color);
             color: var(--dark-color);
             width: 32px;
             height: 32px;
@@ -284,30 +285,40 @@
             justify-content: center;
             align-items: center;
         }
-
+        
         .calendar-day.other-month {
             color: #666;
         }
-
-        .calendar-event-dot {
-            width: 6px;
-            height: 6px;
+        
+        /* Event Markers/Dots */
+        .calendar-event-markers {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            margin-top: 3px;
+        }
+        
+        .event-dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
+        }
+        
+        .event-dot.robotics {
             background-color: var(--primary-color);
-            margin-top: 2px;
         }
-
-        .calendar-day.accent-event .calendar-event-dot {
-            background-color: #ffcc00;
+        
+        .event-dot.first {
+            background-color: var(--gold-color);
         }
-
+        
         /* Events Container Styles */
         .calendar-events-container {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-
+        
         .calendar-events {
             background-color: #2a2a2a;
             border-radius: 12px;
@@ -317,7 +328,7 @@
             display: flex;
             flex-direction: column;
         }
-
+        
         .calendar-events-title {
             margin: 0 0 20px 0;
             font-size: 1.4rem;
@@ -329,11 +340,11 @@
             padding-bottom: 15px;
             border-bottom: 1px solid #444;
         }
-
+        
         .calendar-events-title i {
             color: var(--primary-color);
         }
-
+        
         .calendar-event {
             background-color: #333;
             padding: 15px;
@@ -344,16 +355,16 @@
             transition: all 0.3s;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
+        
         .calendar-event:hover {
             transform: translateX(5px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-
+        
         .calendar-event.accent {
-            border-left-color: #ffcc00;
+            border-left-color: var(--gold-color);
         }
-
+        
         .calendar-event-date {
             font-weight: 600;
             color: var(--primary-color);
@@ -362,36 +373,36 @@
             display: flex;
             align-items: center;
         }
-
+        
         .calendar-event.accent .calendar-event-date {
-            color: #ffcc00;
+            color: var(--gold-color);
         }
-
+        
         .calendar-event-details {
             display: flex;
             flex-direction: column;
             flex-grow: 1;
             margin-left: 15px;
         }
-
+        
         .calendar-event-title {
             font-weight: 600;
             margin-bottom: 5px;
             font-size: 1.05rem;
             color: var(--white-color);
         }
-
+        
         .calendar-event-time {
             font-size: 0.9rem;
             color: #aaa;
         }
-
+        
         .calendar-event-location {
             font-size: 0.85rem;
             color: #777;
             margin-top: 3px;
         }
-
+        
         /* Event Filtering */
         .calendar-event-filters {
             display: flex;
@@ -399,7 +410,7 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-
+        
         .event-filter-btn {
             padding: 8px 15px;
             border: none;
@@ -411,17 +422,17 @@
             font-size: 0.9rem;
             font-weight: 500;
         }
-
+        
         .event-filter-btn.active {
             background-color: var(--primary-color);
             color: white;
         }
-
+        
         .event-filter-btn:hover {
             background-color: #6d1f30;
             color: white;
         }
-
+        
         /* Footer Styles */
         footer {
             background-color: var(--dark-color);
@@ -444,6 +455,7 @@
             flex-direction: column;
             cursor: pointer;
         }
+        
         .bar {
             height: 3px;
             width: 25px;
@@ -500,7 +512,7 @@
                 padding: 20px;
             }
         }
-
+        
         @media (max-width: 480px) {
             .calendar-event {
                 flex-direction: column;
@@ -539,14 +551,14 @@
             </ul>
         </nav>
     </header>
-
+    
     <div class="calendar-page">
         <div class="calendar-wrapper">
             <div class="page-header">
                 <h1>Team Calendar</h1>
-                <p>Stay updated with The Aeronuats events and activities</p>
+                <p>Stay updated with The Aeronauts events and activities</p>
             </div>
-
+            
             <div class="calendar-main-layout">
                 <div class="calendar-container">
                     <div class="calendar-header">
@@ -617,8 +629,6 @@
                                 <div class="calendar-event-location">Appleton East High School</div>
                             </div>
                         </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -630,7 +640,7 @@
         <p>School District of La Crosse</p>
         <p>&copy; 2025 The Aeronauts. All Rights Reserved.</p>
     </footer>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Mobile menu toggle
@@ -650,6 +660,16 @@
             
             // Current date
             let currentDate = new Date();
+            
+            // Sample events data
+            const sampleEvents = {
+                '2025-1-13': { category: 'Robotics' },
+                '2025-1-20': { category: 'Robotics' },
+                '2025-2-3': { category: 'Robotics' },
+                '2025-3-20': { category: 'FIRST' },
+                '2025-3-21': { category: 'FIRST' },
+                '2025-3-22': { category: 'FIRST' },
+            };
             
             // Event filtering functionality
             filterButtons.forEach(button => {
@@ -707,7 +727,7 @@
                 
                 // Add previous month days
                 for (let i = 0; i < startingDayOfWeek; i++) {
-                    createDayElement(prevMonthLastDay - startingDayOfWeek + i + 1, 'other-month');
+                    createDayElement(prevMonthLastDay - startingDayOfWeek + i + 1, 'other-month', []);
                 }
                 
                 // Add current month days
@@ -717,6 +737,12 @@
                 for (let i = 1; i <= daysInMonth; i++) {
                     const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
                     const dateKey = `${dayDate.getFullYear()}-${dayDate.getMonth()+1}-${dayDate.getDate()}`;
+                    const dayEvents = [];
+                    
+                    // Check if there are events for this date
+                    if (sampleEvents[dateKey]) {
+                        dayEvents.push(sampleEvents[dateKey]);
+                    }
                     
                     let dayClass = 'calendar-day';
                     if (i === today.getDate() && 
@@ -732,16 +758,16 @@
                         dayClass += ' selected';
                     }
                     
-                    createDayElement(i, dayClass);
+                    createDayElement(i, dayClass, dayEvents);
                 }
                 
                 // Add next month days
                 for (let i = 1; i <= daysInNextMonthGrid; i++) {
-                    createDayElement(i, 'other-month');
+                    createDayElement(i, 'other-month', []);
                 }
             }
             
-            function createDayElement(dayNumber, className) {
+            function createDayElement(dayNumber, className, dayEvents = []) {
                 const dayElement = document.createElement('div');
                 dayElement.className = className;
                 
@@ -749,6 +775,20 @@
                 dayNumberElement.className = 'calendar-day-number';
                 dayNumberElement.textContent = dayNumber;
                 dayElement.appendChild(dayNumberElement);
+                
+                // Add event markers
+                if (dayEvents.length > 0) {
+                    const eventMarkers = document.createElement('div');
+                    eventMarkers.className = 'calendar-event-markers';
+                    
+                    dayEvents.forEach(event => {
+                        const eventDot = document.createElement('div');
+                        eventDot.className = `event-dot ${event.category.toLowerCase()}`;
+                        eventMarkers.appendChild(eventDot);
+                    });
+                    
+                    dayElement.appendChild(eventMarkers);
+                }
                 
                 // Add click event
                 if (!className.includes('other-month')) {
