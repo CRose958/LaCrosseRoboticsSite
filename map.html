@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satellite Map</title>
+    <title>Highly Visible Marker Map</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -12,6 +12,52 @@
     <style>
         body { margin: 0; padding: 0; }
         #map { height: 100vh; width: 100%; }
+
+        /* --- NEW CSS FOR THE PULSING MARKER --- */
+        
+        /* 1. Define the pulsing animation keyframes */
+        @keyframes pulsing-ring-anim {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* 2. The container for our custom icon */
+        .custom-marker-container {
+            position: relative;
+            /* We don't need height/width here as Leaflet handles it via iconSize */
+        }
+
+        /* 3. The solid red center dot */
+        .marker-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff0000; /* Bright Red */
+            border: 3px solid #ffffff; /* White border to pop against dark map */
+            border-radius: 50%; /* Make it a circle */
+            box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Subtle drop shadow */
+            z-index: 2; /* Ensure dot is on top of the ring */
+            /* Center the dot relative to the container point */
+            top: -10px; 
+            left: -10px;
+        }
+
+        /* 4. The outer ring that animates */
+        .marker-ring {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #ff0000; /* Red ring border */
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 1;
+            /* Center ring relative to container point */
+            top: -20px;
+            left: -20px;
+            /* Apply the animation defined above */
+            animation: pulsing-ring-anim 2s infinite ease-out;
+        }
+
     </style>
 </head>
 <body>
@@ -23,22 +69,41 @@
      crossorigin=""></script>
 
     <script>
-        // 1. Coordinates
         const targetLat = 43.84532827750364;
         const targetLng = -91.23363568277517;
 
-        // 2. Initialize Map
-        const map = L.map('map').setView([targetLat, targetLng], 18); // Zoomed in to 18 for satellite detail
+        // Initialize map with satellite imagery
+        const map = L.map('map').setView([targetLat, targetLng], 18);
 
-        // 3. Add Satellite Tile Layer (Esri World Imagery)
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-GP, and the GIS User Community',
+            attribution: 'Tiles &copy; Esri',
             maxZoom: 19
         }).addTo(map);
 
-        // 4. Add the Marker
-        const marker = L.marker([targetLat, targetLng]).addTo(map);
-        marker.bindPopup("<b>Target Location</b><br>43.845, -91.233").openPopup();
+
+        // --- NEW JAVASCRIPT FOR CUSTOM ICON ---
+
+        // 1. Define the custom icon using HTML and our CSS classes
+        // We use L.divIcon instead of L.icon because we are using raw HTML/CSS, not an image file.
+        const pulsingRedIcon = L.divIcon({
+            // The outer class needed by Leaflet
+            className: 'custom-marker-container',
+            // The actual HTML structure of our marker (a dot and a ring)
+            html: '<div class="marker-ring"></div><div class="marker-dot"></div>',
+            // Size of the overall container space [width, height]
+            iconSize: [20, 20], 
+            // The point of the icon which corresponds to marker's location [x, y]
+            // We set it to the center so the dot sits exactly on the coordinates
+            iconAnchor: [0, 0] 
+        });
+
+        // 2. Add the marker using the custom icon options
+        const marker = L.marker([targetLat, targetLng], {icon: pulsingRedIcon}).addTo(map);
+        
+        // Optional: Open popup on click (it won't open automatically with this custom icon style by default)
+        marker.bindPopup("<b>Target Location</b>");
+        marker.on('click', function() { this.openPopup(); });
+
 
     </script>
 </body>
