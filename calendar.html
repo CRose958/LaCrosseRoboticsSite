@@ -546,11 +546,18 @@
 
             function filterEvents(filter, dateFilter) {
                 const events = document.querySelectorAll('.calendar-event');
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
                 let visibleCount = 0;
 
                 events.forEach(event => {
                     const category = event.getAttribute('data-category');
                     const eventDate = event.getAttribute('data-date');
+                    
+                    // Parse event date and check if it's in the past
+                    const [year, month, day] = eventDate.split('-').map(Number);
+                    const eventDateObj = new Date(year, month - 1, day);
+                    const isPast = eventDateObj < today;
 
                     let shouldShow = true;
 
@@ -559,7 +566,10 @@
                         shouldShow = eventDate === dateFilter;
                     } else if (filter !== 'all') {
                         // Show only events matching the category filter
-                        shouldShow = category === filter;
+                        shouldShow = category === filter && !isPast;
+                    } else {
+                        // For "all" filter, exclude past events
+                        shouldShow = !isPast;
                     }
 
                     if (shouldShow) {
