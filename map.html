@@ -209,16 +209,16 @@
         const pulsingRedIcon = L.divIcon({
             className: 'custom-marker-container',
             html: '<div class="marker-ring"></div><div class="marker-dot"></div>',
-            iconSize: [20, 20], 
+            iconSize: [25, 25], 
             iconAnchor: [0, 0] 
         });
 
         const marker = L.marker([targetLat, targetLng], {icon: pulsingRedIcon}).addTo(map);
-        marker.bindPopup("<b>Team 4054 Meeting Location</b><br>1500 Ranger Dr");
+        marker.bindPopup("<b>The Aeronauts Meeting Room (196)</b><br>1500 Ranger Dr");
 
         // Button Logic
         const btn = document.getElementById('gmaps-link');
-        const address = "1500 Ranger Dr, La Crosse, WI 54603";
+        const address = "Logan High School, 1500 Ranger Dr, La Crosse, WI 54603";
         btn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
     </script>
 </body>
