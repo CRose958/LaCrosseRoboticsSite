@@ -7,121 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
-    
-    <style>
-        /* --- SECRET PAGE STYLES --- */
-        body {
-            background-color: #000000; /* Pure black for terminal look */
-            color: #00ff00; /* Hacker Green */
-            font-family: 'Share Tech Mono', monospace; /* Monospace font */
-            overflow-x: hidden;
-            transition: transform 1s ease; /* For the barrel roll */
-        }
-
-        /* Override Header for this page to look "Hacked" */
-        header {
-            background-color: #111;
-            border-bottom: 2px solid #00ff00;
-        }
-        
-        .nav-list a { color: #00ff00; }
-        .logo a { color: #00ff00; }
-        .logo span { color: #fff; }
-
-        /* Main Container */
-        .terminal-container {
-            max-width: 800px;
-            margin: 100px auto;
-            text-align: center;
-            border: 1px solid #00ff00;
-            padding: 40px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
-            position: relative;
-            background: rgba(0, 20, 0, 0.9);
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 10px #00ff00;
-        }
-
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-        }
-
-        /* THE BIG RED BUTTON */
-        .danger-btn {
-            background: radial-gradient(circle, #ff5555 0%, #aa0000 100%);
-            border: 4px solid #500000;
-            color: white;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
-            padding: 30px 50px;
-            border-radius: 50%; /* Circle */
-            cursor: pointer;
-            box-shadow: 0 10px 0 #500000, 0 10px 20px rgba(0,0,0,0.5);
-            transition: all 0.1s;
-            text-transform: uppercase;
-            outline: none;
-            user-select: none;
-        }
-
-        .danger-btn:active {
-            transform: translateY(10px);
-            box-shadow: 0 0 0 #500000, inset 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        /* Log Console area */
-        .log-output {
-            margin-top: 40px;
-            text-align: left;
-            height: 150px;
-            overflow-y: auto;
-            border-top: 1px dashed #00ff00;
-            padding-top: 10px;
-            color: #ccffcc;
-            font-size: 0.9rem;
-        }
-
-        .log-line {
-            margin: 5px 0;
-            opacity: 0;
-            animation: fadeIn 0.3s forwards;
-        }
-
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        /* Glitch Animation Class */
-        .shake {
-            animation: shake 0.5s;
-            animation-iteration-count: infinite;
-        }
-
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-
-        .barrel-roll {
-            transform: rotate(360deg);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
 </head>
-<body>
+<body class="secret-dark">
 
     <header>
         <nav>
@@ -135,7 +24,7 @@
     <div class="terminal-container">
         <h1>// RESTRICTED AREA //</h1>
         <p>WARNING: Unauthorized access detected. Do not interact with the control interface.</p>
-        
+
         <button id="doNotPress" class="danger-btn">DO NOT PRESS</button>
 
         <div class="log-output" id="consoleLog">
@@ -184,7 +73,7 @@
             // Logic for clicks
             if (clickCount <= messages.length) {
                 addLog(messages[clickCount - 1]);
-                
+
                 // Change button text slightly
                 if(clickCount === 1) btn.innerText = "STOP";
                 if(clickCount === 3) btn.innerText = "NO!";
@@ -196,7 +85,7 @@
                 document.body.classList.add('barrel-roll');
                 addLog("SYSTEM CRITICAL FAILURE.");
                 addLog("Rebooting reality...");
-                
+
                 setTimeout(() => {
                     document.body.classList.remove('barrel-roll');
                     addLog("System restored. You broke the site. Good job.");

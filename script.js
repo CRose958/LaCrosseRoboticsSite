@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- 1. CONFIGURATION: IMAGE GALLERIES ---
-    const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg"; 
-    
+    const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg";
+
     // LIST A: MAIN GALLERY IDs (Current Year / Competition)
     const galleryImageIds = [
         "bbee9c6b-d0e7-41cb-fb05-bf5ca781e500",
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // LIST B: ARCHIVE IDs (Past Years)
     // REPLACE these IDs with your older photos when you have them!
     const archiveImageIds = [
-        "5af60ec2-34f7-47a5-9894-02a327c79700", 
+        "5af60ec2-34f7-47a5-9894-02a327c79700",
         "95e22222-d128-43fd-7004-6f68f4fcc800",
         "1892658d-e6bd-4f2a-6774-619f11a9de00",
         "3517fcc7-6ccd-429b-dfc2-d8754579cc00"
@@ -38,12 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
             ids.forEach(id => {
                 const div = document.createElement('div');
                 div.className = itemClass; // e.g. 'gallery-item' or 'archive-item'
-                
+
                 const img = document.createElement('img');
                 img.src = `https://imagedelivery.net/${ACCOUNT_HASH}/${id}/public`;
                 img.loading = 'lazy';
-                img.alt = 'Team Photo'; 
-                
+                img.alt = 'Team Photo';
+
                 div.appendChild(img);
                 container.appendChild(div);
             });
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 4. NUMBER COUNTER ANIMATION ---
     const statsSection = document.querySelector('.stats-banner');
-    let statsAnimated = false; 
+    let statsAnimated = false;
 
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function animateNumbers() {
         const counters = document.querySelectorAll('.stat-number');
-        const speed = 200; 
+        const speed = 200;
         counters.forEach(counter => {
             const updateCount = () => {
                 const target = +counter.getAttribute('data-target');
@@ -108,13 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 5. LIGHTBOX FUNCTIONALITY (UPDATED FOR BOTH GALLERIES) ---
     const modal = document.getElementById("lightbox");
-    
+
     if (modal) {
         const modalImg = document.getElementById("lightbox-img");
         const closeBtn = document.querySelector(".close-btn");
         const prevBtn = document.querySelector(".prev-btn");
         const nextBtn = document.querySelector(".next-btn");
-        
+
         // SELECT ALL IMAGES (Both Main Gallery AND Archive)
         // This effectively creates one big slideshow of everything on the page
         // Use a short timeout to ensure the grid is built before selecting images
@@ -126,12 +126,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal.style.display = "block";
                 modalImg.src = images[index].src;
                 currentIndex = index;
-                document.body.style.overflow = 'hidden'; 
+                document.body.style.overflow = 'hidden';
             }
 
             function closeLightbox() {
                 modal.style.display = "none";
-                document.body.style.overflow = 'auto'; 
+                document.body.style.overflow = 'auto';
             }
 
             function showNext() {
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             closeBtn.addEventListener('click', closeLightbox);
-            
+
             modal.addEventListener('click', function(e) {
                 if (e.target === modal || e.target.classList.contains('lightbox-content-wrapper')) {
                      closeLightbox();
@@ -168,24 +168,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }, 100); // Small delay to ensure DOM is ready
-    }
-});
-// --- POPUP LOGIC ---
-document.addEventListener('DOMContentLoaded', () => {
-    const popupOverlay = document.getElementById('popup-overlay');
-    const closeBtn = document.getElementById('popup-close-btn');
+        // --- POPUP LOGIC (merged) ---
+        const popupOverlay = document.getElementById('popup-overlay');
+        const popupCloseBtn = document.getElementById('popup-close-btn');
 
-    if (popupOverlay && closeBtn) {
-        // Close on X click
-        closeBtn.addEventListener('click', () => {
-            popupOverlay.style.display = 'none';
-        });
-
-        // Close on click outside box
-        window.addEventListener('click', (e) => {
-            if (e.target === popupOverlay) {
+        if (popupOverlay && popupCloseBtn) {
+            popupCloseBtn.addEventListener('click', () => {
                 popupOverlay.style.display = 'none';
-            }
-        });
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === popupOverlay) {
+                    popupOverlay.style.display = 'none';
+                }
+            });
+        }
     }
 });
