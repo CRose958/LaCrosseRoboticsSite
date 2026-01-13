@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map with Live Location</title>
+    <title>Fast Update Map</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -12,8 +12,6 @@
     <style>
         body { margin: 0; padding: 0; }
         #map { height: 100vh; width: 100%; }
-        /* Optional: A simple control to check status */
-        .leaflet-control-attribution { font-size: 10px; }
     </style>
 </head>
 <body>
@@ -29,38 +27,40 @@
         const targetLat = 43.84532827750364;
         const targetLng = -91.23363568277517;
 
-        const map = L.map('map').setView([targetLat, targetLng], 15);
+        const map = L.map('map').setView([targetLat, targetLng], 16);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap'
         }).addTo(map);
 
-        // 2. Add the Target Marker (The coordinates you gave me)
+        // 2. Add Target Marker
         const targetMarker = L.marker([targetLat, targetLng]).addTo(map);
-        targetMarker.bindPopup("<b>Target Location</b><br>43.845, -91.233").openPopup();
+        targetMarker.bindPopup("<b>Target</b><br>43.845, -91.233").openPopup();
 
-        // --- NEW CODE STARTS HERE ---
-
-        // Variables to store the user's location marker
+        // Variables for user location
         let userMarker = null;
         let userAccuracyCircle = null;
 
-        // 3. Ask the browser for location
-        // 'watch: true' keeps updating if you move
-        map.locate({setView: false, watch: true, enableHighAccuracy: true});
+        // 3. AGGRESSIVE TRACKING SETTINGS
+        map.locate({
+            setView: false, 
+            watch: true,             // Continuous updates
+            enableHighAccuracy: true, // Forces GPS (uses more battery, but faster)
+            maximumAge: 0,           // Disables cache (forces fresh reading every time)
+            timeout: 5000            // Refresh if no data received in 5 seconds
+        });
 
-        // 4. Function that runs when location is found
         function onLocationFound(e) {
             const radius = e.accuracy / 2;
 
-            // If marker exists, just move it. If not, create it.
+            // Update existing marker
             if (userMarker) {
                 userMarker.setLatLng(e.latlng);
                 userAccuracyCircle.setLatLng(e.latlng);
                 userAccuracyCircle.setRadius(radius);
             } else {
-                // Create the "Blue Dot"
+                // Create new marker
                 userMarker = L.circleMarker(e.latlng, {
                     radius: 8,
                     fillColor: "#3388ff",
@@ -70,9 +70,6 @@
                     fillOpacity: 1
                 }).addTo(map);
                 
-                userMarker.bindPopup("You are here").openPopup();
-
-                // Create the accuracy circle (light blue faint circle)
                 userAccuracyCircle = L.circle(e.latlng, {
                     radius: radius,
                     color: '#3388ff',
@@ -83,12 +80,10 @@
             }
         }
 
-        // 5. Function that runs if location fails (e.g., user denies permission)
         function onLocationError(e) {
-            alert("Could not access your location. Ensure you are using HTTPS or Localhost, and have allowed permission.");
+            console.log("GPS Error: " + e.message);
         }
 
-        // Attach the events to the map
         map.on('locationfound', onLocationFound);
         map.on('locationerror', onLocationError);
 
