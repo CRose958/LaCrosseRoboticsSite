@@ -327,6 +327,26 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .calendar-events::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .calendar-events::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 4px;
+        }
+        
+        .calendar-events::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        .calendar-events::-webkit-scrollbar-thumb:hover {
+            background: #6d1f30;
         }
         
         .calendar-events-title {
@@ -339,6 +359,10 @@
             gap: 10px;
             padding-bottom: 15px;
             border-bottom: 1px solid #444;
+            position: sticky;
+            top: 0;
+            background: #2a2a2a;
+            z-index: 10;
         }
         
         .calendar-events-title i {
@@ -510,6 +534,7 @@
             
             .calendar-events {
                 padding: 20px;
+                max-height: 400px;
             }
         }
         
@@ -591,13 +616,22 @@
                         <button class="event-filter-btn active" data-filter="all">All Events</button>
                         <button class="event-filter-btn" data-filter="Robotics">Robotics</button>
                         <button class="event-filter-btn" data-filter="FIRST">FIRST</button>
+                        <button class="event-filter-btn" id="show-all-dates-btn" style="display:none">Show All Dates</button>
                     </div>
                     
                     <div class="calendar-events">
                         <h3 class="calendar-events-title">
-                            <i class="fas fa-calendar-alt"></i> Upcoming Events
+                            <i class="fas fa-calendar-alt"></i> <span id="events-title-text">Upcoming Events</span>
                         </h3>
-                        <div class="calendar-event" data-category="Robotics">
+                        <div class="calendar-event" data-category="Robotics" data-date="2026-1-6">
+                            <span class="calendar-event-date"><b>Jan 6</b></span>
+                            <div class="calendar-event-details">
+                                <div class="calendar-event-title">Team Meeting</div>
+                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
+                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
+                            </div>
+                        </div>
+                        <div class="calendar-event" data-category="Robotics" data-date="2026-1-13">
                             <span class="calendar-event-date"><b>Jan 13</b></span>
                             <div class="calendar-event-details">
                                 <div class="calendar-event-title">Team Meeting</div>
@@ -605,7 +639,7 @@
                                 <div class="calendar-event-location">Room 196 @ Logan High School</div>
                             </div>
                         </div>
-                        <div class="calendar-event" data-category="Robotics">
+                        <div class="calendar-event" data-category="Robotics" data-date="2026-1-20">
                             <span class="calendar-event-date"><b>Jan 20</b></span>
                             <div class="calendar-event-details">
                                 <div class="calendar-event-title">Team Meeting</div>
@@ -613,7 +647,15 @@
                                 <div class="calendar-event-location">Room 196 @ Logan High School</div>
                             </div>
                         </div>
-                        <div class="calendar-event" data-category="Robotics">
+                        <div class="calendar-event" data-category="Robotics" data-date="2026-1-27">
+                            <span class="calendar-event-date"><b>Jan 27</b></span>
+                            <div class="calendar-event-details">
+                                <div class="calendar-event-title">Team Meeting</div>
+                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
+                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
+                            </div>
+                        </div>
+                        <div class="calendar-event" data-category="Robotics" data-date="2026-2-3">
                             <span class="calendar-event-date"><b>Feb 3</b></span>
                             <div class="calendar-event-details">
                                 <div class="calendar-event-title">Team Meeting</div>
@@ -621,7 +663,7 @@
                                 <div class="calendar-event-location">Room 196 @ Logan High School</div>
                             </div>
                         </div>
-                        <div class="calendar-event" data-category="Robotics">
+                        <div class="calendar-event" data-category="Robotics" data-date="2026-2-10">
                             <span class="calendar-event-date"><b>Feb 10</b></span>
                             <div class="calendar-event-details">
                                 <div class="calendar-event-title">Team Meeting</div>
@@ -629,7 +671,7 @@
                                 <div class="calendar-event-location">Room 196 @ Logan High School</div>
                             </div>
                         </div>
-                        <div class="calendar-event" data-category="Robotics">
+                        <div class="calendar-event" data-category="Robotics" data-date="2026-2-17">
                             <span class="calendar-event-date"><b>Feb 17</b></span>
                             <div class="calendar-event-details">
                                 <div class="calendar-event-title">Team Meeting</div>
@@ -637,17 +679,34 @@
                                 <div class="calendar-event-location">Room 196 @ Logan High School</div>
                             </div>
                         </div>
-                        <div class="calendar-event" data-category="Robotics">
+                        <div class="calendar-event" data-category="Robotics" data-date="2026-2-24">
                             <span class="calendar-event-date"><b>Feb 24</b></span>
                             <div class="calendar-event-details">
                                 <div class="calendar-event-title">Team Meeting</div>
                                 <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
                                 <div class="calendar-event-location">Room 196 @ Logan High School</div>
                             </div>
-                        <div class="calendar-event accent" data-category="FIRST">
-                            <span class="calendar-event-date"><b>Mar 20-22</b></span>
+                        </div>
+                        <div class="calendar-event accent" data-category="FIRST" data-date="2026-3-20">
+                            <span class="calendar-event-date"><b>Mar 20</b></span>
                             <div class="calendar-event-details">
-                                <div class="calendar-event-title">FIRST Competition (Appleton)</div>
+                                <div class="calendar-event-title">FIRST Competition Day 1</div>
+                                <div class="calendar-event-time">All Day</div>
+                                <div class="calendar-event-location">Appleton East High School</div>
+                            </div>
+                        </div>
+                        <div class="calendar-event accent" data-category="FIRST" data-date="2026-3-21">
+                            <span class="calendar-event-date"><b>Mar 21</b></span>
+                            <div class="calendar-event-details">
+                                <div class="calendar-event-title">FIRST Competition Day 2</div>
+                                <div class="calendar-event-time">All Day</div>
+                                <div class="calendar-event-location">Appleton East High School</div>
+                            </div>
+                        </div>
+                        <div class="calendar-event accent" data-category="FIRST" data-date="2026-3-22">
+                            <span class="calendar-event-date"><b>Mar 22</b></span>
+                            <div class="calendar-event-details">
+                                <div class="calendar-event-title">FIRST Competition Day 3</div>
                                 <div class="calendar-event-time">All Day</div>
                                 <div class="calendar-event-location">Appleton East High School</div>
                             </div>
@@ -680,54 +739,97 @@
             const prevMonthBtn = document.getElementById('prev-month');
             const nextMonthBtn = document.getElementById('next-month');
             const filterButtons = document.querySelectorAll('.event-filter-btn');
+            const showAllDatesBtn = document.getElementById('show-all-dates-btn');
+            const eventsTitleText = document.getElementById('events-title-text');
             
             // Current date - Set to January 2026 to show our events
             let currentDate = new Date(2026, 0, 1); // January 2026 (months are 0-based)
+            let currentFilter = 'all';
+            let selectedDateFilter = null;
             
             // Sample events data - dates that exist in January 2026
-            // Format: 'YYYY-M-D': { category: 'CategoryName' }
-            // Tuesdays
             const sampleEvents = {
-                '2026-1-6': { category: 'Robotics' },     // january 6, 2026
-                '2026-1-13': { category: 'Robotics' },    // january 13, 2026
-                '2026-1-20': { category: 'Robotics' },    // january 20, 2026
-                '2026-1-27': { category: 'Robotics' },        // january 27, 2026
-                '2026-2-3': { category: 'Robotics' },        // february 3, 2026
-                '2026-2-10': { category: 'Robotics' },      // february 10, 2026
-                '2026-2-17': { category: 'Robotics' },      // february 17, 2026
-                '2026-2-24': { category: 'Robotics' },      //february 24, 2026
-                    '2026-3-20': { category: 'FIRST' },        // march 20-22, 2026
-                    '2026-3-21': { category: 'FIRST' },        // march 21, 2026
-                    '2026-3-22': { category: 'FIRST' },        // march 22, 2026
+                '2026-1-6': { category: 'Robotics' },
+                '2026-1-13': { category: 'Robotics' },
+                '2026-1-20': { category: 'Robotics' },
+                '2026-1-27': { category: 'Robotics' },
+                '2026-2-3': { category: 'Robotics' },
+                '2026-2-10': { category: 'Robotics' },
+                '2026-2-17': { category: 'Robotics' },
+                '2026-2-24': { category: 'Robotics' },
+                '2026-3-20': { category: 'FIRST' },
+                '2026-3-21': { category: 'FIRST' },
+                '2026-3-22': { category: 'FIRST' },
             };
             
             // Event filtering functionality
             filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    const filter = this.getAttribute('data-filter');
-                    filterEvents(filter);
-                });
+                if (button.id !== 'show-all-dates-btn') {
+                    button.addEventListener('click', function() {
+                        // Remove active class from all buttons except show-all-dates
+                        filterButtons.forEach(btn => {
+                            if (btn.id !== 'show-all-dates-btn') btn.classList.remove('active');
+                        });
+                        // Add active class to clicked button
+                        this.classList.add('active');
+                        
+                        const filter = this.getAttribute('data-filter');
+                        currentFilter = filter;
+                        selectedDateFilter = null;
+                        showAllDatesBtn.style.display = 'none';
+                        eventsTitleText.textContent = 'Upcoming Events';
+                        filterEvents(filter, null);
+                    });
+                }
             });
             
-            function filterEvents(filter) {
+            // Show all dates button functionality
+            showAllDatesBtn.addEventListener('click', function() {
+                selectedDateFilter = null;
+                showAllDatesBtn.style.display = 'none';
+                eventsTitleText.textContent = 'Upcoming Events';
+                filterEvents(currentFilter, null);
+            });
+            
+            function filterEvents(filter, dateFilter) {
                 const events = document.querySelectorAll('.calendar-event');
+                let visibleCount = 0;
+                
                 events.forEach(event => {
-                    if (filter === 'all') {
+                    const category = event.getAttribute('data-category');
+                    const eventDate = event.getAttribute('data-date');
+                    
+                    let shouldShow = true;
+                    
+                    if (dateFilter) {
+                        // Show only events for the selected date
+                        shouldShow = eventDate === dateFilter;
+                    } else if (filter !== 'all') {
+                        // Show only events matching the category filter
+                        shouldShow = category === filter;
+                    }
+                    
+                    if (shouldShow) {
                         event.style.display = 'flex';
+                        visibleCount++;
                     } else {
-                        const category = event.getAttribute('data-category');
-                        if (category === filter) {
-                            event.style.display = 'flex';
-                        } else {
-                            event.style.display = 'none';
-                        }
+                        event.style.display = 'none';
                     }
                 });
+                
+                // If filtering by date, update the title
+                if (dateFilter) {
+                    const dateObj = new Date(dateFilter);
+                    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+                    eventsTitleText.textContent = `Events on ${dateObj.toLocaleDateString('en-US', options)}`;
+                }
+            }
+            
+            // Function to filter events by date
+            function filterEventsByDate(dateString) {
+                selectedDateFilter = dateString;
+                showAllDatesBtn.style.display = 'inline-block';
+                filterEvents(currentFilter, dateString);
             }
             
             // Render the calendar
@@ -788,7 +890,7 @@
                         dayClass += ' selected';
                     }
                     
-                    createDayElement(i, dayClass, dayEvents);
+                    createDayElement(i, dayClass, dayEvents, dateKey);
                 }
                 
                 // Add next month days
@@ -797,7 +899,7 @@
                 }
             }
             
-            function createDayElement(dayNumber, className, dayEvents = []) {
+            function createDayElement(dayNumber, className, dayEvents = [], dateKey = '') {
                 const dayElement = document.createElement('div');
                 dayElement.className = className;
                 
@@ -806,7 +908,7 @@
                 dayNumberElement.textContent = dayNumber;
                 dayElement.appendChild(dayNumberElement);
                 
-                // Add event markers (THIS IS WHERE THE DOTS ARE CREATED)
+                // Add event markers
                 if (dayEvents.length > 0) {
                     const eventMarkers = document.createElement('div');
                     eventMarkers.className = 'calendar-event-markers';
@@ -834,6 +936,11 @@
                         // Store selected date
                         const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayNumber);
                         localStorage.setItem('selectedDate', selectedDate.toISOString());
+                        
+                        // Filter events by this date
+                        if (dateKey && sampleEvents[dateKey]) {
+                            filterEventsByDate(dateKey);
+                        }
                     });
                 }
                 
@@ -843,20 +950,22 @@
             // Navigation event listeners
             prevMonthBtn.addEventListener('click', function() {
                 currentDate.setMonth(currentDate.getMonth() - 1);
+                selectedDateFilter = null;
+                showAllDatesBtn.style.display = 'none';
+                eventsTitleText.textContent = 'Upcoming Events';
                 renderCalendar();
             });
             
             nextMonthBtn.addEventListener('click', function() {
                 currentDate.setMonth(currentDate.getMonth() + 1);
+                selectedDateFilter = null;
+                showAllDatesBtn.style.display = 'none';
+                eventsTitleText.textContent = 'Upcoming Events';
                 renderCalendar();
             });
             
             // Initial setup
             renderCalendar();
-            
-            // Debug: Log sample events to check they're being recognized
-            console.log('Sample events:', sampleEvents);
-            console.log('Current month:', currentDate.getMonth() + 1, 'Current year:', currentDate.getFullYear());
         });
     </script>
 </body>
