@@ -400,6 +400,8 @@ footer {
     opacity: 1;
     transform: translateY(0);
 
+}
+
 /* --- Map page (moved from map.html inline styles) --- */
 .map-dark body {
     background-color: #1c1c1c;
