@@ -728,6 +728,9 @@ body.error-dark { background-color: #1c1c1c; color: #ffffff; display: flex; flex
 .calendar-nav-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: clamp(30px, 8vw, 40px); height: clamp(30px, 8vw, 40px); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: clamp(0.9rem, 3vw, 1.1rem); transition: all 0.3s; }
 .calendar-nav-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
 .calendar-title { font-size: clamp(1.1rem, 4vw, 1.4rem); font-weight: 600; text-align: center; letter-spacing: 0.5px; color: var(--white-color); }
+
+/* Remove the global h2::after underline for this specific calendar title */
+.calendar-title::after { display: none; }
 .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background-color: #333; padding: clamp(8px, 2vw, 12px) 0; }
 .calendar-weekday { text-align: center; font-weight: 600; color: #ccc; font-size: clamp(0.7rem, 2.5vw, 0.9rem); text-transform: uppercase; letter-spacing: 0.5px; }
 .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background-color: #444; padding: 1px; }
