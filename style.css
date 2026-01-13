@@ -723,7 +723,7 @@ body.error-dark { background-color: #1c1c1c; color: #ffffff; display: flex; flex
 @media (orientation: landscape) and (min-width: 768px) { .calendar-main-layout { flex-direction: row; } .calendar-container { flex: 1; } .calendar-events-container { width: min(350px, 40vw); min-width: min(300px, 35vw); } }
 @media (orientation: portrait), (max-width: 767px) { .calendar-main-layout { flex-direction: column; } .calendar-container { width: 100%; } .calendar-events-container { width: 100%; } }
 .calendar-container { background: #2a2a2a; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden; transition: all 0.3s ease; }
-.calendar-header { background: linear-gradient(135deg, var(--primary-color) 0%, #6d1f30 100%); color: white; padding: clamp(15px, 3vw, 20px) clamp(15px, 4vw, 30px); display: flex; justify-content: space-between; align-items: center; position: relative; }
+.calendar-header { background: linear-gradient(135deg, var(--primary-color) 0%, white 100%); color: white; padding: clamp(15px, 3vw, 20px) clamp(15px, 4vw, 30px); display: flex; justify-content: space-between; align-items: center; position: relative; }
 .calendar-header::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.2); }
 .calendar-nav-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: clamp(30px, 8vw, 40px); height: clamp(30px, 8vw, 40px); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: clamp(0.9rem, 3vw, 1.1rem); transition: all 0.3s; }
 .calendar-nav-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
