@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satellite Map with Google Button</title>
+    <title>Satellite Map with Plus Code</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -40,35 +40,30 @@
             animation: pulsing-ring-anim 2s infinite ease-out;
         }
 
-        /* --- NEW BUTTON CSS --- */
+        /* --- BUTTON CSS --- */
         .google-maps-btn {
             position: absolute;
-            bottom: 30px;        /* Distance from bottom */
-            left: 50%;           /* Center horizontally */
-            transform: translateX(-50%); /* Center alignment fix */
-            z-index: 1000;       /* Ensure it sits ON TOP of the map */
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
             
             background-color: white;
             color: #333;
             border: 2px solid rgba(0,0,0,0.2);
             padding: 12px 24px;
-            border-radius: 50px; /* Rounded pill shape */
+            border-radius: 50px;
             font-family: sans-serif;
             font-weight: bold;
             font-size: 14px;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            text-decoration: none; /* Removes underline from link */
+            text-decoration: none;
             transition: background-color 0.2s;
         }
 
-        .google-maps-btn:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .google-maps-btn:active {
-            transform: translateX(-50%) scale(0.95); /* Click effect */
-        }
+        .google-maps-btn:hover { background-color: #f0f0f0; }
+        .google-maps-btn:active { transform: translateX(-50%) scale(0.95); }
 
     </style>
 </head>
@@ -91,9 +86,9 @@
         // Initialize Map
         const map = L.map('map').setView([targetLat, targetLng], 18);
 
-        // Satellite Layer
+        // Satellite Tiles
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri',
+            attribution: 'Tiles © Esri',
             maxZoom: 19
         }).addTo(map);
 
@@ -108,13 +103,14 @@
         const marker = L.marker([targetLat, targetLng], {icon: pulsingRedIcon}).addTo(map);
         marker.bindPopup("<b>Room 196</b>");
 
-        // --- NEW LOGIC FOR BUTTON ---
-        // We set the link dynamically so if you change targetLat above, the button updates automatically
+        // --- BUTTON UPDATE ---
         const btn = document.getElementById('gmaps-link');
         
-        // This URL format works for both Browser and the Mobile App
-        // 43.8453283,-91.2336357
-        btn.href = `https://www.google.com/maps/search/?api=1&query=43.8453283,-91.2336357`;
+        // We use encodeURIComponent to ensure special characters (like +) 
+        // are handled correctly in the web address.
+        const plusCode = "RQV8+W9 La Crosse, Wisconsin";
+        
+        btn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(plusCode);
 
     </script>
 </body>
