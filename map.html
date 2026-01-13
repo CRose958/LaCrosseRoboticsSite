@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fast Update Map</title>
+    <title>Fast Map & Location</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -29,12 +29,18 @@
 
         const map = L.map('map').setView([targetLat, targetLng], 16);
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap'
+        // 2. CHANGED: Using 'CartoDB Voyager' tiles (Much faster than default OSM)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20,
+            
+            // PERFORMANCE SETTINGS
+            keepBuffer: 8,      // Keeps more tiles in memory (reduces grey flickering)
+            updateWhenIdle: false // Loads tiles while panning (smoother feel)
         }).addTo(map);
 
-        // 2. Add Target Marker
+        // 3. Add Target Marker
         const targetMarker = L.marker([targetLat, targetLng]).addTo(map);
         targetMarker.bindPopup("<b>Target</b><br>43.845, -91.233").openPopup();
 
@@ -42,25 +48,23 @@
         let userMarker = null;
         let userAccuracyCircle = null;
 
-        // 3. AGGRESSIVE TRACKING SETTINGS
+        // 4. GPS Tracking
         map.locate({
             setView: false, 
-            watch: true,             // Continuous updates
-            enableHighAccuracy: true, // Forces GPS (uses more battery, but faster)
-            maximumAge: 0,           // Disables cache (forces fresh reading every time)
-            timeout: 5000            // Refresh if no data received in 5 seconds
+            watch: true,
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 5000 
         });
 
         function onLocationFound(e) {
             const radius = e.accuracy / 2;
 
-            // Update existing marker
             if (userMarker) {
                 userMarker.setLatLng(e.latlng);
                 userAccuracyCircle.setLatLng(e.latlng);
                 userAccuracyCircle.setRadius(radius);
             } else {
-                // Create new marker
                 userMarker = L.circleMarker(e.latlng, {
                     radius: 8,
                     fillColor: "#3388ff",
