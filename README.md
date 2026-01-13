@@ -9,13 +9,11 @@ This is a simple, fast-loading static site with no build tools or server-side de
 ## Pages
 
 - **index.html** — Main landing page with site navigation
-- **photos.html** — Photo gallery with lightbox viewer
+- **photos.html** — Photo Gallery
 - **about.html** — Team information
-- **calendar.html** — Event schedule
-- **sponsors.html** — Sponsor listings
-- **admin.html** — Administrative resources
-- **404.html** — Custom 404 error page
-- **101.html** — Team intro/guide
+- **calendar.html** — Event Schedule
+- **sponsors.html** — Sponsors
+- **404.html** — 404 error page
 
 ## Key Features
 
