@@ -873,3 +873,14 @@ body.secret-dark p { font-size: 1.2rem; margin-bottom: 40px; }
         gap: 0;
     }
 }
+
+/* Thank you page styles */
+.thank-you-section { padding: 80px 20px; flex-grow: 1; }
+.thank-you-container { max-width: 700px; margin: 0 auto; }
+.thank-you-content { text-align: center; }
+.thank-you-content h2 { font-size: 2.5rem; margin-bottom: 20px; color: #ffffff; }
+.thank-you-content p { font-size: 1.1rem; color: #cccccc; line-height: 1.6; margin-bottom: 15px; }
+.thank-you-actions { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+.btn-secondary { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
+.btn-secondary:hover { background-color: var(--primary-color); color: #ffffff; }
+@media (max-width: 600px) { .thank-you-content h2 { font-size: 1.8rem; } .thank-you-actions { flex-direction: column; gap: 10px; } }
