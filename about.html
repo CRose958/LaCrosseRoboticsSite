@@ -2,16 +2,15 @@
 <html lang="en">
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5859092930525234"
-     crossorigin="anonymous"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-REBLDRBN4N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+      crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-REBLDRBN4N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-REBLDRBN4N');
-</script>
+      gtag('config', 'G-REBLDRBN4N');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us | Team 4054</title>
@@ -19,12 +18,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,200;1,200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
     <script src="script.js" defer></script>
 
     
     <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
 </head>
-<body class="about-dark">
+<body class="map-dark">
 
     <header>
         <nav>
@@ -76,13 +80,56 @@
     <section class="hidden">
         <h2>Join Us</h2>
         <p>We have meetings at Logan High School in Room 196 from 6-8 pm every Tuesday. Email Dan Manke at dmanke@lacrossesd.org for more information!</p>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2877.53286478752!2d-91.2366970241813!3d43.84478297109362!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87f95495efa479b7%3A0xe961bea2698de495!2sLogan%20High%20School!5e0!3m2!1sen!2sus!4v1766068723494!5m2!1sen!2sus"
-                    width="1140" height="900" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+        <div class="map-wrapper">
+            <div id="map"></div>
+            <a id="gmaps-link" class="google-maps-btn" target="_blank">
+                Open in Google Maps
+            </a>
+        </div>
+
     </section>
 
     <footer id="contact">
         <h3>La Crosse Robotics | Team 4054</h3>
-        <p>&copy; 2025 The Aeronauts. All Rights Reserved.</p>
+        <p>© 2025 The Aeronauts. All Rights Reserved.</p>
     </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+    <script>
+        // Coordinates for roughly 1500 Ranger Dr
+        const targetLat = 43.84532827750364;
+        const targetLng = -91.23363568277517;
+
+        // Initialize Map
+        const map = L.map('map', {
+            scrollWheelZoom: false // Disables zooming when scrolling down the page (better user experience)
+        }).setView([targetLat, targetLng], 18);
+
+        // Satellite Tiles
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Custom Marker
+        const pulsingRedIcon = L.divIcon({
+            className: 'custom-marker-container',
+            html: '<div class="marker-ring"></div><div class="marker-dot"></div>',
+            iconSize: [25, 25],
+            iconAnchor: [0, 0]
+        });
+
+        const marker = L.marker([targetLat, targetLng], {icon: pulsingRedIcon}).addTo(map);
+        marker.bindPopup("<b>The Aeronauts Meeting Room (196)</b><br>1500 Ranger Dr");
+
+        // Button Logic
+        const btn = document.getElementById('gmaps-link');
+        const address = "Logan High School, 1500 Ranger Dr, La Crosse, WI 54603";
+        btn.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+    </script>
 </body>
 </html>
