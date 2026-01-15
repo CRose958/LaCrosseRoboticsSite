@@ -747,12 +747,13 @@ body.error-dark { background-color: #1c1c1c; color: #ffffff; display: flex; flex
 .event-dot.robotics { background-color: var(--primary-color); }
 .event-dot.first { background-color: var(--gold-color); }
 .calendar-events-container { display: flex; flex-direction: column; gap: clamp(15px, 3vw, 20px); }
-.calendar-events { background-color: #2a2a2a; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: clamp(15px, 4vw, 25px); flex-grow: 1; display: flex; flex-direction: column; max-height: min(500px, 70vh); overflow-y: auto; }
+.calendar-events { background-color: #2a2a2a; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: clamp(15px, 4vw, 25px); flex-grow: 1; display: flex; flex-direction: column; max-height: min(500px, 70vh); overflow-y: auto; padding-top: clamp(40px, 5vw, 50px); }
 .calendar-events::-webkit-scrollbar { width: clamp(6px, 1.5vw, 8px); }
 .calendar-events::-webkit-scrollbar-track { background: #333; border-radius: 4px; }
 .calendar-events::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
 .calendar-events::-webkit-scrollbar-thumb:hover { background: #6d1f30; }
 .calendar-events-title { margin: 0 0 clamp(15px, 3vw, 20px) 0; font-size: clamp(1.1rem, 4vw, 1.4rem); font-weight: 600; color: var(--white-color); display: flex; align-items: center; gap: clamp(8px, 2vw, 10px); padding-bottom: clamp(10px, 3vw, 15px); border-bottom: 1px solid #444; position: sticky; top: 0; background: #2a2a2a; z-index: 10; }
+.calendar-events-title { margin: 0 0 clamp(15px, 3vw, 20px) 0; font-size: clamp(1.1rem, 4vw, 1.4rem); font-weight: 600; color: var(--white-color); display: flex; align-items: center; gap: clamp(8px, 2vw, 10px); padding-bottom: clamp(10px, 3vw, 15px); border-bottom: 1px solid #444; position: sticky; top: 0; background: #2a2a2a; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
 .calendar-events-title i { color: var(--primary-color); }
 .calendar-event { background-color: #333; padding: clamp(10px, 3vw, 15px); margin-bottom: clamp(8px, 2vw, 12px); border-radius: 8px; border-left: 4px solid var(--primary-color); display: flex; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 .calendar-event:hover { transform: translateX(5px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
