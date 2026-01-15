@@ -81,65 +81,7 @@
                         </h3>
                         <div id="calendar-events-list"></div>
                     </div>
-                        // Dynamically generate event list from sampleEvents
-                        function buildEventList() {
-                            const eventsList = document.getElementById('calendar-events-list');
-                            if (!eventsList) return;
-                            eventsList.innerHTML = '';
 
-                            // Gather all events as array of {date, event} objects
-                            let allEvents = [];
-                            for (const [date, event] of Object.entries(sampleEvents)) {
-                                if (Array.isArray(event)) {
-                                    event.forEach(e => allEvents.push({date, event: e}));
-                                } else {
-                                    allEvents.push({date, event});
-                                }
-                            }
-                            // Sort by date ascending
-                            allEvents.sort((a, b) => {
-                                const [ay, am, ad] = a.date.split('-').map(Number);
-                                const [by, bm, bd] = b.date.split('-').map(Number);
-                                return new Date(ay, am-1, ad) - new Date(by, bm-1, bd);
-                            });
-
-                            // Render each event
-                            allEvents.forEach(({date, event}) => {
-                                const eventDiv = document.createElement('div');
-                                eventDiv.className = 'calendar-event' + (event.category === 'FIRST' ? ' accent' : '');
-                                eventDiv.setAttribute('data-category', event.category);
-                                eventDiv.setAttribute('data-date', date);
-
-                                // Date label
-                                const dateSpan = document.createElement('span');
-                                dateSpan.className = 'calendar-event-date';
-                                const d = new Date(date);
-                                const options = { month: 'short', day: 'numeric' };
-                                dateSpan.innerHTML = `<b>${d.toLocaleDateString('en-US', options)}</b>`;
-                                eventDiv.appendChild(dateSpan);
-
-                                // Details
-                                const detailsDiv = document.createElement('div');
-                                detailsDiv.className = 'calendar-event-details';
-                                const titleDiv = document.createElement('div');
-                                titleDiv.className = 'calendar-event-title';
-                                titleDiv.textContent = event.category === 'FIRST' ? (event.title || 'FIRST Competition') : (event.title || 'Team Meeting');
-                                detailsDiv.appendChild(titleDiv);
-                                const timeDiv = document.createElement('div');
-                                timeDiv.className = 'calendar-event-time';
-                                timeDiv.textContent = event.time || (event.category === 'FIRST' ? 'All Day' : '4:00 PM - 8:00 PM');
-                                detailsDiv.appendChild(timeDiv);
-                                const locDiv = document.createElement('div');
-                                locDiv.className = 'calendar-event-location';
-                                locDiv.textContent = event.location || (event.category === 'FIRST' ? 'TBD' : 'Room 196 @ Logan High School');
-                                detailsDiv.appendChild(locDiv);
-                                eventDiv.appendChild(detailsDiv);
-
-                                eventsList.appendChild(eventDiv);
-                            });
-                        }
-
-                        // Call buildEventList after DOMContentLoaded and after any event/filter change
                 </div>
             </div>
         </div>
@@ -153,6 +95,58 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Dynamically generate event list from sampleEvents
+            function buildEventList() {
+                const eventsList = document.getElementById('calendar-events-list');
+                if (!eventsList) return;
+                eventsList.innerHTML = '';
+
+                let allEvents = [];
+                for (const [date, event] of Object.entries(sampleEvents)) {
+                    if (Array.isArray(event)) {
+                        event.forEach(e => allEvents.push({date, event: e}));
+                    } else {
+                        allEvents.push({date, event});
+                    }
+                }
+                allEvents.sort((a, b) => {
+                    const [ay, am, ad] = a.date.split('-').map(Number);
+                    const [by, bm, bd] = b.date.split('-').map(Number);
+                    return new Date(ay, am-1, ad) - new Date(by, bm-1, bd);
+                });
+
+                allEvents.forEach(({date, event}) => {
+                    const eventDiv = document.createElement('div');
+                    eventDiv.className = 'calendar-event' + (event.category === 'FIRST' ? ' accent' : '');
+                    eventDiv.setAttribute('data-category', event.category);
+                    eventDiv.setAttribute('data-date', date);
+
+                    const dateSpan = document.createElement('span');
+                    dateSpan.className = 'calendar-event-date';
+                    const d = new Date(date);
+                    const options = { month: 'short', day: 'numeric' };
+                    dateSpan.innerHTML = `<b>${d.toLocaleDateString('en-US', options)}</b>`;
+                    eventDiv.appendChild(dateSpan);
+
+                    const detailsDiv = document.createElement('div');
+                    detailsDiv.className = 'calendar-event-details';
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = 'calendar-event-title';
+                    titleDiv.textContent = event.category === 'FIRST' ? (event.title || 'FIRST Competition') : (event.title || 'Team Meeting');
+                    detailsDiv.appendChild(titleDiv);
+                    const timeDiv = document.createElement('div');
+                    timeDiv.className = 'calendar-event-time';
+                    timeDiv.textContent = event.time || (event.category === 'FIRST' ? 'All Day' : '4:00 PM - 8:00 PM');
+                    detailsDiv.appendChild(timeDiv);
+                    const locDiv = document.createElement('div');
+                    locDiv.className = 'calendar-event-location';
+                    locDiv.textContent = event.location || (event.category === 'FIRST' ? 'TBD' : 'Room 196 @ Logan High School');
+                    detailsDiv.appendChild(locDiv);
+                    eventDiv.appendChild(detailsDiv);
+
+                    eventsList.appendChild(eventDiv);
+                });
+            }
             // Mobile menu toggle
             const mobileMenu = document.getElementById('mobile-menu');
             const navList = document.querySelector('.nav-list');
