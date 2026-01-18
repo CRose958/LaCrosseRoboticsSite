@@ -370,6 +370,13 @@ h2::after {
     opacity: 1;
 }
 
+/* Make last two logos bigger */
+.logo-loop-item:nth-child(6) .sponsor-logo,
+.logo-loop-item:nth-child(7) .sponsor-logo {
+    height: 100px;
+    max-width: 250px;
+}
+
 /* --- PHOTO GALLERY (NUCLEAR FIX) --- */
 .gallery-grid {
     column-count: 4;
