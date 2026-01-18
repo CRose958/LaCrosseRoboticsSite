@@ -64,9 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemRect = item.getBoundingClientRect();
             const navRect = navList.getBoundingClientRect();
             
-            const left = itemRect.left - navRect.left;
-            const width = itemRect.width;
+            // Calculate position relative to nav container
+            let left = itemRect.left - navRect.left;
+            let width = itemRect.width;
             const height = itemRect.height;
+            
+            // Constrain to stay within nav bounds (accounting for padding)
+            const padding = 8;
+            const maxLeft = navRect.width - width - padding;
+            left = Math.max(padding, Math.min(left, maxLeft));
             
             // Use CSS custom properties to animate the blob
             navList.style.setProperty('--blob-left', `${left}px`);
