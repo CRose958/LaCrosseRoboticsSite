@@ -339,6 +339,7 @@ h2::after {
     gap: 100px;
     align-items: center;
     flex-shrink: 0;
+    padding-right: 100px;
 }
 
 .logo-loop-item {
@@ -626,6 +627,7 @@ footer {
     /* Logo Loop Mobile Adjustments */
     .logo-loop-group {
         gap: 60px;
+        padding-right: 60px;
     }
     .logo-loop-item {
         padding: 5px;
