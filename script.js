@@ -91,10 +91,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         let foundActive = false;
         
+        // Clear any existing active classes first
+        navItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        
         navItems.forEach(item => {
             const link = item.querySelector('a');
             const href = link.getAttribute('href');
-            if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            
+            // More robust matching - check both with and without .html
+            const pageName = currentPage.replace('.html', '');
+            const linkName = href.replace('.html', '');
+            
+            if (href === currentPage || 
+                linkName === pageName ||
+                (currentPage === '' && href === 'index.html') ||
+                (currentPage === 'index.html' && href === 'index.html')) {
                 item.classList.add('active');
                 foundActive = true;
             }
@@ -107,9 +120,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initialize gooey nav position with multiple attempts to ensure fonts/layout loaded
         requestAnimationFrame(() => {
-            updateGooeyNav();
-            setTimeout(() => updateGooeyNav(), 100);
-            setTimeout(() => updateGooeyNav(), 300);
+            const activeItem = document.querySelector('.nav-list li.active');
+            if (activeItem) {
+                updateGooeyNav(activeItem);
+            }
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) updateGooeyNav(activeItem);
+            }, 100);
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) updateGooeyNav(activeItem);
+            }, 300);
         });
 
         // Add hover effect - temporarily move blob
