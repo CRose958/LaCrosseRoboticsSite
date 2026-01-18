@@ -299,7 +299,7 @@ h2::after {
 
 /* --- SPONSOR GRID (Updated with your custom styles) --- */
 .sponsors-section {
-    padding: 60px 20px;
+    padding: 80px 20px;
     background-color: #fff;
     text-align: center;
     overflow: hidden;
@@ -308,10 +308,11 @@ h2::after {
 /* Logo Loop Animation */
 .logo-loop-container {
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    padding: 30px 0;
 }
 
 .logo-loop-track {
@@ -335,7 +336,7 @@ h2::after {
 
 .logo-loop-group {
     display: flex;
-    gap: 60px;
+    gap: 100px;
     align-items: center;
     flex-shrink: 0;
 }
@@ -346,6 +347,7 @@ h2::after {
     justify-content: center;
     flex-shrink: 0;
     transition: transform 0.3s ease;
+    padding: 10px;
 }
 
 .logo-loop-item:hover {
@@ -623,7 +625,10 @@ footer {
 
     /* Logo Loop Mobile Adjustments */
     .logo-loop-group {
-        gap: 40px;
+        gap: 60px;
+    }
+    .logo-loop-item {
+        padding: 5px;
     }
     .logo-loop-item .sponsor-logo {
         height: 60px;
