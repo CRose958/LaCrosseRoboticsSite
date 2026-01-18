@@ -302,31 +302,69 @@ h2::after {
     padding: 60px 20px;
     background-color: #fff;
     text-align: center;
+    overflow: hidden;
 }
 
-.sponsors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    justify-items: center;
+/* Logo Loop Animation */
+.logo-loop-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.logo-loop-track {
+    display: flex;
+    width: fit-content;
+    animation: scroll-left 40s linear infinite;
+}
+
+.logo-loop-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.logo-loop-group {
+    display: flex;
+    gap: 60px;
     align-items: center;
+    flex-shrink: 0;
 }
 
-.sponsor-logo {
-    max-width: 250px;
-    height: auto;
+.logo-loop-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.logo-loop-item:hover {
+    transform: scale(1.1);
+}
+
+.logo-loop-item .sponsor-logo {
+    height: 80px;
+    width: auto;
+    max-width: 200px;
     filter: grayscale(100%);
     transition: all 0.3s ease;
     opacity: 0.7;
-    object-fit: contain; /* Ensures logos fit nicely */
+    object-fit: contain;
 }
 
-.sponsor-logo:hover {
+.logo-loop-item:hover .sponsor-logo {
     filter: grayscale(0%);
     opacity: 1;
-    transform: scale(1.05);
 }
 
 /* --- PHOTO GALLERY (NUCLEAR FIX) --- */
@@ -583,13 +621,16 @@ footer {
         column-count: 2;
     }
 
-    /* Sponsors Grid Mobile Fix */
-    .sponsors-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 30px;
+    /* Logo Loop Mobile Adjustments */
+    .logo-loop-group {
+        gap: 40px;
     }
-    .sponsor-logo {
+    .logo-loop-item .sponsor-logo {
+        height: 60px;
         max-width: 150px;
+    }
+    .logo-loop-track {
+        animation: scroll-left 30s linear infinite;
     }
 }
 
@@ -744,13 +785,8 @@ body.map-dark { background-color: #1c1c1c; color: #ffffff; }
 /* --- sponsors.html styles --- */
 body.sponsors-dark { background-color: #1c1c1c; color: #ffffff; }
 .hero.small { height: 40vh; min-height: 300px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/948d1bb0-7ce3-4d1a-c655-ead3c0c59d00/public'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: white; }
-.sponsors-section { padding: 60px 20px; background-color: #1c1c1c; text-align: center; }
-.sponsors-section h2 { font-size: 2.5rem; margin-bottom: 40px; color: #ffffff; }
-.sponsors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; justify-items: center; align-items: center; }
-.sponsor-logo { max-width: 250px; height: auto; background-color: #ffffff; padding: 20px; border-radius: 8px; filter: grayscale(100%); transition: all 0.3s ease; opacity: 0.8; display: block; }
-.sponsor-logo:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.05); cursor: pointer; }
-.sponsors-grid a { text-decoration: none; }
-@media (max-width: 768px) { .sponsors-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 30px; } .sponsor-logo { max-width: 150px; padding: 10px; } }
+.sponsors-dark .sponsors-section { padding: 60px 20px; background-color: #1c1c1c; text-align: center; }
+.sponsors-dark .logo-loop-container { mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
 
 /* From 404.html: error page styles */
 /* --- 404.html styles --- */
