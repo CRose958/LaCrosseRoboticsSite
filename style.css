@@ -911,7 +911,7 @@ body.secret-dark p { font-size: 1.2rem; margin-bottom: 40px; }
     width: var(--spark-size, 25px);
     height: 3px;
     background-color: var(--spark-color, #8f2b40);
-    transform-origin: center;
+    transform-origin: left center;
     transform: rotate(var(--angle, 0deg)) translateX(0);
     opacity: 1;
     border-radius: 2px;
