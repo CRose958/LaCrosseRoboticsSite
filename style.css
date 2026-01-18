@@ -67,24 +67,50 @@ nav {
     color: var(--primary-color);
 }
 
+/* Gooey Nav Styles */
 .nav-list {
     list-style: none;
     display: flex;
+    position: relative;
+    background: rgba(143, 43, 64, 0.15);
+    padding: 8px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+
+.nav-list::before {
+    content: '';
+    position: absolute;
+    background: var(--primary-color);
+    border-radius: 50px;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: -1;
+    filter: blur(0);
 }
 
 .nav-list li {
-    margin-left: 25px;
+    margin: 0;
+    position: relative;
 }
 
 .nav-list a {
     color: var(--white-color);
     text-decoration: none;
-    font-weight: 400;
+    font-weight: 500;
+    padding: 12px 24px;
+    display: block;
+    position: relative;
+    z-index: 1;
     transition: color 0.3s;
+    border-radius: 50px;
 }
 
 .nav-list a:hover {
-    color: var(--primary-color);
+    color: var(--white-color);
+}
+
+.nav-list li.active a {
+    color: var(--white-color);
 }
 
 /* Hamburger Menu Icon */
@@ -521,12 +547,22 @@ footer {
         left: 0;
         background-color: var(--dark-color);
         text-align: center;
+        border-radius: 0;
+        backdrop-filter: none;
+        padding: 0;
+    }
+    .nav-list::before {
+        display: none;
     }
     .nav-list.active {
         display: flex;
     }
     .nav-list li {
-        margin: 15px 0;
+        margin: 0;
+    }
+    .nav-list a {
+        padding: 15px;
+        border-radius: 0;
     }
     .hero-content h1 {
         font-size: 2.5rem;

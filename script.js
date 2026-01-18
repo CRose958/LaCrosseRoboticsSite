@@ -54,9 +54,95 @@ document.addEventListener('DOMContentLoaded', () => {
     buildGrid('archive-container', archiveImageIds, 'archive-item');
 
 
-    // --- 2. MOBILE MENU TOGGLE ---
-    const mobileMenu = document.getElementById('mobile-menu');
+    // --- 2. GOOEY NAV ANIMATION ---
     const navList = document.querySelector('.nav-list');
+    const navItems = document.querySelectorAll('.nav-list li');
+    const navBefore = window.getComputedStyle(navList, '::before');
+    
+    function updateGooeyNav() {
+        const activeItem = document.querySelector('.nav-list li.active');
+        if (activeItem && navList) {
+            const itemRect = activeItem.getBoundingClientRect();
+            const navRect = navList.getBoundingClientRect();
+            
+            const left = itemRect.left - navRect.left;
+            const width = itemRect.width;
+            
+            navList.style.setProperty('--nav-blob-left', `${left}px`);
+            navList.style.setProperty('--nav-blob-width', `${width}px`);
+            
+            // Update the ::before element position
+            const styleSheet = document.styleSheets[0];
+            const rule = `.nav-list::before { left: ${left}px; width: ${width}px; height: ${itemRect.height}px; }`;
+            
+            // Find and update existing rule or add new one
+            let ruleIndex = -1;
+            for (let i = 0; i < styleSheet.cssRules.length; i++) {
+                if (styleSheet.cssRules[i].selectorText === '.nav-list::before') {
+                    ruleIndex = i;
+                    break;
+                }
+            }
+            
+            if (ruleIndex !== -1) {
+                styleSheet.deleteRule(ruleIndex);
+            }
+            styleSheet.insertRule(rule, styleSheet.cssRules.length);
+        }
+    }
+
+    // Set active state based on current page
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    navItems.forEach(item => {
+        const link = item.querySelector('a');
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            item.classList.add('active');
+        }
+    });
+
+    // Initialize gooey nav position
+    setTimeout(updateGooeyNav, 100);
+
+    // Add hover effect
+    navItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            navItems.forEach(i => i.classList.remove('hover'));
+            item.classList.add('hover');
+            const itemRect = item.getBoundingClientRect();
+            const navRect = navList.getBoundingClientRect();
+            const left = itemRect.left - navRect.left;
+            const width = itemRect.width;
+            
+            const styleSheet = document.styleSheets[0];
+            const rule = `.nav-list::before { left: ${left}px; width: ${width}px; height: ${itemRect.height}px; }`;
+            
+            let ruleIndex = -1;
+            for (let i = 0; i < styleSheet.cssRules.length; i++) {
+                if (styleSheet.cssRules[i].selectorText === '.nav-list::before') {
+                    ruleIndex = i;
+                    break;
+                }
+            }
+            
+            if (ruleIndex !== -1) {
+                styleSheet.deleteRule(ruleIndex);
+            }
+            styleSheet.insertRule(rule, styleSheet.cssRules.length);
+        });
+    });
+
+    navList.addEventListener('mouseleave', () => {
+        navItems.forEach(i => i.classList.remove('hover'));
+        updateGooeyNav();
+    });
+
+    // Update on window resize
+    window.addEventListener('resize', updateGooeyNav);
+
+
+    // --- 3. MOBILE MENU TOGGLE ---
+    const mobileMenu = document.getElementById('mobile-menu');
     if (mobileMenu) {
         mobileMenu.addEventListener('click', () => {
             navList.classList.toggle('active');
