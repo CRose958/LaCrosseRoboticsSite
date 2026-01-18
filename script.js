@@ -100,22 +100,33 @@ document.addEventListener('DOMContentLoaded', () => {
             navItems[0].classList.add('active');
         }
 
-        // Initialize gooey nav position after a short delay
-        setTimeout(() => updateGooeyNav(), 100);
+        // Initialize gooey nav position immediately and after load
+        updateGooeyNav();
+        setTimeout(() => updateGooeyNav(), 50);
+        setTimeout(() => updateGooeyNav(), 200);
 
-        // Add hover effect
+        // Add hover effect - temporarily move blob
         navItems.forEach(item => {
             item.addEventListener('mouseenter', () => {
                 updateGooeyNav(item);
             });
         });
 
+        // Return blob to active page when mouse leaves nav
         navList.addEventListener('mouseleave', () => {
-            updateGooeyNav();
+            const activeItem = document.querySelector('.nav-list li.active');
+            if (activeItem) {
+                updateGooeyNav(activeItem);
+            }
         });
 
         // Update on window resize
-        window.addEventListener('resize', () => updateGooeyNav());
+        window.addEventListener('resize', () => {
+            const activeItem = document.querySelector('.nav-list li.active');
+            if (activeItem) {
+                updateGooeyNav(activeItem);
+            }
+        });
     }
 
 
