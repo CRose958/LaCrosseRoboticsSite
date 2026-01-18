@@ -204,8 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configuration
     const sparkConfig = {
         sparkColor: '#8f2b40', // Match primary color
-        sparkSize: 10,
-        sparkRadius: 15,
+        sparkSize: 25,
+        sparkRadius: 40,
         sparkCount: 8,
         duration: 400,
         easing: 'ease-out',
