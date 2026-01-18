@@ -896,3 +896,35 @@ body.secret-dark p { font-size: 1.2rem; margin-bottom: 40px; }
 .btn-secondary { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
 .btn-secondary:hover { background-color: var(--primary-color); color: #ffffff; }
 @media (max-width: 600px) { .thank-you-content h2 { font-size: 1.8rem; } .thank-you-actions { flex-direction: column; gap: 10px; } }
+
+/* --- CLICK SPARK ANIMATION --- */
+.spark-container {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    width: 0;
+    height: 0;
+}
+
+.spark {
+    position: absolute;
+    width: var(--spark-size, 10px);
+    height: 2px;
+    background-color: var(--spark-color, #8f2b40);
+    transform-origin: center;
+    transform: rotate(var(--angle, 0deg)) translateX(0);
+    opacity: 1;
+    border-radius: 2px;
+    animation: spark-animation var(--duration, 400ms) var(--easing, ease-out) forwards;
+}
+
+@keyframes spark-animation {
+    0% {
+        transform: rotate(var(--angle, 0deg)) translateX(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: rotate(var(--angle, 0deg)) translateX(var(--spark-radius, 15px)) scale(0);
+        opacity: 0;
+    }
+}

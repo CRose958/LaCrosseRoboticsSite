@@ -199,4 +199,51 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // --- CLICK SPARK ANIMATION ---
+    // Configuration
+    const sparkConfig = {
+        sparkColor: '#8f2b40', // Match primary color
+        sparkSize: 10,
+        sparkRadius: 15,
+        sparkCount: 8,
+        duration: 400,
+        easing: 'ease-out',
+        extraScale: 1
+    };
+
+    function createClickSpark(x, y) {
+        const sparkContainer = document.createElement('div');
+        sparkContainer.className = 'spark-container';
+        sparkContainer.style.left = `${x}px`;
+        sparkContainer.style.top = `${y}px`;
+        document.body.appendChild(sparkContainer);
+
+        // Create multiple spark lines
+        for (let i = 0; i < sparkConfig.sparkCount; i++) {
+            const angle = (360 / sparkConfig.sparkCount) * i;
+            const spark = document.createElement('div');
+            spark.className = 'spark';
+            
+            // Set CSS custom properties for each spark
+            spark.style.setProperty('--angle', `${angle}deg`);
+            spark.style.setProperty('--spark-color', sparkConfig.sparkColor);
+            spark.style.setProperty('--spark-size', `${sparkConfig.sparkSize}px`);
+            spark.style.setProperty('--spark-radius', `${sparkConfig.sparkRadius * sparkConfig.extraScale}px`);
+            spark.style.setProperty('--duration', `${sparkConfig.duration}ms`);
+            spark.style.setProperty('--easing', sparkConfig.easing);
+            
+            sparkContainer.appendChild(spark);
+        }
+
+        // Remove spark container after animation completes
+        setTimeout(() => {
+            sparkContainer.remove();
+        }, sparkConfig.duration);
+    }
+
+    // Add click event listener to document
+    document.addEventListener('click', (e) => {
+        createClickSpark(e.clientX, e.clientY);
+    });
 });
