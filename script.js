@@ -57,88 +57,60 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. GOOEY NAV ANIMATION ---
     const navList = document.querySelector('.nav-list');
     const navItems = document.querySelectorAll('.nav-list li');
-    const navBefore = window.getComputedStyle(navList, '::before');
     
-    function updateGooeyNav() {
-        const activeItem = document.querySelector('.nav-list li.active');
-        if (activeItem && navList) {
-            const itemRect = activeItem.getBoundingClientRect();
+    function updateGooeyNav(targetItem) {
+        const item = targetItem || document.querySelector('.nav-list li.active');
+        if (item && navList) {
+            const itemRect = item.getBoundingClientRect();
             const navRect = navList.getBoundingClientRect();
             
             const left = itemRect.left - navRect.left;
             const width = itemRect.width;
+            const height = itemRect.height;
             
-            navList.style.setProperty('--nav-blob-left', `${left}px`);
-            navList.style.setProperty('--nav-blob-width', `${width}px`);
-            
-            // Update the ::before element position
-            const styleSheet = document.styleSheets[0];
-            const rule = `.nav-list::before { left: ${left}px; width: ${width}px; height: ${itemRect.height}px; }`;
-            
-            // Find and update existing rule or add new one
-            let ruleIndex = -1;
-            for (let i = 0; i < styleSheet.cssRules.length; i++) {
-                if (styleSheet.cssRules[i].selectorText === '.nav-list::before') {
-                    ruleIndex = i;
-                    break;
-                }
-            }
-            
-            if (ruleIndex !== -1) {
-                styleSheet.deleteRule(ruleIndex);
-            }
-            styleSheet.insertRule(rule, styleSheet.cssRules.length);
+            // Use CSS custom properties to animate the blob
+            navList.style.setProperty('--blob-left', `${left}px`);
+            navList.style.setProperty('--blob-width', `${width}px`);
+            navList.style.setProperty('--blob-height', `${height}px`);
         }
     }
 
     // Set active state based on current page
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    navItems.forEach(item => {
-        const link = item.querySelector('a');
-        const href = link.getAttribute('href');
-        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-            item.classList.add('active');
-        }
-    });
-
-    // Initialize gooey nav position
-    setTimeout(updateGooeyNav, 100);
-
-    // Add hover effect
-    navItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            navItems.forEach(i => i.classList.remove('hover'));
-            item.classList.add('hover');
-            const itemRect = item.getBoundingClientRect();
-            const navRect = navList.getBoundingClientRect();
-            const left = itemRect.left - navRect.left;
-            const width = itemRect.width;
-            
-            const styleSheet = document.styleSheets[0];
-            const rule = `.nav-list::before { left: ${left}px; width: ${width}px; height: ${itemRect.height}px; }`;
-            
-            let ruleIndex = -1;
-            for (let i = 0; i < styleSheet.cssRules.length; i++) {
-                if (styleSheet.cssRules[i].selectorText === '.nav-list::before') {
-                    ruleIndex = i;
-                    break;
-                }
+    if (navList && navItems.length > 0) {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        let foundActive = false;
+        
+        navItems.forEach(item => {
+            const link = item.querySelector('a');
+            const href = link.getAttribute('href');
+            if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+                item.classList.add('active');
+                foundActive = true;
             }
-            
-            if (ruleIndex !== -1) {
-                styleSheet.deleteRule(ruleIndex);
-            }
-            styleSheet.insertRule(rule, styleSheet.cssRules.length);
         });
-    });
 
-    navList.addEventListener('mouseleave', () => {
-        navItems.forEach(i => i.classList.remove('hover'));
-        updateGooeyNav();
-    });
+        // If no active found, activate first item
+        if (!foundActive && navItems.length > 0) {
+            navItems[0].classList.add('active');
+        }
 
-    // Update on window resize
-    window.addEventListener('resize', updateGooeyNav);
+        // Initialize gooey nav position after a short delay
+        setTimeout(() => updateGooeyNav(), 100);
+
+        // Add hover effect
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                updateGooeyNav(item);
+            });
+        });
+
+        navList.addEventListener('mouseleave', () => {
+            updateGooeyNav();
+        });
+
+        // Update on window resize
+        window.addEventListener('resize', () => updateGooeyNav());
+    }
 
 
     // --- 3. MOBILE MENU TOGGLE ---
