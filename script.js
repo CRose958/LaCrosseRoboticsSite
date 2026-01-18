@@ -78,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
             navList.style.setProperty('--blob-left', `${left}px`);
             navList.style.setProperty('--blob-width', `${width}px`);
             navList.style.setProperty('--blob-height', `${height}px`);
+            
+            // Mark as initialized to show the blob
+            if (!navList.classList.contains('initialized')) {
+                navList.classList.add('initialized');
+            }
         }
     }
 
@@ -100,10 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
             navItems[0].classList.add('active');
         }
 
-        // Initialize gooey nav position immediately and after load
-        updateGooeyNav();
-        setTimeout(() => updateGooeyNav(), 50);
-        setTimeout(() => updateGooeyNav(), 200);
+        // Initialize gooey nav position with multiple attempts to ensure fonts/layout loaded
+        requestAnimationFrame(() => {
+            updateGooeyNav();
+            setTimeout(() => updateGooeyNav(), 100);
+            setTimeout(() => updateGooeyNav(), 300);
+        });
 
         // Add hover effect - temporarily move blob
         navItems.forEach(item => {
