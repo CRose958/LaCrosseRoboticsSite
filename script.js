@@ -117,22 +117,17 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('mouseenter', () => {
                 updateGooeyNav(item);
             });
-            
-            // Return to active when leaving individual item
-            item.addEventListener('mouseleave', () => {
-                const activeItem = document.querySelector('.nav-list li.active');
-                if (activeItem && activeItem !== item) {
-                    updateGooeyNav(activeItem);
-                }
-            });
         });
 
         // Return blob to active page when mouse leaves entire nav
         navList.addEventListener('mouseleave', () => {
-            const activeItem = document.querySelector('.nav-list li.active');
-            if (activeItem) {
-                updateGooeyNav(activeItem);
-            }
+            // Small delay to ensure smooth transition back
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) {
+                    updateGooeyNav(activeItem);
+                }
+            }, 50);
         });
 
         // Update on window resize
