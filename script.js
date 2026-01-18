@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     // --- 1. CONFIGURATION: IMAGE GALLERIES ---
     const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg";
 
@@ -58,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. MOBILE MENU TOGGLE ---
     const mobileMenu = document.getElementById('mobile-menu');
     const navList = document.querySelector('.nav-list');
-    if(mobileMenu){
+    if (mobileMenu) {
         mobileMenu.addEventListener('click', () => {
             navList.classList.toggle('active');
         });
@@ -67,7 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3. SCROLL ANIMATIONS ---
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('show');
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
         });
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
@@ -85,7 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    if (statsSection) statsObserver.observe(statsSection);
+    if (statsSection) {
+        statsObserver.observe(statsSection);
+    }
 
     function animateNumbers() {
         const counters = document.querySelectorAll('.stat-number');
@@ -151,23 +154,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             closeBtn.addEventListener('click', closeLightbox);
 
-            modal.addEventListener('click', function(e) {
+            modal.addEventListener('click', function (e) {
                 if (e.target === modal || e.target.classList.contains('lightbox-content-wrapper')) {
-                     closeLightbox();
+                    closeLightbox();
                 }
             });
 
-            nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
-            prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showNext();
+            });
 
-            document.addEventListener('keydown', function(e) {
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showPrev();
+            });
+
+            document.addEventListener('keydown', function (e) {
                 if (modal.style.display === "block") {
-                    if (e.key === "ArrowLeft") showPrev();
-                    else if (e.key === "ArrowRight") showNext();
-                    else if (e.key === "Escape") closeLightbox();
+                    if (e.key === "ArrowLeft") {
+                        showPrev();
+                    } else if (e.key === "ArrowRight") {
+                        showNext();
+                    } else if (e.key === "Escape") {
+                        closeLightbox();
+                    }
                 }
             });
         }, 100); // Small delay to ensure DOM is ready
+
         // --- POPUP LOGIC (merged) ---
         const popupOverlay = document.getElementById('popup-overlay');
         const popupCloseBtn = document.getElementById('popup-close-btn');

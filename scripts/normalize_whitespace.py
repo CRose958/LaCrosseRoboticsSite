@@ -3,7 +3,6 @@
 Normalize trailing whitespace and ensure newline-at-EOF for text files.
 Run from the repository root.
 """
-import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,12 +19,13 @@ for path in ROOT.rglob('*'):
             except Exception:
                 continue
         lines = text.splitlines()
-        new_lines = [ln.rstrip(' \t') for ln in lines]
+        new_lines = [line.rstrip(' \t') for line in lines]
         new_text = '\n'.join(new_lines) + '\n'
-        if new_text != text.replace('\r\n', '\n').replace('\r','\n'):
+        normalized_original = text.replace('\r\n', '\n').replace('\r', '\n')
+        if new_text != normalized_original:
             path.write_text(new_text, encoding='utf-8')
             changed.append(str(path.relative_to(ROOT)))
 
-print('Normalized files:', len(changed))
-for p in changed:
-    print(' -', p)
+print(f'Normalized files: {len(changed)}')
+for path in changed:
+    print(f' - {path}')
