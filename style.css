@@ -853,9 +853,9 @@ body.error-dark { background-color: #1c1c1c; color: #ffffff; display: flex; flex
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    /* Remove max-height and overflow-y to prevent sticky header clipping */
     padding-top: clamp(40px, 5vw, 50px);
-    overflow-y: visible;
+    max-height: min(500px, 70vh);
+    overflow-y: auto;
 }
 .calendar-events::-webkit-scrollbar { width: clamp(6px, 1.5vw, 8px); }
 .calendar-events::-webkit-scrollbar-track { background: #333; border-radius: 4px; }
