@@ -1,4 +1,106 @@
 document.addEventListener('DOMContentLoaded', () => {
+        // --- CardNav-inspired Event Navigation ---
+        function buildCardNavEvents() {
+            const cardnavTabs = document.getElementById('cardnav-tabs');
+            const cardnavList = document.getElementById('cardnav-list');
+            if (!cardnavTabs || !cardnavList) return;
+
+            // Gather all events and sort by date
+            let allEvents = [];
+            for (const [date, event] of Object.entries(sampleEvents)) {
+                if (Array.isArray(event)) {
+                    event.forEach(e => allEvents.push({date, event: e}));
+                } else {
+                    allEvents.push({date, event});
+                }
+            }
+            allEvents.sort((a, b) => {
+                const [ay, am, ad] = a.date.split('-').map(Number);
+                const [by, bm, bd] = b.date.split('-').map(Number);
+                return new Date(ay, am-1, ad) - new Date(by, bm-1, bd);
+            });
+
+            // Group events by month and meeting type
+            const months = {};
+            allEvents.forEach(({date, event}) => {
+                const d = new Date(date);
+                const monthKey = `${d.getFullYear()}-${d.getMonth()+1}`;
+                if (!months[monthKey]) months[monthKey] = [];
+                months[monthKey].push({date, event});
+            });
+
+            // Build tabs for each month
+            cardnavTabs.innerHTML = '';
+            const monthKeys = Object.keys(months).sort();
+            monthKeys.forEach((monthKey, idx) => {
+                const d = new Date(monthKey + '-01');
+                const tab = document.createElement('button');
+                tab.className = 'cardnav-tab' + (idx === 0 ? ' active' : '');
+                tab.textContent = d.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+                tab.setAttribute('data-month', monthKey);
+                cardnavTabs.appendChild(tab);
+            });
+
+            // Render events for selected month
+            function renderMonthEvents(monthKey) {
+                cardnavList.innerHTML = '';
+                // Group by meeting type
+                const meetings = {};
+                months[monthKey].forEach(({date, event}) => {
+                    const type = event.category || 'Meeting';
+                    if (!meetings[type]) meetings[type] = [];
+                    meetings[type].push({date, event});
+                });
+                Object.keys(meetings).forEach(type => {
+                    // Meeting type header
+                    const typeHeader = document.createElement('div');
+                    typeHeader.className = 'cardnav-type-header';
+                    typeHeader.textContent = type === 'FIRST' ? 'FIRST Events' : (type === 'Robotics' ? 'Robotics Meetings' : 'Team Meetings');
+                    cardnavList.appendChild(typeHeader);
+                    // Cards
+                    meetings[type].forEach(({date, event}) => {
+                        const card = document.createElement('div');
+                        card.className = 'cardnav-card';
+                        // Date
+                        const d = new Date(date);
+                        const dateDiv = document.createElement('div');
+                        dateDiv.className = 'cardnav-date';
+                        dateDiv.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        card.appendChild(dateDiv);
+                        // Title
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'cardnav-title';
+                        titleDiv.textContent = event.title || (type === 'FIRST' ? 'FIRST Competition' : 'Team Meeting');
+                        card.appendChild(titleDiv);
+                        // Time
+                        const timeDiv = document.createElement('div');
+                        timeDiv.className = 'cardnav-time';
+                        timeDiv.textContent = event.time || (type === 'FIRST' ? 'All Day' : '4:00 PM - 8:00 PM');
+                        card.appendChild(timeDiv);
+                        // Location
+                        const locDiv = document.createElement('div');
+                        locDiv.className = 'cardnav-location';
+                        locDiv.textContent = event.location || (type === 'FIRST' ? 'Appleton East High School' : 'Room 196 @ Logan High School');
+                        card.appendChild(locDiv);
+                        cardnavList.appendChild(card);
+                    });
+                });
+            }
+
+            // Tab click handler
+            cardnavTabs.querySelectorAll('.cardnav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    cardnavTabs.querySelectorAll('.cardnav-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    renderMonthEvents(tab.getAttribute('data-month'));
+                });
+            });
+            // Initial render
+            if (monthKeys.length > 0) renderMonthEvents(monthKeys[0]);
+        }
+
+        // Run CardNav event builder
+        buildCardNavEvents();
     // --- 1. CONFIGURATION: IMAGE GALLERIES ---
     const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg";
 
