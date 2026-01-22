@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Gather all events and sort by date
             let allEvents = [];
-            for (const [date, event] of Object.entries(sampleEvents)) {
+            for (const [date, event] of Object.entries(window.sampleEvents)) {
                 if (Array.isArray(event)) {
                     event.forEach(e => allEvents.push({date, event: e}));
                 } else {
