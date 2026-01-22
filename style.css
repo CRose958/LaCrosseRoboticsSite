@@ -863,24 +863,20 @@ body.error-dark { background-color: #1c1c1c; color: #ffffff; display: flex; flex
 .calendar-events::-webkit-scrollbar-thumb:hover { background: #6d1f30; }
 .calendar-events-title {
     margin: 0;
-    font-size: clamp(1.2rem, 4vw, 1.5rem);
-    font-weight: 700;
-    color: #fff;
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
+    font-weight: 600;
+    color: var(--white-color);
     display: flex;
     align-items: center;
-    gap: clamp(10px, 2vw, 16px);
-    padding: 20px 0 20px 32px;
-    border-radius: 0;
+    gap: clamp(8px, 2vw, 10px);
+    padding: clamp(16px, 4vw, 20px) clamp(15px, 3vw, 20px) clamp(10px, 3vw, 15px) clamp(15px, 3vw, 20px);
+    border-radius: 12px 12px 0 0;
     position: sticky;
     top: 0;
-    background: #a02a3d;
+    background: #2a2a2a;
     z-index: 999;
-    box-shadow: none;
-    border-bottom: none;
-    width: 100%;
-    min-width: 0;
-    letter-spacing: 0.01em;
-    transition: background 0.3s;
+    box-shadow: 0 4px 12px 0 rgba(0,0,0,0.18);
+    border-bottom: 1px solid #444;
 }
 
 /* Remove extra margin from first event, since cap header now covers it cleanly */
