@@ -1,4 +1,95 @@
 document.addEventListener('DOMContentLoaded', () => {
+                // --- Calendar Grid Logic ---
+                const calendarTitle = document.getElementById('calendar-title');
+                const calendarDays = document.getElementById('calendar-days');
+                const prevMonthBtn = document.getElementById('prev-month');
+                const nextMonthBtn = document.getElementById('next-month');
+                // Current date - Set to January 2026 to show our events
+                let currentDate = new Date(2026, 0, 1); // January 2026 (months are 0-based)
+
+                function renderCalendar() {
+                    // Clear previous days
+                    calendarDays.innerHTML = '';
+
+                    // Set calendar title
+                    const monthNames = [
+                        'January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'
+                    ];
+                    calendarTitle.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+
+                    // Get first day of month and number of days
+                    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                    const daysInMonth = lastDay.getDate();
+                    const startingDayOfWeek = firstDay.getDay();
+
+                    // Previous month days
+                    const prevMonthLastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+
+                    // Calculate number of days for next month grid
+                    const totalCells = 42; // 6 rows x 7 columns
+                    const daysInNextMonthGrid = totalCells - (daysInMonth + startingDayOfWeek);
+
+                    // Add previous month days
+                    for (let i = 0; i < startingDayOfWeek; i++) {
+                        createDayElement(prevMonthLastDay - startingDayOfWeek + i + 1, 'other-month', []);
+                    }
+
+                    // Add current month days
+                    const today = new Date();
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+                        const dateKey = `${dayDate.getFullYear()}-${dayDate.getMonth()+1}-${dayDate.getDate()}`;
+                        const dayEvents = [];
+                        if (window.sampleEvents[dateKey]) {
+                            dayEvents.push(window.sampleEvents[dateKey]);
+                        }
+                        let dayClass = 'calendar-day';
+                        if (i === today.getDate() &&
+                            currentDate.getMonth() === today.getMonth() &&
+                            currentDate.getFullYear() === today.getFullYear()) {
+                            dayClass += ' today';
+                        }
+                        createDayElement(i, dayClass, dayEvents, dateKey);
+                    }
+
+                    // Add next month days
+                    for (let i = 1; i <= daysInNextMonthGrid; i++) {
+                        createDayElement(i, 'other-month', []);
+                    }
+                }
+
+                function createDayElement(day, dayClass, events, dateKey) {
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = dayClass;
+                    if (dateKey) dayDiv.setAttribute('data-date', dateKey);
+                    const numDiv = document.createElement('div');
+                    numDiv.className = 'calendar-day-number';
+                    numDiv.textContent = day;
+                    dayDiv.appendChild(numDiv);
+                    // Add event marker if there are events
+                    if (events && events.length > 0) {
+                        const marker = document.createElement('div');
+                        marker.className = 'calendar-event-markers';
+                        marker.innerHTML = '<span class="event-dot robotics"></span>';
+                        dayDiv.appendChild(marker);
+                    }
+                    calendarDays.appendChild(dayDiv);
+                }
+
+                // Month navigation
+                prevMonthBtn.addEventListener('click', () => {
+                    currentDate.setMonth(currentDate.getMonth() - 1);
+                    renderCalendar();
+                });
+                nextMonthBtn.addEventListener('click', () => {
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    renderCalendar();
+                });
+
+                // Initial render
+                renderCalendar();
             // Sample events data - dates that exist in January 2026
             window.sampleEvents = {
                 '2026-1-13': { category: 'Robotics' },
