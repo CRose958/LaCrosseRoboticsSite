@@ -102,14 +102,27 @@ html {
 body {
     font-family: 'Roboto', sans-serif;
     line-height: 1.6;
-    color: var(--dark-color);
-    background-color: var(--white-color);
+    color: var(--white-color);
+    background-color: var(--dark-color);
     overflow-x: hidden;
-
-    /* --- STICKY FOOTER FIX --- */
-    min-height: 100vh; /* Minimum height is 100% of viewport */
+    min-height: 100vh;
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--white-color);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
 }
 
 /* --- NAVIGATION --- */
