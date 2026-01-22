@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5859092930525234"
+     crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-REBLDRBN4N"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-REBLDRBN4N');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
@@ -254,7 +264,7 @@
                 events.forEach(event => {
                     const category = event.getAttribute('data-category');
                     const eventDate = event.getAttribute('data-date');
-                    
+
                     // Parse event date and check if it's in the past
                     const [year, month, day] = eventDate.split('-').map(Number);
                     const eventDateObj = new Date(year, month - 1, day);

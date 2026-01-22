@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     // --- 1. CONFIGURATION: IMAGE GALLERIES ---
     const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg";
 
@@ -55,10 +54,117 @@ document.addEventListener('DOMContentLoaded', () => {
     buildGrid('archive-container', archiveImageIds, 'archive-item');
 
 
-    // --- 2. MOBILE MENU TOGGLE ---
-    const mobileMenu = document.getElementById('mobile-menu');
+    // --- 2. GOOEY NAV ANIMATION ---
     const navList = document.querySelector('.nav-list');
-    if(mobileMenu){
+    const navItems = document.querySelectorAll('.nav-list li');
+    
+    function updateGooeyNav(targetItem) {
+        const item = targetItem || document.querySelector('.nav-list li.active');
+        if (item && navList) {
+            const itemRect = item.getBoundingClientRect();
+            const navRect = navList.getBoundingClientRect();
+            
+            // Calculate position relative to nav container
+            let left = itemRect.left - navRect.left;
+            let width = itemRect.width;
+            const height = itemRect.height;
+            
+            // Constrain to stay within nav bounds (accounting for padding)
+            const padding = 8;
+            const maxLeft = navRect.width - width - padding;
+            left = Math.max(padding, Math.min(left, maxLeft));
+            
+            // Use CSS custom properties to animate the blob
+            navList.style.setProperty('--blob-left', `${left}px`);
+            navList.style.setProperty('--blob-width', `${width}px`);
+            navList.style.setProperty('--blob-height', `${height}px`);
+            
+            // Mark as initialized to show the blob
+            if (!navList.classList.contains('initialized')) {
+                navList.classList.add('initialized');
+            }
+        }
+    }
+
+    // Set active state based on current page
+    if (navList && navItems.length > 0) {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        let foundActive = false;
+        
+        // Clear any existing active classes first
+        navItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        navItems.forEach(item => {
+            const link = item.querySelector('a');
+            const href = link.getAttribute('href');
+            
+            // More robust matching - check both with and without .html
+            const pageName = currentPage.replace('.html', '');
+            const linkName = href.replace('.html', '');
+            
+            if (href === currentPage || 
+                linkName === pageName ||
+                (currentPage === '' && href === 'index.html') ||
+                (currentPage === 'index.html' && href === 'index.html')) {
+                item.classList.add('active');
+                foundActive = true;
+            }
+        });
+
+        // If no active found, activate first item
+        if (!foundActive && navItems.length > 0) {
+            navItems[0].classList.add('active');
+        }
+
+        // Initialize gooey nav position with multiple attempts to ensure fonts/layout loaded
+        requestAnimationFrame(() => {
+            const activeItem = document.querySelector('.nav-list li.active');
+            if (activeItem) {
+                updateGooeyNav(activeItem);
+            }
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) updateGooeyNav(activeItem);
+            }, 100);
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) updateGooeyNav(activeItem);
+            }, 300);
+        });
+
+        // Add hover effect - temporarily move blob
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                updateGooeyNav(item);
+            });
+        });
+
+        // Return blob to active page when mouse leaves entire nav
+        navList.addEventListener('mouseleave', () => {
+            // Small delay to ensure smooth transition back
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) {
+                    updateGooeyNav(activeItem);
+                }
+            }, 50);
+        });
+
+        // Update on window resize
+        window.addEventListener('resize', () => {
+            const activeItem = document.querySelector('.nav-list li.active');
+            if (activeItem) {
+                updateGooeyNav(activeItem);
+            }
+        });
+    }
+
+
+    // --- 3. MOBILE MENU TOGGLE ---
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu) {
         mobileMenu.addEventListener('click', () => {
             navList.classList.toggle('active');
         });
@@ -67,7 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3. SCROLL ANIMATIONS ---
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('show');
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
         });
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
@@ -85,7 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    if (statsSection) statsObserver.observe(statsSection);
+    if (statsSection) {
+        statsObserver.observe(statsSection);
+    }
 
     function animateNumbers() {
         const counters = document.querySelectorAll('.stat-number');
@@ -151,23 +261,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             closeBtn.addEventListener('click', closeLightbox);
 
-            modal.addEventListener('click', function(e) {
+            modal.addEventListener('click', function (e) {
                 if (e.target === modal || e.target.classList.contains('lightbox-content-wrapper')) {
-                     closeLightbox();
+                    closeLightbox();
                 }
             });
 
-            nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
-            prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showNext();
+            });
 
-            document.addEventListener('keydown', function(e) {
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showPrev();
+            });
+
+            document.addEventListener('keydown', function (e) {
                 if (modal.style.display === "block") {
-                    if (e.key === "ArrowLeft") showPrev();
-                    else if (e.key === "ArrowRight") showNext();
-                    else if (e.key === "Escape") closeLightbox();
+                    if (e.key === "ArrowLeft") {
+                        showPrev();
+                    } else if (e.key === "ArrowRight") {
+                        showNext();
+                    } else if (e.key === "Escape") {
+                        closeLightbox();
+                    }
                 }
             });
         }, 100); // Small delay to ensure DOM is ready
+
         // --- POPUP LOGIC (merged) ---
         const popupOverlay = document.getElementById('popup-overlay');
         const popupCloseBtn = document.getElementById('popup-close-btn');
@@ -184,4 +306,51 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // --- CLICK SPARK ANIMATION ---
+    // Configuration
+    const sparkConfig = {
+        sparkColor: '#8f2b40', // Match primary color
+        sparkSize: 25,
+        sparkRadius: 40,
+        sparkCount: 8,
+        duration: 400,
+        easing: 'ease-out',
+        extraScale: 1
+    };
+
+    function createClickSpark(x, y) {
+        const sparkContainer = document.createElement('div');
+        sparkContainer.className = 'spark-container';
+        sparkContainer.style.left = `${x}px`;
+        sparkContainer.style.top = `${y}px`;
+        document.body.appendChild(sparkContainer);
+
+        // Create multiple spark lines
+        for (let i = 0; i < sparkConfig.sparkCount; i++) {
+            const angle = (360 / sparkConfig.sparkCount) * i;
+            const spark = document.createElement('div');
+            spark.className = 'spark';
+            
+            // Set CSS custom properties for each spark
+            spark.style.setProperty('--angle', `${angle}deg`);
+            spark.style.setProperty('--spark-color', sparkConfig.sparkColor);
+            spark.style.setProperty('--spark-size', `${sparkConfig.sparkSize}px`);
+            spark.style.setProperty('--spark-radius', `${sparkConfig.sparkRadius * sparkConfig.extraScale}px`);
+            spark.style.setProperty('--duration', `${sparkConfig.duration}ms`);
+            spark.style.setProperty('--easing', sparkConfig.easing);
+            
+            sparkContainer.appendChild(spark);
+        }
+
+        // Remove spark container after animation completes
+        setTimeout(() => {
+            sparkContainer.remove();
+        }, sparkConfig.duration);
+    }
+
+    // Add click event listener to document
+    document.addEventListener('click', (e) => {
+        createClickSpark(e.clientX, e.clientY);
+    });
 });

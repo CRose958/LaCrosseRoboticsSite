@@ -1,20 +1,3 @@
-/* Sticky header for Upcoming Events - ensure not clipped */
-.calendar-events-title {
-    margin: 0 0 clamp(15px, 3vw, 20px) 0;
-    font-size: clamp(1.1rem, 4vw, 1.4rem);
-    font-weight: 600;
-    color: var(--white-color);
-    display: flex;
-    align-items: center;
-    gap: clamp(8px, 2vw, 10px);
-    padding-bottom: clamp(10px, 3vw, 15px);
-    border-bottom: 1px solid #444;
-    position: sticky;
-    top: 0;
-    background: #2a2a2a;
-    z-index: 100;
-    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.25);
-}
 /* --- CSS VARIABLES & RESET --- */
 :root {
     --primary-color: #8f2b40; /* Maroon/Cranberry */
@@ -84,24 +67,62 @@ nav {
     color: var(--primary-color);
 }
 
+/* Gooey Nav Styles */
 .nav-list {
     list-style: none;
     display: flex;
+    position: relative;
+    background: rgba(143, 43, 64, 0.15);
+    padding: 8px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    --blob-left: 0px;
+    --blob-width: 0px;
+    --blob-height: 0px;
+}
+
+.nav-list::before {
+    content: '';
+    position: absolute;
+    left: var(--blob-left);
+    width: var(--blob-width);
+    height: var(--blob-height);
+    background: var(--primary-color);
+    border-radius: 50px;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    z-index: 0;
+    top: 8px;
+    will-change: left, width;
+    opacity: 0;
+}
+
+.nav-list.initialized::before {
+    opacity: 1;
 }
 
 .nav-list li {
-    margin-left: 25px;
+    margin: 0;
+    position: relative;
 }
 
 .nav-list a {
     color: var(--white-color);
     text-decoration: none;
-    font-weight: 400;
+    font-weight: 500;
+    padding: 12px 24px;
+    display: block;
+    position: relative;
+    z-index: 1;
     transition: color 0.3s;
+    border-radius: 50px;
 }
 
 .nav-list a:hover {
-    color: var(--primary-color);
+    color: var(--white-color);
+}
+
+.nav-list li.active a {
+    color: var(--white-color);
 }
 
 /* Hamburger Menu Icon */
@@ -278,34 +299,82 @@ h2::after {
 
 /* --- SPONSOR GRID (Updated with your custom styles) --- */
 .sponsors-section {
-    padding: 60px 20px;
+    padding: 80px 20px;
     background-color: #fff;
     text-align: center;
+    overflow: hidden;
 }
 
-.sponsors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    justify-items: center;
+/* Logo Loop Animation */
+.logo-loop-container {
+    width: 100%;
+    overflow: visible;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    padding: 30px 0;
+}
+
+.logo-loop-track {
+    display: flex;
+    width: fit-content;
+    animation: scroll-left 40s linear infinite;
+}
+
+.logo-loop-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.logo-loop-group {
+    display: flex;
+    gap: 100px;
     align-items: center;
+    flex-shrink: 0;
+    padding-right: 100px;
 }
 
-.sponsor-logo {
-    max-width: 250px;
-    height: auto;
+.logo-loop-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    padding: 10px;
+}
+
+.logo-loop-item:hover {
+    transform: scale(1.1);
+}
+
+.logo-loop-item .sponsor-logo {
+    height: 80px;
+    width: auto;
+    max-width: 200px;
     filter: grayscale(100%);
     transition: all 0.3s ease;
     opacity: 0.7;
-    object-fit: contain; /* Ensures logos fit nicely */
+    object-fit: contain;
 }
 
-.sponsor-logo:hover {
+.logo-loop-item:hover .sponsor-logo {
     filter: grayscale(0%);
     opacity: 1;
-    transform: scale(1.05);
+}
+
+/* Make last two logos bigger */
+.logo-loop-item:nth-child(6) .sponsor-logo,
+.logo-loop-item:nth-child(7) .sponsor-logo {
+    height: 100px;
+    max-width: 250px;
 }
 
 /* --- PHOTO GALLERY (NUCLEAR FIX) --- */
@@ -538,12 +607,22 @@ footer {
         left: 0;
         background-color: var(--dark-color);
         text-align: center;
+        border-radius: 0;
+        backdrop-filter: none;
+        padding: 0;
+    }
+    .nav-list::before {
+        display: none;
     }
     .nav-list.active {
         display: flex;
     }
     .nav-list li {
-        margin: 15px 0;
+        margin: 0;
+    }
+    .nav-list a {
+        padding: 15px;
+        border-radius: 0;
     }
     .hero-content h1 {
         font-size: 2.5rem;
@@ -552,13 +631,20 @@ footer {
         column-count: 2;
     }
 
-    /* Sponsors Grid Mobile Fix */
-    .sponsors-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 30px;
+    /* Logo Loop Mobile Adjustments */
+    .logo-loop-group {
+        gap: 60px;
+        padding-right: 60px;
     }
-    .sponsor-logo {
+    .logo-loop-item {
+        padding: 5px;
+    }
+    .logo-loop-item .sponsor-logo {
+        height: 60px;
         max-width: 150px;
+    }
+    .logo-loop-track {
+        animation: scroll-left 30s linear infinite;
     }
 }
 
@@ -713,13 +799,8 @@ body.map-dark { background-color: #1c1c1c; color: #ffffff; }
 /* --- sponsors.html styles --- */
 body.sponsors-dark { background-color: #1c1c1c; color: #ffffff; }
 .hero.small { height: 40vh; min-height: 300px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/948d1bb0-7ce3-4d1a-c655-ead3c0c59d00/public'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: white; }
-.sponsors-section { padding: 60px 20px; background-color: #1c1c1c; text-align: center; }
-.sponsors-section h2 { font-size: 2.5rem; margin-bottom: 40px; color: #ffffff; }
-.sponsors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; justify-items: center; align-items: center; }
-.sponsor-logo { max-width: 250px; height: auto; background-color: #ffffff; padding: 20px; border-radius: 8px; filter: grayscale(100%); transition: all 0.3s ease; opacity: 0.8; display: block; }
-.sponsor-logo:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.05); cursor: pointer; }
-.sponsors-grid a { text-decoration: none; }
-@media (max-width: 768px) { .sponsors-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 30px; } .sponsor-logo { max-width: 150px; padding: 10px; } }
+.sponsors-dark .sponsors-section { padding: 60px 20px; background-color: #1c1c1c; text-align: center; }
+.sponsors-dark .logo-loop-container { mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
 
 /* From 404.html: error page styles */
 /* --- 404.html styles --- */
@@ -871,7 +952,7 @@ body.secret-dark p { font-size: 1.2rem; margin-bottom: 40px; }
     font-size: 0.9rem;
 }
 
-.contact-form input, 
+.contact-form input,
 .contact-form textarea {
     width: 100%;
     padding: 12px;
@@ -882,7 +963,7 @@ body.secret-dark p { font-size: 1.2rem; margin-bottom: 40px; }
     font-family: 'Roboto', sans-serif;
 }
 
-.contact-form input:focus, 
+.contact-form input:focus,
 .contact-form textarea:focus {
     outline: none;
     border-color: var(--primary-color);
@@ -913,3 +994,35 @@ body.secret-dark p { font-size: 1.2rem; margin-bottom: 40px; }
 .btn-secondary { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
 .btn-secondary:hover { background-color: var(--primary-color); color: #ffffff; }
 @media (max-width: 600px) { .thank-you-content h2 { font-size: 1.8rem; } .thank-you-actions { flex-direction: column; gap: 10px; } }
+
+/* --- CLICK SPARK ANIMATION --- */
+.spark-container {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    width: 0;
+    height: 0;
+}
+
+.spark {
+    position: absolute;
+    width: var(--spark-size, 25px);
+    height: 3px;
+    background-color: var(--spark-color, #8f2b40);
+    transform-origin: left center;
+    transform: rotate(var(--angle, 0deg)) translateX(0);
+    opacity: 1;
+    border-radius: 2px;
+    animation: spark-animation var(--duration, 400ms) var(--easing, ease-out) forwards;
+}
+
+@keyframes spark-animation {
+    0% {
+        transform: rotate(var(--angle, 0deg)) translateX(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: rotate(var(--angle, 0deg)) translateX(var(--spark-radius, 15px)) scale(0);
+        opacity: 0;
+    }
+}
