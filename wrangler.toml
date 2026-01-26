@@ -1,0 +1,11 @@
+
+name = "lacrosse-robotics-backend"
+account_id = "cfb5806341f9c812f37277262ce16c3a"
+workers_dev = true
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "lacrosse_users_db"
+database_id = "98bdd8c7-6d0c-4b72-9940-8ec49b6f8aab"
