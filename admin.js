@@ -3,8 +3,11 @@ const API = 'https://lacrosse-robotics-backend.christianrosework.workers.dev/api
 let currentFile = null;
 let currentContent = '';
 
+// DEMO: Set a session cookie for admin (in production, set after login)
+document.cookie = 'session=demo_admin_token; path=/;';
+
 async function fetchFiles() {
-  const res = await fetch(`${API}/files`);
+  const res = await fetch(`${API}/files`, { credentials: 'include' });
   const files = await res.json();
   const list = document.getElementById('admin-file-list');
   list.innerHTML = '';
@@ -19,7 +22,7 @@ async function fetchFiles() {
 
 async function loadFile(filename) {
   document.getElementById('admin-status').textContent = 'Loading...';
-  const res = await fetch(`${API}/file?filename=${encodeURIComponent(filename)}`);
+  const res = await fetch(`${API}/file?filename=${encodeURIComponent(filename)}`, { credentials: 'include' });
   if (!res.ok) {
     document.getElementById('admin-status').textContent = 'Failed to load file.';
     return;
@@ -51,6 +54,7 @@ document.getElementById('admin-save').onclick = async function() {
   const res = await fetch(`${API}/file`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify({ filename: currentFile, content })
   });
   if (res.ok) {
@@ -68,6 +72,7 @@ document.getElementById('admin-new-file').onclick = async function() {
   const res = await fetch(`${API}/file`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify({ filename, content: '' })
   });
   if (res.ok) {
