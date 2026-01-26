@@ -26,7 +26,8 @@ export default {
       if (!user) {
         return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
       }
-      return new Response(JSON.stringify({ id: user.id, username: user.username, email: user.email }), { status: 200 });
+      // Expose password_hash for login (demo only)
+      return new Response(JSON.stringify({ id: user.id, username: user.username, email: user.email, password_hash: user.password_hash }), { status: 200 });
     }
     return new Response('Hello from La Crosse Robotics Cloudflare Worker!');
   }
