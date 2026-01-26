@@ -7,9 +7,13 @@ document.getElementById('admin-media-btn').onclick = async function() {
   const images = [
     // Example: 'Images/example1.jpg', 'Images/example2.png'
   ];
-  images.forEach(src => {
+  mediaList.innerHTML = 'Loading...';
+  const res = await fetch(`${API.replace('/admin','/admin')}/images`, { credentials: 'include' });
+  const files = await res.json();
+  mediaList.innerHTML = '';
+  files.forEach(filename => {
     const img = document.createElement('img');
-    img.src = src;
+    img.src = 'Images/' + filename;
     img.style.maxWidth = '120px';
     img.style.maxHeight = '120px';
     img.style.border = '1px solid #444';
@@ -22,8 +26,21 @@ document.getElementById('admin-media-btn').onclick = async function() {
 document.getElementById('media-upload-btn').onclick = async function() {
   const input = document.getElementById('media-upload-input');
   if (!input.files.length) return alert('Select images to upload.');
-  // TODO: Upload images to backend
-  alert('Upload not yet implemented.');
+  for (const file of input.files) {
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const base64 = e.target.result.split(',')[1];
+      await fetch(`${API.replace('/admin','/admin')}/images`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ filename: file.name, data: base64 })
+      });
+      document.getElementById('admin-media-btn').onclick();
+    };
+    reader.readAsDataURL(file);
+  }
+  input.value = '';
 };
 // User Management Modal
 document.getElementById('admin-users-btn').onclick = async function() {
