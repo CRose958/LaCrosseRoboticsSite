@@ -1,35 +1,47 @@
+
 import { getUserByUsername, createUser } from './users.js';
 
-export default {
+// Helper to add CORS headers
+function withCORS(response) {
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  return response;
+}
+
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    // Handle CORS preflight
+    if (request.method === 'OPTIONS') {
+      return withCORS(new Response(null, { status: 204 }));
+    }
     if (url.pathname === '/api/register' && request.method === 'POST') {
       const { username, password, email } = await request.json();
       if (!username || !password || !email) {
-        return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 });
+        return withCORS(new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 }));
       }
       // Simple hash (for demo only, use a real hash in production)
       const password_hash = await hashPassword(password);
       try {
         const user = await createUser(env, username, password_hash, email);
-        return new Response(JSON.stringify({ id: user.id, username: user.username, email: user.email }), { status: 201 });
+        return withCORS(new Response(JSON.stringify({ id: user.id, username: user.username, email: user.email }), { status: 201 }));
       } catch (e) {
-        return new Response(JSON.stringify({ error: 'User exists or DB error' }), { status: 400 });
+        return withCORS(new Response(JSON.stringify({ error: 'User exists or DB error' }), { status: 400 }));
       }
     }
     if (url.pathname === '/api/user' && request.method === 'GET') {
       const username = url.searchParams.get('username');
       if (!username) {
-        return new Response(JSON.stringify({ error: 'Missing username' }), { status: 400 });
+        return withCORS(new Response(JSON.stringify({ error: 'Missing username' }), { status: 400 }));
       }
       const user = await getUserByUsername(env, username);
       if (!user) {
-        return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+        return withCORS(new Response(JSON.stringify({ error: 'User not found' }), { status: 404 }));
       }
       // Expose password_hash for login (demo only)
-      return new Response(JSON.stringify({ id: user.id, username: user.username, email: user.email, password_hash: user.password_hash }), { status: 200 });
+      return withCORS(new Response(JSON.stringify({ id: user.id, username: user.username, email: user.email, password_hash: user.password_hash }), { status: 200 }));
     }
-    return new Response('Hello from La Crosse Robotics Cloudflare Worker!');
+    return withCORS(new Response('Hello from La Crosse Robotics Cloudflare Worker!'));
   }
 }
 
