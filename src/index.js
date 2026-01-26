@@ -1,3 +1,18 @@
+import { pushFileToGitHub } from './github_api.js';
+    // Admin API: Push file to GitHub
+    if (url.pathname === '/api/admin/push' && request.method === 'POST') {
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+      const { filename, content } = await request.json();
+      if (!filename || !content) return withCORS(new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 }));
+      try {
+        await pushFileToGitHub(filename, content, user.username);
+        await logAudit(env, user.id, 'push_github', filename);
+        return withCORS(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+      } catch (e) {
+        return withCORS(new Response(JSON.stringify({ error: 'GitHub push failed', details: e.message }), { status: 500 }));
+      }
+    }
 // --- Simple Session Auth (Phase 2 foundation) ---
 const SESSION_SECRET = 'changeme'; // TODO: Use env var or secret
 function getSessionUser(request) {
