@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Suite - La Crosse Robotics</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #181818; color: #eee; }
+    .admin-container { max-width: 1100px; margin: 40px auto; background: #232323; border-radius: 8px; box-shadow: 0 2px 16px #0008; padding: 32px; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; }
+    .admin-files { width: 260px; float: left; margin-right: 32px; }
+    .admin-editor { overflow: auto; }
+    .admin-file-list { list-style: none; padding: 0; }
+    .admin-file-list li { padding: 8px 12px; cursor: pointer; border-radius: 4px; }
+    .admin-file-list li.selected, .admin-file-list li:hover { background: #333; }
+    .admin-editor textarea { width: 100%; height: 480px; background: #111; color: #fff; border: 1px solid #444; border-radius: 4px; font-family: monospace; font-size: 1rem; padding: 12px; }
+    .admin-actions { margin-top: 16px; }
+    .admin-actions button { margin-right: 12px; }
+    .admin-status { margin-top: 12px; min-height: 24px; }
+    .admin-logout { color: #f55; cursor: pointer; }
+    @media (max-width: 900px) {
+      .admin-files { float: none; width: 100%; margin: 0 0 24px 0; }
+      .admin-editor textarea { height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h2>Site Admin Suite</h2>
+      <span class="admin-logout" id="admin-logout">Logout</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;">
+      <div class="admin-files">
+        <h3>Files</h3>
+        <ul class="admin-file-list" id="admin-file-list"></ul>
+        <button id="admin-new-file">+ New File</button>
+      </div>
+      <div class="admin-editor" style="flex:1;min-width:300px;">
+        <h3 id="admin-filename">(Select a file)</h3>
+        <textarea id="admin-editor" disabled></textarea>
+        <div class="admin-actions">
+          <button id="admin-save" disabled>Save</button>
+          <button id="admin-preview" disabled>Preview</button>
+          <button id="admin-history" disabled>History</button>
+        </div>
+        <div class="admin-status" id="admin-status"></div>
+      </div>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>
