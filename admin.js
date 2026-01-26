@@ -1,3 +1,30 @@
+// Site Settings Modal
+document.getElementById('admin-settings-btn').onclick = async function() {
+  const res = await fetch(`${API.replace('/admin','/admin')}/settings`, { credentials: 'include' });
+  const settings = await res.json();
+  document.getElementById('settings-title').value = settings.title || '';
+  document.getElementById('settings-banner').value = settings.banner || '';
+  document.getElementById('settings-theme').value = settings.theme || 'dark';
+  document.getElementById('settings-status').textContent = '';
+  document.getElementById('admin-settings-modal').style.display = 'flex';
+};
+
+document.getElementById('settings-save-btn').onclick = async function() {
+  const title = document.getElementById('settings-title').value;
+  const banner = document.getElementById('settings-banner').value;
+  const theme = document.getElementById('settings-theme').value;
+  const res = await fetch(`${API.replace('/admin','/admin')}/settings`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ title, banner, theme })
+  });
+  if (res.ok) {
+    document.getElementById('settings-status').textContent = 'Saved!';
+  } else {
+    document.getElementById('settings-status').textContent = 'Save failed.';
+  }
+};
 // Media Manager Modal (UI only, backend to follow)
 document.getElementById('admin-media-btn').onclick = async function() {
   // TODO: Fetch media list from backend

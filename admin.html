@@ -1,3 +1,15 @@
+                <!-- Site Settings Modal -->
+                <div id="admin-settings-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
+                  <div style="background:#232323;padding:24px 32px;border-radius:8px;max-width:500px;width:90vw;max-height:80vh;overflow:auto;">
+                    <h3>Site Settings</h3>
+                    <label>Site Title: <input id="settings-title"></label><br><br>
+                    <label>Banner Text: <input id="settings-banner"></label><br><br>
+                    <label>Theme: <select id="settings-theme"><option value="dark">Dark</option><option value="light">Light</option></select></label><br><br>
+                    <button id="settings-save-btn">Save</button>
+                    <button onclick="document.getElementById('admin-settings-modal').style.display='none'">Close</button>
+                    <div id="settings-status"></div>
+                  </div>
+                </div>
         <!-- Media Manager Modal -->
         <div id="admin-media-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
           <div style="background:#232323;padding:24px 32px;border-radius:8px;max-width:700px;width:95vw;max-height:80vh;overflow:auto;">
@@ -96,6 +108,7 @@
         <button id="admin-users-btn">User Management</button>
         <button id="admin-audit-btn">Audit Log</button>
         <button id="admin-media-btn">Media Manager</button>
+        <button id="admin-settings-btn">Site Settings</button>
       </div>
     </div>
   </div>
