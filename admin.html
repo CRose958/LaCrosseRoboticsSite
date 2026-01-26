@@ -46,6 +46,22 @@
           <button id="admin-history" disabled>History</button>
         </div>
         <div class="admin-status" id="admin-status"></div>
+        <!-- Version History Modal -->
+        <div id="admin-history-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
+          <div style="background:#232323;padding:24px 32px;border-radius:8px;max-width:600px;width:90vw;max-height:80vh;overflow:auto;">
+            <h3>Version History: <span id="history-filename"></span></h3>
+            <ul id="history-list" style="list-style:none;padding:0;"></ul>
+            <button onclick="document.getElementById('admin-history-modal').style.display='none'">Close</button>
+          </div>
+        </div>
+        <!-- Preview Modal -->
+        <div id="admin-preview-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
+          <div style="background:#232323;padding:24px 32px;border-radius:8px;max-width:900px;width:95vw;max-height:90vh;overflow:auto;">
+            <h3>Preview: <span id="preview-filename"></span></h3>
+            <iframe id="preview-iframe" style="width:100%;height:60vh;background:#fff;border:1px solid #444;"></iframe>
+            <button onclick="document.getElementById('admin-preview-modal').style.display='none'">Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

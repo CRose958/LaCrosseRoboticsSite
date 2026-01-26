@@ -37,6 +37,44 @@ async function loadFile(filename) {
   document.getElementById('admin-save').disabled = false;
   document.getElementById('admin-preview').disabled = false;
   document.getElementById('admin-history').disabled = false;
+
+  // Preview logic
+  document.getElementById('admin-preview').onclick = function() {
+    if (!currentFile) return;
+    document.getElementById('preview-filename').textContent = currentFile;
+    const content = document.getElementById('admin-editor').value;
+    const iframe = document.getElementById('preview-iframe');
+    iframe.srcdoc = content;
+    document.getElementById('admin-preview-modal').style.display = 'flex';
+  };
+
+  // Version history logic
+  document.getElementById('admin-history').onclick = async function() {
+    if (!currentFile) return;
+    document.getElementById('history-filename').textContent = currentFile;
+    const res = await fetch(`${API}/file_versions?filename=${encodeURIComponent(currentFile)}`, { credentials: 'include' });
+    const versions = await res.json();
+    const list = document.getElementById('history-list');
+    list.innerHTML = '';
+    versions.forEach(v => {
+      const li = document.createElement('li');
+      li.innerHTML = `<b>${v.created_at}</b> by user ${v.author_id || 'unknown'} <button>Restore</button>`;
+      li.querySelector('button').onclick = async () => {
+        if (confirm('Restore this version?')) {
+          await fetch(`${API}/file`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ filename: currentFile, content: v.content })
+          });
+          loadFile(currentFile);
+          document.getElementById('admin-history-modal').style.display = 'none';
+        }
+      };
+      list.appendChild(li);
+    });
+    document.getElementById('admin-history-modal').style.display = 'flex';
+  };
   document.getElementById('admin-status').textContent = '';
   highlightSelectedFile();
 }
