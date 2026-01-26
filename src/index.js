@@ -1,3 +1,13 @@
+// --- Simple Session Auth (Phase 2 foundation) ---
+const SESSION_SECRET = 'changeme'; // TODO: Use env var or secret
+function getSessionUser(request) {
+  const cookie = request.headers.get('Cookie') || '';
+  const match = cookie.match(/session=([a-zA-Z0-9_-]+)/);
+  if (!match) return null;
+  // In production, verify session token in DB or JWT
+  // For demo, accept any non-empty session
+  return match[1] ? { username: 'admin', id: 1 } : null;
+}
 
 import { getUserByUsername, createUser } from './users.js';
 import { listFiles, getFileContent, saveFile, listFileVersions, logAudit } from './admin_api.js';
@@ -46,14 +56,16 @@ export default {
 
     // Admin API: List files
     if (url.pathname === '/api/admin/files' && request.method === 'GET') {
-      // TODO: Auth check
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
       const files = await listFiles(env);
       return withCORS(new Response(JSON.stringify(files), { status: 200 }));
     }
 
     // Admin API: Get file content
     if (url.pathname === '/api/admin/file' && request.method === 'GET') {
-      // TODO: Auth check
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
       const filename = url.searchParams.get('filename');
       if (!filename) return withCORS(new Response(JSON.stringify({ error: 'Missing filename' }), { status: 400 }));
       const content = await getFileContent(env, filename);
@@ -63,17 +75,19 @@ export default {
 
     // Admin API: Save file (create new version)
     if (url.pathname === '/api/admin/file' && request.method === 'POST') {
-      // TODO: Auth check
-      const { filename, content, author_id } = await request.json();
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+      const { filename, content } = await request.json();
       if (!filename || !content) return withCORS(new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 }));
-      await saveFile(env, filename, content, author_id || null);
-      await logAudit(env, author_id || null, 'save_file', filename);
+      await saveFile(env, filename, content, user.id);
+      await logAudit(env, user.id, 'save_file', filename);
       return withCORS(new Response(JSON.stringify({ ok: true }), { status: 200 }));
     }
 
     // Admin API: List file versions
     if (url.pathname === '/api/admin/file_versions' && request.method === 'GET') {
-      // TODO: Auth check
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
       const filename = url.searchParams.get('filename');
       if (!filename) return withCORS(new Response(JSON.stringify({ error: 'Missing filename' }), { status: 400 }));
       const versions = await listFileVersions(env, filename);
