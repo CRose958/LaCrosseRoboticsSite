@@ -1,3 +1,49 @@
+    // Admin API: List users
+    if (url.pathname === '/api/admin/users' && request.method === 'GET') {
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+      // List all users (id, username, email, created_at)
+      const stmt = env.DB.prepare('SELECT id, username, email, created_at FROM users ORDER BY username');
+      const users = await stmt.all();
+      return withCORS(new Response(JSON.stringify(users), { status: 200 }));
+    }
+
+    // Admin API: Add user
+    if (url.pathname === '/api/admin/users' && request.method === 'POST') {
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+      const { username, password, email } = await request.json();
+      if (!username || !password || !email) return withCORS(new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 }));
+      const password_hash = await hashPassword(password);
+      try {
+        await createUser(env, username, password_hash, email);
+        await logAudit(env, user.id, 'add_user', username);
+        return withCORS(new Response(JSON.stringify({ ok: true }), { status: 201 }));
+      } catch (e) {
+        return withCORS(new Response(JSON.stringify({ error: 'User exists or DB error' }), { status: 400 }));
+      }
+    }
+
+    // Admin API: Remove user
+    if (url.pathname === '/api/admin/users' && request.method === 'DELETE') {
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+      const { username } = await request.json();
+      if (!username) return withCORS(new Response(JSON.stringify({ error: 'Missing username' }), { status: 400 }));
+      const stmt = env.DB.prepare('DELETE FROM users WHERE username = ?');
+      await stmt.bind(username).run();
+      await logAudit(env, user.id, 'remove_user', username);
+      return withCORS(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+    }
+
+    // Admin API: Audit log
+    if (url.pathname === '/api/admin/audit' && request.method === 'GET') {
+      const user = getSessionUser(request);
+      if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+      const stmt = env.DB.prepare('SELECT * FROM audit_log ORDER BY created_at DESC LIMIT 100');
+      const logs = await stmt.all();
+      return withCORS(new Response(JSON.stringify(logs), { status: 200 }));
+    }
 import { pushFileToGitHub } from './github_api.js';
     // Admin API: Push file to GitHub
     if (url.pathname === '/api/admin/push' && request.method === 'POST') {
