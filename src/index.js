@@ -1,3 +1,61 @@
+        // Admin API: Get site settings
+        if (url.pathname === '/api/admin/settings' && request.method === 'GET') {
+          const user = getSessionUser(request);
+          if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+          // Create table if not exists
+          await env.DB.prepare('CREATE TABLE IF NOT EXISTS site_settings (key TEXT PRIMARY KEY, value TEXT)').run();
+          const stmt = env.DB.prepare('SELECT * FROM site_settings');
+          const rows = await stmt.all();
+          const settings = {};
+          rows.forEach(r => { settings[r.key] = r.value; });
+          return withCORS(new Response(JSON.stringify(settings), { status: 200 }));
+        }
+
+        // Admin API: Set site settings
+        if (url.pathname === '/api/admin/settings' && request.method === 'POST') {
+          const user = getSessionUser(request);
+          if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+          const settings = await request.json();
+          await env.DB.prepare('CREATE TABLE IF NOT EXISTS site_settings (key TEXT PRIMARY KEY, value TEXT)').run();
+          for (const key in settings) {
+            await env.DB.prepare('INSERT OR REPLACE INTO site_settings (key, value) VALUES (?, ?)').bind(key, settings[key]).run();
+          }
+          await logAudit(env, user.id, 'update_settings', JSON.stringify(settings));
+          return withCORS(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+        }
+    import { readdirSync, writeFileSync } from 'fs';
+    import path from 'path';
+        // Admin API: List images (local Images/ folder)
+        if (url.pathname === '/api/admin/images' && request.method === 'GET') {
+          const user = getSessionUser(request);
+          if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+          // List all images in Images/ folder
+          try {
+            const imagesDir = path.join(process.cwd(), 'Images');
+            const files = readdirSync(imagesDir).filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f));
+            return withCORS(new Response(JSON.stringify(files), { status: 200 }));
+          } catch (e) {
+            return withCORS(new Response(JSON.stringify({ error: 'Failed to list images', details: e.message }), { status: 500 }));
+          }
+        }
+
+        // Admin API: Upload image (local Images/ folder)
+        if (url.pathname === '/api/admin/images' && request.method === 'POST') {
+          const user = getSessionUser(request);
+          if (!user) return withCORS(new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 }));
+          // Parse multipart form data (simple base64 for demo)
+          const { filename, data } = await request.json();
+          if (!filename || !data) return withCORS(new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 }));
+          try {
+            const imagesDir = path.join(process.cwd(), 'Images');
+            const filePath = path.join(imagesDir, filename);
+            const buffer = Buffer.from(data, 'base64');
+            writeFileSync(filePath, buffer);
+            return withCORS(new Response(JSON.stringify({ ok: true }), { status: 201 }));
+          } catch (e) {
+            return withCORS(new Response(JSON.stringify({ error: 'Failed to upload image', details: e.message }), { status: 500 }));
+          }
+        }
     // Admin API: List users
     if (url.pathname === '/api/admin/users' && request.method === 'GET') {
       const user = getSessionUser(request);
