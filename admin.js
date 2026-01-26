@@ -37,6 +37,26 @@ async function loadFile(filename) {
   document.getElementById('admin-save').disabled = false;
   document.getElementById('admin-preview').disabled = false;
   document.getElementById('admin-history').disabled = false;
+  document.getElementById('admin-push').disabled = false;
+
+  // Push to GitHub logic
+  document.getElementById('admin-push').onclick = async function() {
+    if (!currentFile) return;
+    const content = document.getElementById('admin-editor').value;
+    document.getElementById('admin-status').textContent = 'Pushing to GitHub...';
+    const res = await fetch(`${API}/push`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ filename: currentFile, content })
+    });
+    if (res.ok) {
+      document.getElementById('admin-status').textContent = 'Pushed to GitHub!';
+    } else {
+      const data = await res.json();
+      document.getElementById('admin-status').textContent = 'Push failed: ' + (data.error || 'Unknown error');
+    }
+  };
 
   // Preview logic
   document.getElementById('admin-preview').onclick = function() {
