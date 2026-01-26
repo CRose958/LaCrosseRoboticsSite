@@ -1,3 +1,58 @@
+// User Management Modal
+document.getElementById('admin-users-btn').onclick = async function() {
+  const res = await fetch(`${API.replace('/admin','/admin')}/users`, { credentials: 'include' });
+  const users = await res.json();
+  const list = document.getElementById('users-list');
+  list.innerHTML = '';
+  users.forEach(u => {
+    const li = document.createElement('li');
+    li.innerHTML = `<b>${u.username}</b> (${u.email}) <button>Remove</button>`;
+    li.querySelector('button').onclick = async () => {
+      if (confirm('Remove user ' + u.username + '?')) {
+        await fetch(`${API.replace('/admin','/admin')}/users`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ username: u.username })
+        });
+        document.getElementById('admin-users-btn').onclick();
+      }
+    };
+    list.appendChild(li);
+  });
+  document.getElementById('admin-users-modal').style.display = 'flex';
+};
+
+document.getElementById('add-user-btn').onclick = async function() {
+  const username = document.getElementById('new-user-username').value;
+  const email = document.getElementById('new-user-email').value;
+  const password = document.getElementById('new-user-password').value;
+  if (!username || !email || !password) return alert('Fill all fields');
+  await fetch(`${API.replace('/admin','/admin')}/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ username, email, password })
+  });
+  document.getElementById('new-user-username').value = '';
+  document.getElementById('new-user-email').value = '';
+  document.getElementById('new-user-password').value = '';
+  document.getElementById('admin-users-btn').onclick();
+};
+
+// Audit Log Modal
+document.getElementById('admin-audit-btn').onclick = async function() {
+  const res = await fetch(`${API.replace('/admin','/admin')}/audit`, { credentials: 'include' });
+  const logs = await res.json();
+  const list = document.getElementById('audit-list');
+  list.innerHTML = '';
+  logs.forEach(l => {
+    const li = document.createElement('li');
+    li.innerHTML = `<b>${l.created_at}</b> [user ${l.user_id || 'unknown'}] <i>${l.action}</i> ${l.details || ''}`;
+    list.appendChild(li);
+  });
+  document.getElementById('admin-audit-modal').style.display = 'flex';
+};
 // Admin Suite JS: File browser, editor, save, preview, history (Phase 1: basic CRUD)
 const API = 'https://lacrosse-robotics-backend.christianrosework.workers.dev/api/admin';
 let currentFile = null;

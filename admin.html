@@ -46,6 +46,24 @@
           <button id="admin-history" disabled>History</button>
           <button id="admin-push" disabled>Push to GitHub</button>
         </div>
+        <!-- User Management Modal -->
+        <div id="admin-users-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
+          <div style="background:#232323;padding:24px 32px;border-radius:8px;max-width:600px;width:90vw;max-height:80vh;overflow:auto;">
+            <h3>User Management</h3>
+            <ul id="users-list" style="list-style:none;padding:0;"></ul>
+            <h4>Add User</h4>
+            <input id="new-user-username" placeholder="Username"> <input id="new-user-email" placeholder="Email"> <input id="new-user-password" placeholder="Password" type="password"> <button id="add-user-btn">Add</button>
+            <button onclick="document.getElementById('admin-users-modal').style.display='none'">Close</button>
+          </div>
+        </div>
+        <!-- Audit Log Modal -->
+        <div id="admin-audit-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
+          <div style="background:#232323;padding:24px 32px;border-radius:8px;max-width:700px;width:95vw;max-height:80vh;overflow:auto;">
+            <h3>Audit Log</h3>
+            <ul id="audit-list" style="list-style:none;padding:0;"></ul>
+            <button onclick="document.getElementById('admin-audit-modal').style.display='none'">Close</button>
+          </div>
+        </div>
         <div class="admin-status" id="admin-status"></div>
         <!-- Version History Modal -->
         <div id="admin-history-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
@@ -63,6 +81,10 @@
             <button onclick="document.getElementById('admin-preview-modal').style.display='none'">Close</button>
           </div>
         </div>
+      </div>
+      <div style="margin-top:32px;">
+        <button id="admin-users-btn">User Management</button>
+        <button id="admin-audit-btn">Audit Log</button>
       </div>
     </div>
   </div>
