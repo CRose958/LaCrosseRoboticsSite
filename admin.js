@@ -1,3 +1,30 @@
+// Media Manager Modal (UI only, backend to follow)
+document.getElementById('admin-media-btn').onclick = async function() {
+  // TODO: Fetch media list from backend
+  const mediaList = document.getElementById('media-list');
+  mediaList.innerHTML = '';
+  // Placeholder: show static Images/ folder images (if any)
+  const images = [
+    // Example: 'Images/example1.jpg', 'Images/example2.png'
+  ];
+  images.forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.maxWidth = '120px';
+    img.style.maxHeight = '120px';
+    img.style.border = '1px solid #444';
+    img.style.borderRadius = '4px';
+    mediaList.appendChild(img);
+  });
+  document.getElementById('admin-media-modal').style.display = 'flex';
+};
+
+document.getElementById('media-upload-btn').onclick = async function() {
+  const input = document.getElementById('media-upload-input');
+  if (!input.files.length) return alert('Select images to upload.');
+  // TODO: Upload images to backend
+  alert('Upload not yet implemented.');
+};
 // User Management Modal
 document.getElementById('admin-users-btn').onclick = async function() {
   const res = await fetch(`${API.replace('/admin','/admin')}/users`, { credentials: 'include' });

@@ -1,3 +1,13 @@
+        <!-- Media Manager Modal -->
+        <div id="admin-media-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000a;z-index:1000;align-items:center;justify-content:center;">
+          <div style="background:#232323;padding:24px 32px;border-radius:8px;max-width:700px;width:95vw;max-height:80vh;overflow:auto;">
+            <h3>Media Manager</h3>
+            <input type="file" id="media-upload-input" accept="image/*" multiple>
+            <button id="media-upload-btn">Upload</button>
+            <div id="media-list" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;"></div>
+            <button onclick="document.getElementById('admin-media-modal').style.display='none'">Close</button>
+          </div>
+        </div>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,6 +95,7 @@
       <div style="margin-top:32px;">
         <button id="admin-users-btn">User Management</button>
         <button id="admin-audit-btn">Audit Log</button>
+        <button id="admin-media-btn">Media Manager</button>
       </div>
     </div>
   </div>
