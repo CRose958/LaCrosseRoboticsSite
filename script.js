@@ -493,16 +493,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
 
-    // Fallback: some environments block IntersectionObserver or it may not fire
-    // (for example when running locally with certain privacy settings). To
-    // ensure content becomes visible for users, reveal any remaining `.hidden`
-    // elements shortly after load. This is a low-risk debug/safety fallback
-    // that can be removed once the root cause is identified.
-    setTimeout(() => {
-        document.querySelectorAll('.hidden').forEach(el => {
-            if (!el.classList.contains('show')) el.classList.add('show');
-        });
-    }, 200);
+    // Fallback: only reveal `.hidden` elements if the browser does not
+    // support IntersectionObserver at all. In environments where the API
+    // exists but is blocked/delayed, prefer the observer; an unconditional
+    // reveal (like the previous fallback) can mask other issues and cause
+    // content to flash. This is a safer, feature-detect approach.
+    if (typeof IntersectionObserver === 'undefined') {
+        document.querySelectorAll('.hidden').forEach(el => el.classList.add('show'));
+    }
 
 
     // --- 4. NUMBER COUNTER ANIMATION ---
