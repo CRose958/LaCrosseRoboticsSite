@@ -493,6 +493,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
 
+    // Fallback: some environments block IntersectionObserver or it may not fire
+    // (for example when running locally with certain privacy settings). To
+    // ensure content becomes visible for users, reveal any remaining `.hidden`
+    // elements shortly after load. This is a low-risk debug/safety fallback
+    // that can be removed once the root cause is identified.
+    setTimeout(() => {
+        document.querySelectorAll('.hidden').forEach(el => {
+            if (!el.classList.contains('show')) el.classList.add('show');
+        });
+    }, 200);
+
 
     // --- 4. NUMBER COUNTER ANIMATION ---
     const statsSection = document.querySelector('.stats-banner');
