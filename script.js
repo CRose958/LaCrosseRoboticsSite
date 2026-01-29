@@ -92,6 +92,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial render
         renderCalendar();
+
+        // --- CALENDAR PAGE EVENT LIST RENDERING ---
+        function renderCalendarEventList() {
+            const eventsList = document.getElementById('calendar-events-list');
+            if (!eventsList || !window.sampleEvents) return;
+            eventsList.innerHTML = '';
+
+            let allEvents = [];
+            for (const [date, event] of Object.entries(window.sampleEvents)) {
+                if (Array.isArray(event)) {
+                    event.forEach(e => allEvents.push({date, event: e}));
+                } else {
+                    allEvents.push({date, event});
+                }
+            }
+            allEvents.sort((a, b) => {
+                const [ay, am, ad] = a.date.split('-').map(Number);
+                const [by, bm, bd] = b.date.split('-').map(Number);
+                return new Date(ay, am-1, ad) - new Date(by, bm-1, bd);
+            });
+
+            // Only show upcoming events (today or later)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            allEvents = allEvents.filter(({date}) => {
+                const [y, m, d] = date.split('-').map(Number);
+                const eventDate = new Date(y, m-1, d);
+                return eventDate >= today;
+            });
+
+            if (allEvents.length === 0) {
+                eventsList.innerHTML = '<div style="color:#ccc;padding:20px;">No upcoming events.</div>';
+                return;
+            }
+
+            allEvents.forEach(({date, event}) => {
+                const eventDiv = document.createElement('div');
+                eventDiv.className = 'calendar-event' + (event.category === 'FIRST' ? ' accent' : '');
+                eventDiv.setAttribute('data-category', event.category);
+                eventDiv.setAttribute('data-date', date);
+
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'calendar-event-date';
+                const d = new Date(date);
+                const options = { month: 'short', day: 'numeric' };
+                dateSpan.innerHTML = `<b>${d.toLocaleDateString('en-US', options)}</b>`;
+                eventDiv.appendChild(dateSpan);
+
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'calendar-event-details';
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'calendar-event-title';
+                titleDiv.textContent = event.category === 'FIRST' ? (event.title || 'FIRST Competition') : (event.title || 'Team Meeting');
+                detailsDiv.appendChild(titleDiv);
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'calendar-event-time';
+                timeDiv.textContent = event.time || (event.category === 'FIRST' ? 'All Day' : '4:00 PM - 8:00 PM');
+                detailsDiv.appendChild(timeDiv);
+                const locDiv = document.createElement('div');
+                locDiv.className = 'calendar-event-location';
+                locDiv.textContent = event.location || (event.category === 'FIRST' ? 'Appleton East High School' : 'Room 196 @ Logan High School');
+                detailsDiv.appendChild(locDiv);
+                eventDiv.appendChild(detailsDiv);
+
+                eventsList.appendChild(eventDiv);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // ...existing code...
+
+            // Render event list on calendar page if present
+            renderCalendarEventList();
     }
             // Sample events data - dates that exist in January 2026
             window.sampleEvents = {
