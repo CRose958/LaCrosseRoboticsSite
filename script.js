@@ -160,13 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // ...existing code...
-
-            // Render event list on calendar page if present
-            renderCalendarEventList();
-            // Sample events data - dates that exist in January 2026
-            window.sampleEvents = {
+        // Render event list on calendar page if present
+        renderCalendarEventList();
+        
+        // Sample events data - dates that exist in January 2026
+        window.sampleEvents = {
                 '2026-1-13': { category: 'Robotics' },
                 '2026-1-15': { category: 'Robotics' },
                 '2026-1-20': { category: 'Robotics' },
@@ -313,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Run CardNav event builder
         buildCardNavEvents();
+
     // --- 1. CONFIGURATION: IMAGE GALLERIES ---
     const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg";
 
