@@ -165,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Render event list on calendar page if present
             renderCalendarEventList();
-    }
             // Sample events data - dates that exist in January 2026
             window.sampleEvents = {
                 '2026-1-13': { category: 'Robotics' },
