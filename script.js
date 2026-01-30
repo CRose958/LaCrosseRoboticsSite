@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function buildGrid(containerId, ids, itemClass) {
         const container = document.getElementById(containerId);
         if (container) {
-            ids.forEach(id => {
+            ids.forEach((id, idx) => {
                 const div = document.createElement('div');
                 div.className = itemClass; // e.g. 'gallery-item' or 'archive-item'
 
@@ -356,10 +356,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.src = `https://imagedelivery.net/${ACCOUNT_HASH}/${id}/public`;
                 img.loading = 'lazy';
                 img.alt = 'Team Photo';
+                img.onerror = function() {
+                    // If image fails to load, show error
+                    this.style.backgroundColor = '#666';
+                };
 
                 div.appendChild(img);
                 container.appendChild(div);
             });
+            console.log(`Built ${ids.length} items in ${containerId}`);
         }
     }
 
