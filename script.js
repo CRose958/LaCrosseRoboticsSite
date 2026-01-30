@@ -311,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Run CardNav event builder
         buildCardNavEvents();
+    }
 
     // --- 1. CONFIGURATION: IMAGE GALLERIES ---
     const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg";
