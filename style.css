@@ -586,14 +586,14 @@ footer {
 }
 
 /* --- Map page (moved from map.html inline styles) --- */
-.map-dark body {
+body.map-dark {
     background-color: #1c1c1c;
     color: #ffffff;
 }
 
-.map-dark h2::after { background: #ffffff; }
-.map-dark .card { color: #1c1c1c; }
-.map-dark .card h3 { color: #1c1c1c; }
+body.map-dark h2::after { background: #ffffff; }
+body.map-dark .card { color: #1c1c1c; }
+body.map-dark .card h3 { color: #1c1c1c; }
 
 .map-wrapper {
     position: relative;
