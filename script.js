@@ -681,5 +681,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         createClickSpark(e.clientX, e.clientY);
     });
-    }
 });
