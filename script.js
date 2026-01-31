@@ -91,9 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
                 const dateKey = `${dayDate.getFullYear()}-${dayDate.getMonth()+1}-${dayDate.getDate()}`;
-                const dayEvents = [];
+                let dayEvents = [];
                 if (window.sampleEvents[dateKey]) {
-                    dayEvents.push(window.sampleEvents[dateKey]);
+                    // sampleEvents[dateKey] is already an object, wrap it in array
+                    dayEvents = [window.sampleEvents[dateKey]];
                 }
                 let dayClass = 'calendar-day';
                 if (i === today.getDate() &&
