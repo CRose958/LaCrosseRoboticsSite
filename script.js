@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (window.sampleEvents[dateKey]) {
                     // sampleEvents[dateKey] is already an object, wrap it in array
                     dayEvents = [window.sampleEvents[dateKey]];
-                    console.log(`Date ${dateKey}: Category = ${window.sampleEvents[dateKey].category}`);
                 }
                 let dayClass = 'calendar-day';
                 if (i === today.getDate() &&
