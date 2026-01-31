@@ -122,7 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (events && events.length > 0) {
                 const marker = document.createElement('div');
                 marker.className = 'calendar-event-markers';
-                marker.innerHTML = '<span class="event-dot robotics"></span>';
+                // Check event category to determine dot color
+                const dotClass = events[0].category === 'FIRST' ? 'first' : 'robotics';
+                marker.innerHTML = `<span class="event-dot ${dotClass}"></span>`;
                 dayDiv.appendChild(marker);
                 // Make clickable and add click handler
                 dayDiv.classList.add('has-events');
