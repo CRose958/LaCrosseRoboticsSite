@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Initial render
-        renderCalendar();
+        renderCalendar('all');
 
         // --- EVENT MODAL FUNCTIONALITY ---
         const eventModal = document.getElementById('event-modal');
