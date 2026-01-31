@@ -56,8 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (calendarTitle && calendarDays && prevMonthBtn && nextMonthBtn) {
         // Current date - Set to January 2026 to show our events
         let currentDate = new Date(2026, 0, 1); // January 2026 (months are 0-based)
+        let currentFilter = 'all'; // Track current event filter
 
-        function renderCalendar() {
+        function renderCalendar(filter = 'all') {
+            currentFilter = filter;
             // Clear previous days
             calendarDays.innerHTML = '';
 
@@ -94,7 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 let dayEvents = [];
                 if (window.sampleEvents[dateKey]) {
                     // sampleEvents[dateKey] is already an object, wrap it in array
-                    dayEvents = [window.sampleEvents[dateKey]];
+                    const event = window.sampleEvents[dateKey];
+                    // Only include event if it matches the current filter
+                    if (filter === 'all' || event.category === filter) {
+                        dayEvents = [event];
+                    }
                 }
                 let dayClass = 'calendar-day';
                 if (i === today.getDate() &&
@@ -138,11 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Month navigation
         prevMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
+            renderCalendar(currentFilter);
         });
         nextMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
+            renderCalendar(currentFilter);
         });
 
         // Initial render
@@ -291,8 +297,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 filterButtons.forEach(b => b.classList.remove('active'));
                 // Add active class to clicked button
                 this.classList.add('active');
-                // Get filter value and re-render
+                // Get filter value and re-render both calendar and event list
                 const filter = this.getAttribute('data-filter');
+                renderCalendar(filter);
                 renderCalendarEventList(filter);
             });
         });
