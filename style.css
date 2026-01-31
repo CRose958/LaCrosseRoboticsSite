@@ -1049,10 +1049,40 @@ body.error-dark { background-color: #1c1c1c; color: #ffffff; display: flex; flex
     color: #888; 
     margin: 0;
 }
-.calendar-event-filters { display: flex; gap: clamp(8px, 2vw, 10px); margin-bottom: clamp(15px, 3vw, 20px); flex-wrap: wrap; }
-.event-filter-btn { padding: clamp(6px, 2vw, 8px) clamp(10px, 3vw, 15px); border: none; border-radius: 20px; background-color: #444; color: #ccc; cursor: pointer; transition: all 0.3s; font-size: clamp(0.8rem, 2.5vw, 0.9rem); font-weight: 500; }
-.event-filter-btn.active { background-color: var(--primary-color); color: white; }
-.event-filter-btn:hover { background-color: #6d1f30; color: white; }
+
+.calendar-event-filters { 
+    display: flex; 
+    gap: 10px; 
+    padding: 12px 20px; 
+    border-bottom: 1px solid #29293a;
+    flex-wrap: wrap;
+}
+
+.event-filter-btn { 
+    padding: 8px 16px; 
+    border: 2px solid #3a3a4a; 
+    border-radius: 20px; 
+    background-color: transparent; 
+    color: #bbb; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+    font-size: 0.9rem; 
+    font-weight: 600;
+    font-family: inherit;
+}
+
+.event-filter-btn:hover { 
+    background-color: rgba(163, 42, 61, 0.2); 
+    border-color: var(--primary-color); 
+    color: #fff; 
+}
+
+.event-filter-btn.active { 
+    background-color: var(--primary-color); 
+    border-color: var(--primary-color);
+    color: white; 
+}
+
 .footer { background-color: var(--dark-color); color: #999; padding: clamp(30px, 5vw, 50px) clamp(15px, 3vw, 20px); text-align: center; margin-top: auto; }
 .footer h3 { color: var(--white-color); margin-bottom: 10px; font-size: clamp(1.1rem, 3vw, 1.3rem); }
 .footer p { font-size: clamp(0.8rem, 2.5vw, 0.9rem); }

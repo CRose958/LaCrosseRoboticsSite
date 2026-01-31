@@ -142,10 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCalendar();
 
         // --- CALENDAR PAGE EVENT LIST RENDERING ---
-        function renderCalendarEventList() {
+        let currentFilter = 'all';
+        
+        function renderCalendarEventList(filter = 'all') {
             const eventsList = document.getElementById('calendar-events-list');
             if (!eventsList || !window.sampleEvents) return;
             eventsList.innerHTML = '';
+            currentFilter = filter;
 
             let allEvents = [];
             for (const [date, event] of Object.entries(window.sampleEvents)) {
@@ -169,6 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const eventDate = new Date(y, m-1, d);
                 return eventDate >= today;
             });
+            
+            // Apply category filter
+            if (filter !== 'all') {
+                allEvents = allEvents.filter(({event}) => event.category === filter);
+            }
 
             if (allEvents.length === 0) {
                 eventsList.innerHTML = '<div style="color:#ccc;padding:20px;">No upcoming events.</div>';
@@ -210,6 +218,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Render event list on calendar page if present
         renderCalendarEventList();
+        
+        // Setup filter buttons
+        const filterButtons = document.querySelectorAll('.event-filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                // Get filter value and re-render
+                const filter = this.getAttribute('data-filter');
+                renderCalendarEventList(filter);
+            });
+        });
         
         // --- CardNav-inspired Event Navigation ---
         function buildCardNavEvents() {
