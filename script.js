@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (window.sampleEvents[dateKey]) {
                     // sampleEvents[dateKey] is already an object, wrap it in array
                     dayEvents = [window.sampleEvents[dateKey]];
+                    console.log(`Date ${dateKey}: Category = ${window.sampleEvents[dateKey].category}`);
                 }
                 let dayClass = 'calendar-day';
                 if (i === today.getDate() &&
@@ -124,7 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const marker = document.createElement('div');
                 marker.className = 'calendar-event-markers';
                 // Check event category to determine dot color
-                const dotClass = events[0].category === 'FIRST' ? 'first' : 'robotics';
+                const eventCategory = events[0]?.category || 'Robotics';
+                const dotClass = eventCategory === 'FIRST' ? 'first' : 'robotics';
                 marker.innerHTML = `<span class="event-dot ${dotClass}"></span>`;
                 dayDiv.appendChild(marker);
                 // Make clickable and add click handler
