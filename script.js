@@ -94,10 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
                 const dateKey = `${dayDate.getFullYear()}-${dayDate.getMonth()+1}-${dayDate.getDate()}`;
                 let dayEvents = [];
+                let allEvents = [];
                 if (window.sampleEvents[dateKey]) {
-                    // sampleEvents[dateKey] is already an object, wrap it in array
                     const event = window.sampleEvents[dateKey];
-                    // Only include event if it matches the current filter
+                    allEvents = [event]; // Keep all events for modal
+                    // Only include event dot if it matches the current filter
                     if (filter === 'all' || event.category === filter) {
                         dayEvents = [event];
                     }
@@ -108,7 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentDate.getFullYear() === today.getFullYear()) {
                     dayClass += ' today';
                 }
-                createDayElement(i, dayClass, dayEvents, dateKey);
+                // Pass dayEvents for dot display, allEvents for click modal
+                createDayElement(i, dayClass, dayEvents, dateKey, allEvents);
             }
 
             // Add next month days
@@ -117,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        function createDayElement(day, dayClass, events, dateKey) {
+        function createDayElement(day, dayClass, events, dateKey, allEvents = []) {
             const dayDiv = document.createElement('div');
             dayDiv.className = dayClass;
             if (dateKey) dayDiv.setAttribute('data-date', dateKey);
@@ -125,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             numDiv.className = 'calendar-day-number';
             numDiv.textContent = day;
             dayDiv.appendChild(numDiv);
-            // Add event marker if there are events
+            // Add event marker if there are events to display (based on filter)
             if (events && events.length > 0) {
                 const marker = document.createElement('div');
                 marker.className = 'calendar-event-markers';
@@ -134,9 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dotClass = eventCategory === 'FIRST' ? 'first' : 'robotics';
                 marker.innerHTML = `<span class="event-dot ${dotClass}"></span>`;
                 dayDiv.appendChild(marker);
-                // Make clickable and add click handler
+            }
+            // Make clickable if there are ANY events (filtered or not) for modal
+            if (allEvents && allEvents.length > 0) {
                 dayDiv.classList.add('has-events');
-                dayDiv.addEventListener('click', () => showEventModal(dateKey, events));
+                dayDiv.addEventListener('click', () => showEventModal(dateKey, allEvents));
             }
             calendarDays.appendChild(dayDiv);
         }
