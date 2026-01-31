@@ -216,7 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- CALENDAR PAGE EVENT LIST RENDERING ---
-        let currentFilter = 'all';
         
         function renderCalendarEventList(filter = 'all') {
             const eventsList = document.getElementById('calendar-events-list');
