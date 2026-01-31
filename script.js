@@ -124,6 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 marker.className = 'calendar-event-markers';
                 marker.innerHTML = '<span class="event-dot robotics"></span>';
                 dayDiv.appendChild(marker);
+                // Make clickable and add click handler
+                dayDiv.classList.add('has-events');
+                dayDiv.addEventListener('click', () => showEventModal(dateKey, events));
             }
             calendarDays.appendChild(dayDiv);
         }
@@ -140,6 +143,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial render
         renderCalendar();
+
+        // --- EVENT MODAL FUNCTIONALITY ---
+        const eventModal = document.getElementById('event-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+
+        function showEventModal(dateKey, events) {
+            if (!eventModal || !modalTitle || !modalBody) return;
+            
+            // Parse date
+            const [year, month, day] = dateKey.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            modalTitle.textContent = dateStr;
+            
+            // Build event details
+            let html = '';
+            events.forEach(event => {
+                const category = event.category || 'Robotics';
+                const title = event.title || (category === 'FIRST' ? 'FIRST Competition' : 'Team Meeting');
+                const time = event.time || (category === 'FIRST' ? 'All Day' : '4:00 PM - 8:00 PM');
+                const location = event.location || (category === 'FIRST' ? 'Appleton East High School' : 'Room 196 @ Logan High School');
+                const borderColor = category === 'FIRST' ? 'var(--gold-color)' : 'var(--primary-color)';
+                
+                html += `
+                    <div class="modal-event-item" style="border-left: 4px solid ${borderColor};">
+                        <div class="modal-event-category">${category}</div>
+                        <div class="modal-event-title">${title}</div>
+                        <div class="modal-event-time"><i class="fas fa-clock"></i> ${time}</div>
+                        <div class="modal-event-location"><i class="fas fa-map-marker-alt"></i> ${location}</div>
+                    </div>
+                `;
+            });
+            
+            modalBody.innerHTML = html;
+            eventModal.style.display = 'flex';
+        }
+
+        function hideEventModal() {
+            if (eventModal) {
+                eventModal.style.display = 'none';
+            }
+        }
+
+        if (modalClose) {
+            modalClose.addEventListener('click', hideEventModal);
+        }
+
+        if (eventModal) {
+            eventModal.addEventListener('click', (e) => {
+                if (e.target === eventModal) {
+                    hideEventModal();
+                }
+            });
+        }
 
         // --- CALENDAR PAGE EVENT LIST RENDERING ---
         let currentFilter = 'all';
