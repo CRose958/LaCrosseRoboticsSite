@@ -66,6 +66,10 @@
                 <button class="frc-tab" data-tab="events">Events</button>
                 <button class="frc-tab" data-tab="team">Team Lookup</button>
                 <button class="frc-tab" data-tab="matches">Match Results</button>
+                <button class="frc-tab" data-tab="rankings">Rankings</button>
+                <button class="frc-tab" data-tab="awards">Awards</button>
+                <button class="frc-tab" data-tab="alliances">Alliances</button>
+                <button class="frc-tab" data-tab="districts">Districts</button>
             </div>
 
             <!-- Season Info Tab -->
@@ -121,6 +125,67 @@
                         <button onclick="fetchMatches()" class="btn">Get Matches</button>
                     </div>
                     <div id="matches-results" class="results-container"></div>
+                </div>
+            </div>
+
+            <!-- Rankings Tab -->
+            <div class="frc-tab-content" id="rankings-tab">
+                <div class="frc-card">
+                    <h2>Event Rankings</h2>
+                    <div class="input-group">
+                        <input type="number" id="rankings-year" placeholder="Year (e.g., 2024)" value="2024">
+                        <input type="text" id="rankings-event-code" placeholder="Event Code (e.g., WIMI)">
+                        <button onclick="fetchRankings()" class="btn">Get Rankings</button>
+                    </div>
+                    <div id="rankings-results" class="results-container"></div>
+                </div>
+            </div>
+
+            <!-- Awards Tab -->
+            <div class="frc-tab-content" id="awards-tab">
+                <div class="frc-card">
+                    <h2>Event Awards</h2>
+                    <div class="input-group">
+                        <input type="number" id="awards-year" placeholder="Year (e.g., 2024)" value="2024">
+                        <input type="text" id="awards-event-code" placeholder="Event Code (e.g., WIMI)">
+                        <input type="number" id="awards-team" placeholder="Team Number (optional)">
+                        <button onclick="fetchAwards()" class="btn">Get Awards</button>
+                    </div>
+                    <div id="awards-results" class="results-container"></div>
+                </div>
+            </div>
+
+            <!-- Alliances Tab -->
+            <div class="frc-tab-content" id="alliances-tab">
+                <div class="frc-card">
+                    <h2>Alliance Selection</h2>
+                    <div class="input-group">
+                        <input type="number" id="alliances-year" placeholder="Year (e.g., 2024)" value="2024">
+                        <input type="text" id="alliances-event-code" placeholder="Event Code (e.g., WIMI)">
+                        <button onclick="fetchAlliances()" class="btn">Get Alliances</button>
+                    </div>
+                    <div id="alliances-results" class="results-container"></div>
+                </div>
+            </div>
+
+            <!-- Districts Tab -->
+            <div class="frc-tab-content" id="districts-tab">
+                <div class="frc-card">
+                    <h2>District Information</h2>
+                    <div class="input-group">
+                        <input type="number" id="districts-year" placeholder="Year (e.g., 2024)" value="2024">
+                        <button onclick="fetchDistricts()" class="btn">Get Districts</button>
+                    </div>
+                    <div id="districts-results" class="results-container"></div>
+                </div>
+                <div class="frc-card" style="margin-top: 20px;">
+                    <h2>District Rankings</h2>
+                    <div class="input-group">
+                        <input type="number" id="district-rankings-year" placeholder="Year (e.g., 2024)" value="2024">
+                        <input type="text" id="district-code" placeholder="District Code (e.g., FIM)">
+                        <button onclick="fetchDistrictRankings()" class="btn">Get District Rankings</button>
+                    </div>
+                    <div id="district-rankings-results" class="results-container"></div>
                 </div>
             </div>
 
@@ -335,6 +400,175 @@
                 document.getElementById('matches-results').innerHTML = html;
             } else {
                 document.getElementById('matches-results').innerHTML = '<div class="info-message">No match data found</div>';
+            }
+        }
+
+        // Fetch Rankings
+        async function fetchRankings() {
+            const year = document.getElementById('rankings-year').value;
+            const eventCode = document.getElementById('rankings-event-code').value;
+            
+            if (!year || !eventCode) {
+                alert('Please enter both year and event code');
+                return;
+            }
+
+            const data = await fetchFRCData(`/${year}/${eventCode}/rankings`, 'rankings-results');
+            if (data && data.Rankings) {
+                let html = '<div class="data-display"><h3>Event Rankings</h3>';
+                html += '<div class="rankings-table-wrapper">';
+                html += '<table class="rankings-table">';
+                html += '<thead><tr>';
+                html += '<th>Rank</th><th>Team</th><th>Record (W-L-T)</th>';
+                html += '<th>Ranking Points</th><th>Matches Played</th></tr></thead><tbody>';
+                
+                data.Rankings.forEach(rank => {
+                    html += '<tr>';
+                    html += `<td><strong>${rank.rank}</strong></td>`;
+                    html += `<td>Team ${rank.teamNumber}</td>`;
+                    html += `<td>${rank.wins || 0}-${rank.losses || 0}-${rank.ties || 0}</td>`;
+                    html += `<td>${rank.sortOrder1 !== undefined ? rank.sortOrder1.toFixed(2) : 'N/A'}</td>`;
+                    html += `<td>${rank.matchesPlayed || 0}</td>`;
+                    html += '</tr>';
+                });
+                
+                html += '</tbody></table></div></div>';
+                document.getElementById('rankings-results').innerHTML = html;
+            } else {
+                document.getElementById('rankings-results').innerHTML = '<div class="info-message">No rankings data found</div>';
+            }
+        }
+
+        // Fetch Awards
+        async function fetchAwards() {
+            const year = document.getElementById('awards-year').value;
+            const eventCode = document.getElementById('awards-event-code').value;
+            const teamNumber = document.getElementById('awards-team').value;
+            
+            if (!year || !eventCode) {
+                alert('Please enter both year and event code');
+                return;
+            }
+
+            let endpoint = `/${year}/${eventCode}/awards`;
+            if (teamNumber) endpoint += `?teamNumber=${teamNumber}`;
+
+            const data = await fetchFRCData(endpoint, 'awards-results');
+            if (data && data.Awards) {
+                let html = '<div class="data-display"><h3>Awards</h3><div class="awards-list">';
+                
+                data.Awards.forEach(award => {
+                    html += `<div class="award-card">`;
+                    html += `<h4>${award.name}</h4>`;
+                    if (award.teamNumber) {
+                        html += `<p><strong>Team:</strong> ${award.teamNumber}</p>`;
+                    }
+                    if (award.person) {
+                        html += `<p><strong>Recipient:</strong> ${award.person}</p>`;
+                    }
+                    html += `</div>`;
+                });
+                
+                html += '</div></div>';
+                document.getElementById('awards-results').innerHTML = html;
+            } else {
+                document.getElementById('awards-results').innerHTML = '<div class="info-message">No awards data found</div>';
+            }
+        }
+
+        // Fetch Alliances
+        async function fetchAlliances() {
+            const year = document.getElementById('alliances-year').value;
+            const eventCode = document.getElementById('alliances-event-code').value;
+            
+            if (!year || !eventCode) {
+                alert('Please enter both year and event code');
+                return;
+            }
+
+            const data = await fetchFRCData(`/${year}/${eventCode}/alliances`, 'alliances-results');
+            if (data && data.Alliances) {
+                let html = '<div class="data-display"><h3>Alliance Selection</h3><div class="alliances-grid">';
+                
+                data.Alliances.forEach((alliance, index) => {
+                    html += `<div class="alliance-card">`;
+                    html += `<h4>Alliance ${index + 1}</h4>`;
+                    html += `<p><strong>Captain:</strong> Team ${alliance.captain || 'N/A'}</p>`;
+                    if (alliance.round1) html += `<p><strong>Pick 1:</strong> Team ${alliance.round1}</p>`;
+                    if (alliance.round2) html += `<p><strong>Pick 2:</strong> Team ${alliance.round2}</p>`;
+                    if (alliance.round3) html += `<p><strong>Pick 3:</strong> Team ${alliance.round3}</p>`;
+                    if (alliance.backup) html += `<p><strong>Backup:</strong> Team ${alliance.backup}</p>`;
+                    html += `</div>`;
+                });
+                
+                html += '</div></div>';
+                document.getElementById('alliances-results').innerHTML = html;
+            } else {
+                document.getElementById('alliances-results').innerHTML = '<div class="info-message">No alliance data found</div>';
+            }
+        }
+
+        // Fetch Districts
+        async function fetchDistricts() {
+            const year = document.getElementById('districts-year').value;
+            
+            if (!year) {
+                alert('Please enter a year');
+                return;
+            }
+
+            const data = await fetchFRCData(`/${year}/districts`, 'districts-results');
+            if (data && data.districts) {
+                let html = '<div class="data-display"><h3>Districts</h3><div class="districts-grid">';
+                
+                data.districts.forEach(district => {
+                    html += `<div class="district-card">`;
+                    html += `<h4>${district.name}</h4>`;
+                    html += `<p><strong>Code:</strong> ${district.code}</p>`;
+                    html += `</div>`;
+                });
+                
+                html += '</div></div>';
+                document.getElementById('districts-results').innerHTML = html;
+            } else {
+                document.getElementById('districts-results').innerHTML = '<div class="info-message">No districts data found</div>';
+            }
+        }
+
+        // Fetch District Rankings
+        async function fetchDistrictRankings() {
+            const year = document.getElementById('district-rankings-year').value;
+            const districtCode = document.getElementById('district-code').value;
+            
+            if (!year || !districtCode) {
+                alert('Please enter both year and district code');
+                return;
+            }
+
+            const data = await fetchFRCData(`/${year}/rankings/${districtCode}`, 'district-rankings-results');
+            if (data && data.districtRanks) {
+                let html = '<div class="data-display"><h3>District Rankings</h3>';
+                html += '<div class="rankings-table-wrapper">';
+                html += '<table class="rankings-table">';
+                html += '<thead><tr>';
+                html += '<th>Rank</th><th>Team</th><th>Total Points</th>';
+                html += '<th>Event 1</th><th>Event 2</th><th>DCMP</th></tr></thead><tbody>';
+                
+                data.districtRanks.forEach(rank => {
+                    html += '<tr>';
+                    html += `<td><strong>${rank.rank}</strong></td>`;
+                    html += `<td>Team ${rank.teamNumber}</td>`;
+                    html += `<td>${rank.totalPoints || 0}</td>`;
+                    html += `<td>${rank.event1Points || 0}</td>`;
+                    html += `<td>${rank.event2Points || 0}</td>`;
+                    html += `<td>${rank.districtCmpPoints || 0}</td>`;
+                    html += '</tr>';
+                });
+                
+                html += '</tbody></table></div></div>';
+                document.getElementById('district-rankings-results').innerHTML = html;
+            } else {
+                document.getElementById('district-rankings-results').innerHTML = '<div class="info-message">No district rankings data found</div>';
             }
         }
 
