@@ -277,15 +277,28 @@
 
             const data = await fetchFRCData(`/${year}`, 'season-results');
             if (data) {
-                console.log('Season data:', data); // Debug log
                 let html = '<div class="data-display">';
                 html += `<h3>Season ${year}</h3>`;
                 html += `<div class="data-grid">`;
                 html += `<div class="data-item"><strong>Event Count:</strong> ${data.eventCount || 'N/A'}</div>`;
                 html += `<div class="data-item"><strong>Game Name:</strong> ${data.gameName || 'N/A'}</div>`;
-                html += `<div class="data-item"><strong>Kickoff:</strong> ${data.kickoff ? new Date(data.kickoff).toLocaleDateString() : 'N/A'}</div>`;
+                
+                // Handle kickoff date - check if it's a valid date (not 0001-01-01)
+                let kickoffDisplay = 'N/A';
+                if (data.kickoff && !data.kickoff.startsWith('0001-01-01')) {
+                    kickoffDisplay = new Date(data.kickoff).toLocaleDateString();
+                }
+                html += `<div class="data-item"><strong>Kickoff:</strong> ${kickoffDisplay}</div>`;
+                
                 html += `<div class="data-item"><strong>Rookie Start:</strong> ${data.rookieStart || 'N/A'}</div>`;
-                html += `<div class="data-item"><strong>FRC Championship:</strong> ${data.frcChampionship ? new Date(data.frcChampionship).toLocaleDateString() : 'N/A'}</div>`;
+                
+                // Handle championship date - check if it's valid
+                let champDisplay = 'N/A';
+                if (data.frcChampionship && data.frcChampionship !== null) {
+                    champDisplay = new Date(data.frcChampionship).toLocaleDateString();
+                }
+                html += `<div class="data-item"><strong>FRC Championship:</strong> ${champDisplay}</div>`;
+                
                 html += `</div></div>`;
                 document.getElementById('season-results').innerHTML = html;
             }
