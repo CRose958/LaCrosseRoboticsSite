@@ -5,7 +5,7 @@ compatibility_date = "2024-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "lacrosse-robotics-events"
-database_id = "" # Will be filled after creating the database
+database_id = "12ff1932-e65c-43d7-87cd-9e153650715b" # Will be filled after creating the database
 
 [vars]
 ALLOWED_ORIGINS = "https://lacrosserobotics.com,http://localhost:8000"

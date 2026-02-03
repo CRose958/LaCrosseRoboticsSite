@@ -1,7 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Sample events data - dates that exist in January 2026
-    // IMPORTANT: Define this first so it's available to calendar rendering functions
-    window.sampleEvents = {
+document.addEventListener('DOMContentLoaded', async () => {
+    // API Configuration
+    const API_URL = 'https://lacrosse-robotics-api.crose958.workers.dev';
+    
+    // Fallback events data in case API fails
+    const fallbackEvents = {
         '2026-1-13': { category: 'Robotics' },
         '2026-1-15': { category: 'Robotics' },
         '2026-1-20': { category: 'Robotics' },
@@ -46,6 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
         '2026-5-26': { category: 'Robotics' },
         '2026-5-28': { category: 'Robotics' },
     };
+
+    // Fetch events from API, fallback to hardcoded if it fails
+    try {
+        const response = await fetch(`${API_URL}/api/events`);
+        if (response.ok) {
+            window.sampleEvents = await response.json();
+            console.log('✓ Events loaded from API');
+        } else {
+            throw new Error('API response not OK');
+        }
+    } catch (error) {
+        console.warn('⚠ Failed to load events from API, using fallback data:', error.message);
+        window.sampleEvents = fallbackEvents;
+    }
 
     // --- Calendar Grid Logic ---
     const calendarTitle = document.getElementById('calendar-title');
