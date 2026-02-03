@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextMonthBtn = document.getElementById('next-month');
     // Only run calendar logic if all required elements exist
     if (calendarTitle && calendarDays && prevMonthBtn && nextMonthBtn) {
-        // Current date - Set to January 2026 to show our events
-        let currentDate = new Date(2026, 0, 1); // January 2026 (months are 0-based)
+        // Current date - Set to February 2026 to show our events
+        let currentDate = new Date(2026, 1, 1); // February 2026 (months are 0-based)
         let currentFilter = 'all'; // Track current event filter
 
         function renderCalendar(filter = 'all') {
