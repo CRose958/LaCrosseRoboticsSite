@@ -678,6 +678,14 @@ body.map-dark .card h3 { color: #1c1c1c; }
     color: white;
     border-radius: 8px;
     border: 1px solid #555;
+    overflow: hidden;
+}
+
+.home-hero-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* Small overrides for moved inline attributes */
