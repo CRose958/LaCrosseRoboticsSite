@@ -1,8 +1,437 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // API Configuration
+    const API_URL = 'https://lacrosse-robotics-api.christianrosework.workers.dev';
     
+    // Fallback events data in case API fails
+    const fallbackEvents = {
+        '2026-1-13': { category: 'Robotics' },
+        '2026-1-15': { category: 'Robotics' },
+        '2026-1-20': { category: 'Robotics' },
+        '2026-1-22': { category: 'Robotics' },
+        '2026-1-27': { category: 'Robotics' },
+        '2026-1-29': { category: 'Robotics' },
+        '2026-2-3': { category: 'Robotics' },
+        '2026-2-5': { category: 'Robotics' },
+        '2026-2-10': { category: 'Robotics' },
+        '2026-2-12': { category: 'Robotics' },
+        '2026-2-17': { category: 'Robotics' },
+        '2026-2-19': { category: 'Robotics' },
+        '2026-2-24': { category: 'Robotics' },
+        '2026-2-26': { category: 'Robotics' },
+        '2026-3-3': { category: 'Robotics' },
+        '2026-3-5': { category: 'Robotics' },
+        '2026-3-10': { category: 'Robotics' },
+        '2026-3-12': { category: 'Robotics' },
+        '2026-3-17': { category: 'Robotics' },
+        '2026-3-19': { category: 'Robotics' },
+        '2026-3-20': { category: 'FIRST' },
+        '2026-3-21': { category: 'FIRST' },
+        '2026-3-22': { category: 'FIRST' },
+        '2026-3-24': { category: 'Robotics' },
+        '2026-3-26': { category: 'Robotics' },
+        '2026-3-31': { category: 'Robotics' },
+        '2026-4-2': { category: 'FIRST' },
+        '2026-4-3': { category: 'FIRST' },
+        '2026-4-4': { category: 'FIRST' },
+        '2026-4-7': { category: 'Robotics' },
+        '2026-4-9': { category: 'Robotics' },
+        '2026-4-14': { category: 'Robotics' },
+        '2026-4-16': { category: 'Robotics' },
+        '2026-4-21': { category: 'Robotics' },
+        '2026-4-23': { category: 'Robotics' },
+        '2026-4-28': { category: 'Robotics' },
+        '2026-4-30': { category: 'Robotics' },
+        '2026-5-5': { category: 'Robotics' },
+        '2026-5-7': { category: 'Robotics' },
+        '2026-5-12': { category: 'Robotics' },
+        '2026-5-14': { category: 'Robotics' },
+        '2026-5-19': { category: 'Robotics' },
+        '2026-5-21': { category: 'Robotics' },
+        '2026-5-26': { category: 'Robotics' },
+        '2026-5-28': { category: 'Robotics' },
+    };
+
+    // Fetch events from API, fallback to hardcoded if it fails
+    try {
+        const response = await fetch(`${API_URL}/api/events`);
+        if (response.ok) {
+            window.sampleEvents = await response.json();
+            console.log('✓ Events loaded from API');
+        } else {
+            throw new Error('API response not OK');
+        }
+    } catch (error) {
+        console.warn('⚠ Failed to load events from API, using fallback data:', error.message);
+        window.sampleEvents = fallbackEvents;
+    }
+
+    // --- Calendar Grid Logic ---
+    const calendarTitle = document.getElementById('calendar-title');
+    const calendarDays = document.getElementById('calendar-days');
+    const prevMonthBtn = document.getElementById('prev-month');
+    const nextMonthBtn = document.getElementById('next-month');
+    // Only run calendar logic if all required elements exist
+    if (calendarTitle && calendarDays && prevMonthBtn && nextMonthBtn) {
+        // Current date - Set to February 2026 to show our events
+        let currentDate = new Date(2026, 1, 1); // February 2026 (months are 0-based)
+        let currentFilter = 'all'; // Track current event filter
+
+        function renderCalendar(filter = 'all') {
+            currentFilter = filter;
+            // Clear previous days
+            calendarDays.innerHTML = '';
+
+            // Set calendar title
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            calendarTitle.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+
+            // Get first day of month and number of days
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+
+            // Previous month days
+            const prevMonthLastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+
+            // Calculate number of days for next month grid
+            const totalCells = 42; // 6 rows x 7 columns
+            const daysInNextMonthGrid = totalCells - (daysInMonth + startingDayOfWeek);
+
+            // Add previous month days
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                createDayElement(prevMonthLastDay - startingDayOfWeek + i + 1, 'other-month', []);
+            }
+
+            // Add current month days
+            const today = new Date();
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+                const dateKey = `${dayDate.getFullYear()}-${dayDate.getMonth()+1}-${dayDate.getDate()}`;
+                let dayEvents = [];
+                let allEvents = [];
+                if (window.sampleEvents[dateKey]) {
+                    const event = window.sampleEvents[dateKey];
+                    allEvents = [event]; // Keep all events for modal
+                    // Only include event dot if it matches the current filter
+                    if (filter === 'all' || event.category === filter) {
+                        dayEvents = [event];
+                    }
+                }
+                let dayClass = 'calendar-day';
+                if (i === today.getDate() &&
+                    currentDate.getMonth() === today.getMonth() &&
+                    currentDate.getFullYear() === today.getFullYear()) {
+                    dayClass += ' today';
+                }
+                // Pass dayEvents for dot display, allEvents for click modal
+                createDayElement(i, dayClass, dayEvents, dateKey, allEvents);
+            }
+
+            // Add next month days
+            for (let i = 1; i <= daysInNextMonthGrid; i++) {
+                createDayElement(i, 'other-month', []);
+            }
+        }
+
+        function createDayElement(day, dayClass, events, dateKey, allEvents = []) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = dayClass;
+            if (dateKey) dayDiv.setAttribute('data-date', dateKey);
+            const numDiv = document.createElement('div');
+            numDiv.className = 'calendar-day-number';
+            numDiv.textContent = day;
+            dayDiv.appendChild(numDiv);
+            // Add event marker if there are events to display (based on filter)
+            if (events && events.length > 0) {
+                const marker = document.createElement('div');
+                marker.className = 'calendar-event-markers';
+                // Check event category to determine dot color
+                const eventCategory = events[0]?.category || 'Robotics';
+                const dotClass = eventCategory === 'FIRST' ? 'first' : 'robotics';
+                marker.innerHTML = `<span class="event-dot ${dotClass}"></span>`;
+                dayDiv.appendChild(marker);
+            }
+            // Make clickable if there are ANY events (filtered or not) for modal
+            if (allEvents && allEvents.length > 0) {
+                dayDiv.classList.add('has-events');
+                dayDiv.addEventListener('click', () => showEventModal(dateKey, allEvents));
+            }
+            calendarDays.appendChild(dayDiv);
+        }
+
+        // Month navigation
+        prevMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentFilter);
+        });
+        nextMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentFilter);
+        });
+
+        // Initial render
+        renderCalendar('all');
+
+        // --- EVENT MODAL FUNCTIONALITY ---
+        const eventModal = document.getElementById('event-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+
+        function showEventModal(dateKey, events) {
+            if (!eventModal || !modalTitle || !modalBody) return;
+            
+            // Parse date
+            const [year, month, day] = dateKey.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            modalTitle.textContent = dateStr;
+            
+            // Build event details
+            let html = '';
+            events.forEach(event => {
+                const category = event.category || 'Robotics';
+                const title = event.title || (category === 'FIRST' ? 'FIRST Competition' : 'Team Meeting');
+                const time = event.time || (category === 'FIRST' ? 'All Day' : '4:00 PM - 8:00 PM');
+                const location = event.location || (category === 'FIRST' ? 'Appleton East High School' : 'Room 196 @ Logan High School');
+                const borderColor = category === 'FIRST' ? 'var(--gold-color)' : 'var(--primary-color)';
+                
+                html += `
+                    <div class="modal-event-item" style="border-left: 4px solid ${borderColor};">
+                        <div class="modal-event-category">${category}</div>
+                        <div class="modal-event-title">${title}</div>
+                        <div class="modal-event-time"><i class="fas fa-clock"></i> ${time}</div>
+                        <div class="modal-event-location"><i class="fas fa-map-marker-alt"></i> ${location}</div>
+                    </div>
+                `;
+            });
+            
+            modalBody.innerHTML = html;
+            eventModal.style.display = 'flex';
+        }
+
+        function hideEventModal() {
+            if (eventModal) {
+                eventModal.style.display = 'none';
+            }
+        }
+
+        if (modalClose) {
+            modalClose.addEventListener('click', hideEventModal);
+        }
+
+        if (eventModal) {
+            eventModal.addEventListener('click', (e) => {
+                if (e.target === eventModal) {
+                    hideEventModal();
+                }
+            });
+        }
+
+        // --- CALENDAR PAGE EVENT LIST RENDERING ---
+        
+        function renderCalendarEventList(filter = 'all') {
+            const eventsList = document.getElementById('calendar-events-list');
+            if (!eventsList || !window.sampleEvents) return;
+            eventsList.innerHTML = '';
+            currentFilter = filter;
+
+            let allEvents = [];
+            for (const [date, event] of Object.entries(window.sampleEvents)) {
+                if (Array.isArray(event)) {
+                    event.forEach(e => allEvents.push({date, event: e}));
+                } else {
+                    allEvents.push({date, event});
+                }
+            }
+            allEvents.sort((a, b) => {
+                const [ay, am, ad] = a.date.split('-').map(Number);
+                const [by, bm, bd] = b.date.split('-').map(Number);
+                return new Date(ay, am-1, ad) - new Date(by, bm-1, bd);
+            });
+
+            // Only show upcoming events (today or later)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            allEvents = allEvents.filter(({date}) => {
+                const [y, m, d] = date.split('-').map(Number);
+                const eventDate = new Date(y, m-1, d);
+                return eventDate >= today;
+            });
+            
+            // Apply category filter
+            if (filter !== 'all') {
+                allEvents = allEvents.filter(({event}) => event.category === filter);
+            }
+
+            if (allEvents.length === 0) {
+                eventsList.innerHTML = '<div style="color:#ccc;padding:20px;">No upcoming events.</div>';
+                return;
+            }
+
+            allEvents.forEach(({date, event}) => {
+                const eventDiv = document.createElement('div');
+                eventDiv.className = 'calendar-event' + (event.category === 'FIRST' ? ' accent' : '');
+                eventDiv.setAttribute('data-category', event.category);
+                eventDiv.setAttribute('data-date', date);
+
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'calendar-event-date';
+                const d = new Date(date);
+                const options = { month: 'short', day: 'numeric' };
+                dateSpan.innerHTML = `<b>${d.toLocaleDateString('en-US', options)}</b>`;
+                eventDiv.appendChild(dateSpan);
+
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'calendar-event-details';
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'calendar-event-title';
+                titleDiv.textContent = event.category === 'FIRST' ? (event.title || 'FIRST Competition') : (event.title || 'Team Meeting');
+                detailsDiv.appendChild(titleDiv);
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'calendar-event-time';
+                timeDiv.textContent = event.time || (event.category === 'FIRST' ? 'All Day' : '4:00 PM - 8:00 PM');
+                detailsDiv.appendChild(timeDiv);
+                const locDiv = document.createElement('div');
+                locDiv.className = 'calendar-event-location';
+                locDiv.textContent = event.location || (event.category === 'FIRST' ? 'Appleton East High School' : 'Room 196 @ Logan High School');
+                detailsDiv.appendChild(locDiv);
+                eventDiv.appendChild(detailsDiv);
+
+                eventsList.appendChild(eventDiv);
+            });
+        }
+
+        // Render event list on calendar page if present
+        renderCalendarEventList();
+        
+        // Setup filter buttons
+        const filterButtons = document.querySelectorAll('.event-filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                // Get filter value and re-render both calendar and event list
+                const filter = this.getAttribute('data-filter');
+                renderCalendar(filter);
+                renderCalendarEventList(filter);
+            });
+        });
+        
+        // --- CardNav-inspired Event Navigation ---
+        function buildCardNavEvents() {
+            const cardnavTabs = document.getElementById('cardnav-tabs');
+            const cardnavList = document.getElementById('cardnav-list');
+            if (!cardnavTabs || !cardnavList) return;
+
+            // Gather all events and sort by date
+            let allEvents = [];
+            for (const [date, event] of Object.entries(window.sampleEvents)) {
+                if (Array.isArray(event)) {
+                    event.forEach(e => allEvents.push({date, event: e}));
+                } else {
+                    allEvents.push({date, event});
+                }
+            }
+            allEvents.sort((a, b) => {
+                const [ay, am, ad] = a.date.split('-').map(Number);
+                const [by, bm, bd] = b.date.split('-').map(Number);
+                return new Date(ay, am-1, ad) - new Date(by, bm-1, bd);
+            });
+
+            // Group events by month and meeting type
+            const months = {};
+            allEvents.forEach(({date, event}) => {
+                const d = new Date(date);
+                const monthKey = `${d.getFullYear()}-${d.getMonth()+1}`;
+                if (!months[monthKey]) months[monthKey] = [];
+                months[monthKey].push({date, event});
+            });
+
+            // Build tabs for each month
+            cardnavTabs.innerHTML = '';
+            const monthKeys = Object.keys(months).sort();
+            monthKeys.forEach((monthKey, idx) => {
+                const d = new Date(monthKey + '-01');
+                const tab = document.createElement('button');
+                tab.className = 'cardnav-tab' + (idx === 0 ? ' active' : '');
+                tab.textContent = d.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+                tab.setAttribute('data-month', monthKey);
+                cardnavTabs.appendChild(tab);
+            });
+
+            // Render events for selected month
+            function renderMonthEvents(monthKey) {
+                cardnavList.innerHTML = '';
+                // Group by meeting type
+                const meetings = {};
+                months[monthKey].forEach(({date, event}) => {
+                    const type = event.category || 'Meeting';
+                    if (!meetings[type]) meetings[type] = [];
+                    meetings[type].push({date, event});
+                });
+                Object.keys(meetings).forEach(type => {
+                    // Meeting type header
+                    const typeHeader = document.createElement('div');
+                    typeHeader.className = 'cardnav-type-header';
+                    typeHeader.textContent = type === 'FIRST' ? 'FIRST Events' : (type === 'Robotics' ? 'Robotics Meetings' : 'Team Meetings');
+                    cardnavList.appendChild(typeHeader);
+                    // Cards
+                    meetings[type].forEach(({date, event}) => {
+                        const card = document.createElement('div');
+                        card.className = 'cardnav-card';
+                        // Date
+                        const d = new Date(date);
+                        const dateDiv = document.createElement('div');
+                        dateDiv.className = 'cardnav-date';
+                        dateDiv.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        card.appendChild(dateDiv);
+                        // Title
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'cardnav-title';
+                        titleDiv.textContent = event.title || (type === 'FIRST' ? 'FIRST Competition' : 'Team Meeting');
+                        card.appendChild(titleDiv);
+                        // Time
+                        const timeDiv = document.createElement('div');
+                        timeDiv.className = 'cardnav-time';
+                        timeDiv.textContent = event.time || (type === 'FIRST' ? 'All Day' : '4:00 PM - 8:00 PM');
+                        card.appendChild(timeDiv);
+                        // Location
+                        const locDiv = document.createElement('div');
+                        locDiv.className = 'cardnav-location';
+                        locDiv.textContent = event.location || (type === 'FIRST' ? 'Appleton East High School' : 'Room 196 @ Logan High School');
+                        card.appendChild(locDiv);
+                        cardnavList.appendChild(card);
+                    });
+                });
+            }
+
+            // Tab click handler
+            cardnavTabs.querySelectorAll('.cardnav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    cardnavTabs.querySelectorAll('.cardnav-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    renderMonthEvents(tab.getAttribute('data-month'));
+                });
+            });
+            // Initial render
+            if (monthKeys.length > 0) renderMonthEvents(monthKeys[0]);
+        }
+
+        // Run CardNav event builder
+        buildCardNavEvents();
+    }
+
     // --- 1. CONFIGURATION: IMAGE GALLERIES ---
-    const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg"; 
-    
+    const ACCOUNT_HASH = "CaN6tPHwuX-NOcXEjJG0lg";
+
     // LIST A: MAIN GALLERY IDs (Current Year / Competition)
     const galleryImageIds = [
         "bbee9c6b-d0e7-41cb-fb05-bf5ca781e500",
@@ -25,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // LIST B: ARCHIVE IDs (Past Years)
     // REPLACE these IDs with your older photos when you have them!
     const archiveImageIds = [
-        "5af60ec2-34f7-47a5-9894-02a327c79700", 
+        "5af60ec2-34f7-47a5-9894-02a327c79700",
         "95e22222-d128-43fd-7004-6f68f4fcc800",
         "1892658d-e6bd-4f2a-6774-619f11a9de00",
         "3517fcc7-6ccd-429b-dfc2-d8754579cc00"
@@ -35,18 +464,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function buildGrid(containerId, ids, itemClass) {
         const container = document.getElementById(containerId);
         if (container) {
-            ids.forEach(id => {
+            ids.forEach((id, idx) => {
                 const div = document.createElement('div');
                 div.className = itemClass; // e.g. 'gallery-item' or 'archive-item'
-                
+
                 const img = document.createElement('img');
                 img.src = `https://imagedelivery.net/${ACCOUNT_HASH}/${id}/public`;
                 img.loading = 'lazy';
-                img.alt = 'Team Photo'; 
-                
+                img.alt = 'Team Photo';
+                img.onerror = function() {
+                    // If image fails to load, show error
+                    this.style.backgroundColor = '#666';
+                };
+
                 div.appendChild(img);
                 container.appendChild(div);
             });
+            console.log(`Built ${ids.length} items in ${containerId}`);
         }
     }
 
@@ -55,10 +489,117 @@ document.addEventListener('DOMContentLoaded', () => {
     buildGrid('archive-container', archiveImageIds, 'archive-item');
 
 
-    // --- 2. MOBILE MENU TOGGLE ---
-    const mobileMenu = document.getElementById('mobile-menu');
+    // --- 2. GOOEY NAV ANIMATION ---
     const navList = document.querySelector('.nav-list');
-    if(mobileMenu){
+    const navItems = document.querySelectorAll('.nav-list li');
+    
+    function updateGooeyNav(targetItem) {
+        const item = targetItem || document.querySelector('.nav-list li.active');
+        if (item && navList) {
+            const itemRect = item.getBoundingClientRect();
+            const navRect = navList.getBoundingClientRect();
+            
+            // Calculate position relative to nav container
+            let left = itemRect.left - navRect.left;
+            let width = itemRect.width;
+            const height = itemRect.height;
+            
+            // Constrain to stay within nav bounds (accounting for padding)
+            const padding = 8;
+            const maxLeft = navRect.width - width - padding;
+            left = Math.max(padding, Math.min(left, maxLeft));
+            
+            // Use CSS custom properties to animate the blob
+            navList.style.setProperty('--blob-left', `${left}px`);
+            navList.style.setProperty('--blob-width', `${width}px`);
+            navList.style.setProperty('--blob-height', `${height}px`);
+            
+            // Mark as initialized to show the blob
+            if (!navList.classList.contains('initialized')) {
+                navList.classList.add('initialized');
+            }
+        }
+    }
+
+    // Set active state based on current page
+    if (navList && navItems.length > 0) {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        let foundActive = false;
+        
+        // Clear any existing active classes first
+        navItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        navItems.forEach(item => {
+            const link = item.querySelector('a');
+            const href = link.getAttribute('href');
+            
+            // More robust matching - check both with and without .html
+            const pageName = currentPage.replace('.html', '');
+            const linkName = href.replace('.html', '');
+            
+            if (href === currentPage || 
+                linkName === pageName ||
+                (currentPage === '' && href === 'index.html') ||
+                (currentPage === 'index.html' && href === 'index.html')) {
+                item.classList.add('active');
+                foundActive = true;
+            }
+        });
+
+        // If no active found, activate first item
+        if (!foundActive && navItems.length > 0) {
+            navItems[0].classList.add('active');
+        }
+
+        // Initialize gooey nav position with multiple attempts to ensure fonts/layout loaded
+        requestAnimationFrame(() => {
+            const activeItem = document.querySelector('.nav-list li.active');
+            if (activeItem) {
+                updateGooeyNav(activeItem);
+            }
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) updateGooeyNav(activeItem);
+            }, 100);
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) updateGooeyNav(activeItem);
+            }, 300);
+        });
+
+        // Add hover effect - temporarily move blob
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                updateGooeyNav(item);
+            });
+        });
+
+        // Return blob to active page when mouse leaves entire nav
+        navList.addEventListener('mouseleave', () => {
+            // Small delay to ensure smooth transition back
+            setTimeout(() => {
+                const activeItem = document.querySelector('.nav-list li.active');
+                if (activeItem) {
+                    updateGooeyNav(activeItem);
+                }
+            }, 50);
+        });
+
+        // Update on window resize
+        window.addEventListener('resize', () => {
+            const activeItem = document.querySelector('.nav-list li.active');
+            if (activeItem) {
+                updateGooeyNav(activeItem);
+            }
+        });
+    }
+
+
+    // --- 3. MOBILE MENU TOGGLE ---
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu) {
         mobileMenu.addEventListener('click', () => {
             navList.classList.toggle('active');
         });
@@ -67,15 +608,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3. SCROLL ANIMATIONS ---
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('show');
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
         });
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
 
+    // Fallback: only reveal `.hidden` elements if the browser does not
+    // support IntersectionObserver at all. In environments where the API
+    // exists but is blocked/delayed, prefer the observer; an unconditional
+    // reveal (like the previous fallback) can mask other issues and cause
+    // content to flash. This is a safer, feature-detect approach.
+    if (typeof IntersectionObserver === 'undefined') {
+        document.querySelectorAll('.hidden').forEach(el => el.classList.add('show'));
+    }
+
 
     // --- 4. NUMBER COUNTER ANIMATION ---
     const statsSection = document.querySelector('.stats-banner');
-    let statsAnimated = false; 
+    let statsAnimated = false;
 
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -85,11 +637,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    if (statsSection) statsObserver.observe(statsSection);
+    if (statsSection) {
+        statsObserver.observe(statsSection);
+    }
 
     function animateNumbers() {
         const counters = document.querySelectorAll('.stat-number');
-        const speed = 200; 
+        const speed = 200;
         counters.forEach(counter => {
             const updateCount = () => {
                 const target = +counter.getAttribute('data-target');
@@ -108,13 +662,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 5. LIGHTBOX FUNCTIONALITY (UPDATED FOR BOTH GALLERIES) ---
     const modal = document.getElementById("lightbox");
-    
+
     if (modal) {
         const modalImg = document.getElementById("lightbox-img");
         const closeBtn = document.querySelector(".close-btn");
         const prevBtn = document.querySelector(".prev-btn");
         const nextBtn = document.querySelector(".next-btn");
-        
+
         // SELECT ALL IMAGES (Both Main Gallery AND Archive)
         // This effectively creates one big slideshow of everything on the page
         // Use a short timeout to ensure the grid is built before selecting images
@@ -126,12 +680,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal.style.display = "block";
                 modalImg.src = images[index].src;
                 currentIndex = index;
-                document.body.style.overflow = 'hidden'; 
+                document.body.style.overflow = 'hidden';
             }
 
             function closeLightbox() {
                 modal.style.display = "none";
-                document.body.style.overflow = 'auto'; 
+                document.body.style.overflow = 'auto';
             }
 
             function showNext() {
@@ -150,42 +704,97 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             closeBtn.addEventListener('click', closeLightbox);
-            
-            modal.addEventListener('click', function(e) {
+
+            modal.addEventListener('click', function (e) {
                 if (e.target === modal || e.target.classList.contains('lightbox-content-wrapper')) {
-                     closeLightbox();
+                    closeLightbox();
                 }
             });
 
-            nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
-            prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showNext();
+            });
 
-            document.addEventListener('keydown', function(e) {
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showPrev();
+            });
+
+            document.addEventListener('keydown', function (e) {
                 if (modal.style.display === "block") {
-                    if (e.key === "ArrowLeft") showPrev();
-                    else if (e.key === "ArrowRight") showNext();
-                    else if (e.key === "Escape") closeLightbox();
+                    if (e.key === "ArrowLeft") {
+                        showPrev();
+                    } else if (e.key === "ArrowRight") {
+                        showNext();
+                    } else if (e.key === "Escape") {
+                        closeLightbox();
+                    }
                 }
             });
         }, 100); // Small delay to ensure DOM is ready
-    }
-});
-// --- POPUP LOGIC ---
-document.addEventListener('DOMContentLoaded', () => {
-    const popupOverlay = document.getElementById('popup-overlay');
-    const closeBtn = document.getElementById('popup-close-btn');
 
-    if (popupOverlay && closeBtn) {
-        // Close on X click
-        closeBtn.addEventListener('click', () => {
-            popupOverlay.style.display = 'none';
-        });
+        // --- POPUP LOGIC (merged) ---
+        const popupOverlay = document.getElementById('popup-overlay');
+        const popupCloseBtn = document.getElementById('popup-close-btn');
 
-        // Close on click outside box
-        window.addEventListener('click', (e) => {
-            if (e.target === popupOverlay) {
+        if (popupOverlay && popupCloseBtn) {
+            popupCloseBtn.addEventListener('click', () => {
                 popupOverlay.style.display = 'none';
-            }
-        });
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === popupOverlay) {
+                    popupOverlay.style.display = 'none';
+                }
+            });
+        }
     }
+
+    // --- CLICK SPARK ANIMATION ---
+    // Configuration
+    const sparkConfig = {
+        sparkColor: '#8f2b40', // Match primary color
+        sparkSize: 25,
+        sparkRadius: 40,
+        sparkCount: 8,
+        duration: 400,
+        easing: 'ease-out',
+        extraScale: 1
+    };
+
+    function createClickSpark(x, y) {
+        const sparkContainer = document.createElement('div');
+        sparkContainer.className = 'spark-container';
+        sparkContainer.style.left = `${x}px`;
+        sparkContainer.style.top = `${y}px`;
+        document.body.appendChild(sparkContainer);
+
+        // Create multiple spark lines
+        for (let i = 0; i < sparkConfig.sparkCount; i++) {
+            const angle = (360 / sparkConfig.sparkCount) * i;
+            const spark = document.createElement('div');
+            spark.className = 'spark';
+            
+            // Set CSS custom properties for each spark
+            spark.style.setProperty('--angle', `${angle}deg`);
+            spark.style.setProperty('--spark-color', sparkConfig.sparkColor);
+            spark.style.setProperty('--spark-size', `${sparkConfig.sparkSize}px`);
+            spark.style.setProperty('--spark-radius', `${sparkConfig.sparkRadius * sparkConfig.extraScale}px`);
+            spark.style.setProperty('--duration', `${sparkConfig.duration}ms`);
+            spark.style.setProperty('--easing', sparkConfig.easing);
+            
+            sparkContainer.appendChild(spark);
+        }
+
+        // Remove spark container after animation completes
+        setTimeout(() => {
+            sparkContainer.remove();
+        }, sparkConfig.duration);
+    }
+
+    // Add click event listener to document
+    document.addEventListener('click', (e) => {
+        createClickSpark(e.clientX, e.clientY);
+    });
 });

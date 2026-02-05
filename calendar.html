@@ -1,620 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5859092930525234"
+     crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-REBLDRBN4N"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-REBLDRBN4N');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,200;1,200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* --- CSS VARIABLES & RESET --- */
-        :root {
-            --primary-color: #8f2b40; /* Maroon/Cranberry */
-            --dark-color: #1c1c1c;    /* Dark Gray/Black */
-            --white-color: #ffffff;
-            --bg-gray: #f0f0f0;
-            --gold-color: #ffcc00; /* For FIRST events */
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html {
-            scroll-behavior: smooth;
-            height: 100%; /* Ensure html takes full height */
-        }
-        body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.6;
-            color: var(--dark-color);
-            background-color: var(--white-color);
-            overflow-x: hidden;
-            
-            /* --- STICKY FOOTER FIX --- */
-            min-height: 100vh; /* Minimum height is 100% of viewport */
-            display: flex;
-            flex-direction: column; /* Stack elements vertically */
-        }
-        
-        /* --- NAVIGATION --- */
-        header {
-            background-color: var(--dark-color);
-            color: var(--white-color);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 3px solid var(--primary-color);
-        }
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            width: 100%; /* Ensure nav spans width */
-        }
-        .logo {
-            font-size: clamp(1.2rem, 4vw, 1.5rem); /* Fluid font sizing */
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .logo a {
-            color: var(--white-color);
-            text-decoration: none;
-        }
-        .logo span {
-            color: var(--primary-color);
-        }
-        .nav-list {
-            list-style: none;
-            display: flex;
-        }
-        .nav-list li {
-            margin-left: clamp(15px, 3vw, 25px); /* Fluid spacing */
-        }
-        .nav-list a {
-            color: var(--white-color);
-            text-decoration: none;
-            font-weight: 400;
-            transition: color 0.3s;
-            font-size: clamp(0.9rem, 2.5vw, 1rem); /* Fluid font sizing */
-        }
-        .nav-list a:hover {
-            color: var(--primary-color);
-        }
-        
-        /* --- CALENDAR SPECIFIC STYLES --- */
-        .calendar-page {
-            background-color: var(--dark-color);
-            color: var(--white-color);
-            padding: clamp(30px, 5vw, 60px) 0; /* Fluid padding */
-            flex-grow: 1; /* Fill remaining space */
-            width: 100%;
-        }
-        
-        .calendar-wrapper {
-            max-width: min(1200px, 95vw); /* Scales with viewport */
-            margin: 0 auto;
-            padding: 0 clamp(10px, 3vw, 20px); /* Fluid padding */
-            display: flex;
-            flex-direction: column;
-            gap: clamp(20px, 4vw, 30px); /* Fluid gap */
-        }
-        
-        .page-header {
-            text-align: center;
-            margin-bottom: clamp(20px, 4vw, 30px); /* Fluid margin */
-        }
-        .page-header h1 {
-            font-size: clamp(2rem, 6vw, 2.8rem); /* Fluid font sizing */
-            margin-bottom: 10px;
-            color: var(--white-color);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .page-header p {
-            font-size: clamp(1rem, 3vw, 1.2rem); /* Fluid font sizing */
-            color: #aaa;
-            max-width: min(700px, 90vw); /* Scales with viewport */
-            margin: 0 auto;
-        }
-        
-        /* Main Calendar Layout */
-        .calendar-main-layout {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(15px, 4vw, 25px); /* Fluid gap */
-        }
-        
-        /* Landscape layout (events on the side) */
-        @media (orientation: landscape) and (min-width: 768px) {
-            .calendar-main-layout {
-                flex-direction: row;
-            }
-            
-            .calendar-container {
-                flex: 1;
-            }
-            
-            .calendar-events-container {
-                width: min(350px, 40vw); /* Scales with viewport */
-                min-width: min(300px, 35vw);
-            }
-        }
-        
-        /* Portrait layout (events below) */
-        @media (orientation: portrait), (max-width: 767px) {
-            .calendar-main-layout {
-                flex-direction: column;
-            }
-            
-            .calendar-container {
-                width: 100%;
-            }
-            
-            .calendar-events-container {
-                width: 100%;
-            }
-        }
-        
-        /* Calendar Container Styles */
-        .calendar-container {
-            background: #2a2a2a;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .calendar-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #6d1f30 100%);
-            color: white;
-            padding: clamp(15px, 3vw, 20px) clamp(15px, 4vw, 30px); /* Fluid padding */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-        
-        .calendar-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .calendar-nav-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            color: white;
-            width: clamp(30px, 8vw, 40px); /* Fluid sizing */
-            height: clamp(30px, 8vw, 40px);
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: clamp(0.9rem, 3vw, 1.1rem); /* Fluid font sizing */
-            transition: all 0.3s;
-        }
-        
-        .calendar-nav-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.1);
-        }
-        
-        .calendar-title {
-            font-size: clamp(1.1rem, 4vw, 1.4rem); /* Fluid font sizing */
-            font-weight: 600;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
-        
-        .calendar-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            background-color: #333;
-            padding: clamp(8px, 2vw, 12px) 0; /* Fluid padding */
-        }
-        
-        .calendar-weekday {
-            text-align: center;
-            font-weight: 600;
-            color: #ccc;
-            font-size: clamp(0.7rem, 2.5vw, 0.9rem); /* Fluid font sizing */
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background-color: #444;
-            padding: 1px;
-        }
-        
-        .calendar-day {
-            background-color: #2a2a2a;
-            aspect-ratio: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            padding: clamp(4px, 1vw, 8px) clamp(2px, 0.5vw, 4px); /* Fluid padding */
-            position: relative;
-            user-select: none;
-        }
-        
-        .calendar-day:hover {
-            background-color: #333;
-        }
-        
-        .calendar-day-number {
-            font-weight: 600;
-            font-size: clamp(0.8rem, 3vw, 1rem); /* Fluid font sizing */
-            margin-bottom: 2px;
-            color: var(--white-color);
-        }
-        
-        .calendar-day.today .calendar-day-number {
-            background-color: var(--primary-color);
-            color: white;
-            width: clamp(24px, 7vw, 32px); /* Fluid sizing */
-            height: clamp(24px, 7vw, 32px);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .calendar-day.selected .calendar-day-number {
-            background-color: var(--gold-color);
-            color: var(--dark-color);
-            width: clamp(24px, 7vw, 32px); /* Fluid sizing */
-            height: clamp(24px, 7vw, 32px);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .calendar-day.other-month {
-            color: #666;
-        }
-        
-        /* Event Markers/Dots */
-        .calendar-event-markers {
-            display: flex;
-            justify-content: center;
-            gap: clamp(2px, 1vw, 4px); /* Fluid gap */
-            margin-top: clamp(2px, 0.5vw, 3px); /* Fluid margin */
-        }
-        
-        .event-dot {
-            width: clamp(6px, 2vw, 8px); /* Fluid sizing */
-            height: clamp(6px, 2vw, 8px);
-            border-radius: 50%;
-        }
-        
-        .event-dot.robotics {
-            background-color: var(--primary-color);
-        }
-        
-        .event-dot.first {
-            background-color: var(--gold-color);
-        }
-        
-        /* Events Container Styles */
-        .calendar-events-container {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(15px, 3vw, 20px); /* Fluid gap */
-        }
-        
-        .calendar-events {
-            background-color: #2a2a2a;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            padding: clamp(15px, 4vw, 25px); /* Fluid padding */
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            max-height: min(500px, 70vh); /* Scales with viewport height */
-            overflow-y: auto;
-        }
-        
-        .calendar-events::-webkit-scrollbar {
-            width: clamp(6px, 1.5vw, 8px); /* Fluid scrollbar */
-        }
-        
-        .calendar-events::-webkit-scrollbar-track {
-            background: #333;
-            border-radius: 4px;
-        }
-        
-        .calendar-events::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 4px;
-        }
-        
-        .calendar-events::-webkit-scrollbar-thumb:hover {
-            background: #6d1f30;
-        }
-        
-        .calendar-events-title {
-            margin: 0 0 clamp(15px, 3vw, 20px) 0; /* Fluid margin */
-            font-size: clamp(1.1rem, 4vw, 1.4rem); /* Fluid font sizing */
-            font-weight: 600;
-            color: var(--white-color);
-            display: flex;
-            align-items: center;
-            gap: clamp(8px, 2vw, 10px); /* Fluid gap */
-            padding-bottom: clamp(10px, 3vw, 15px); /* Fluid padding */
-            border-bottom: 1px solid #444;
-            position: sticky;
-            top: 0;
-            background: #2a2a2a;
-            z-index: 10;
-        }
-        
-        .calendar-events-title i {
-            color: var(--primary-color);
-        }
-        
-        .calendar-event {
-            background-color: #333;
-            padding: clamp(10px, 3vw, 15px); /* Fluid padding */
-            margin-bottom: clamp(8px, 2vw, 12px); /* Fluid margin */
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-            display: flex;
-            transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .calendar-event:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .calendar-event.accent {
-            border-left-color: var(--gold-color);
-        }
-        
-        .calendar-event-date {
-            font-weight: 600;
-            color: var(--primary-color);
-            font-size: clamp(0.8rem, 2.5vw, 0.95rem); /* Fluid font sizing */
-            min-width: clamp(60px, 15vw, 70px); /* Fluid sizing */
-            display: flex;
-            align-items: center;
-        }
-        
-        .calendar-event.accent .calendar-event-date {
-            color: var(--gold-color);
-        }
-        
-        .calendar-event-details {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            margin-left: clamp(10px, 3vw, 15px); /* Fluid margin */
-        }
-        
-        .calendar-event-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: clamp(0.9rem, 3vw, 1.05rem); /* Fluid font sizing */
-            color: var(--white-color);
-        }
-        
-        .calendar-event-time {
-            font-size: clamp(0.8rem, 2.5vw, 0.9rem); /* Fluid font sizing */
-            color: #aaa;
-        }
-        
-        .calendar-event-location {
-            font-size: clamp(0.75rem, 2.2vw, 0.85rem); /* Fluid font sizing */
-            color: #777;
-            margin-top: 3px;
-        }
-        
-        /* Event Filtering */
-        .calendar-event-filters {
-            display: flex;
-            gap: clamp(8px, 2vw, 10px); /* Fluid gap */
-            margin-bottom: clamp(15px, 3vw, 20px); /* Fluid margin */
-            flex-wrap: wrap;
-        }
-        
-        .event-filter-btn {
-            padding: clamp(6px, 2vw, 8px) clamp(10px, 3vw, 15px); /* Fluid padding */
-            border: none;
-            border-radius: 20px;
-            background-color: #444;
-            color: #ccc;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: clamp(0.8rem, 2.5vw, 0.9rem); /* Fluid font sizing */
-            font-weight: 500;
-        }
-        
-        .event-filter-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .event-filter-btn:hover {
-            background-color: #6d1f30;
-            color: white;
-        }
-        
-        /* Footer Styles */
-        footer {
-            background-color: var(--dark-color);
-            color: #999;
-            padding: clamp(30px, 5vw, 50px) clamp(15px, 3vw, 20px); /* Fluid padding */
-            text-align: center;
-            
-            /* --- STICKY FOOTER PART 2 --- */
-            margin-top: auto; /* Pushes footer to bottom */
-        }
-        
-        footer h3 {
-            color: var(--white-color);
-            margin-bottom: 10px;
-            font-size: clamp(1.1rem, 3vw, 1.3rem); /* Fluid font sizing */
-        }
-        
-        footer p {
-            font-size: clamp(0.8rem, 2.5vw, 0.9rem); /* Fluid font sizing */
-        }
-        
-        /* Hamburger Menu Icon */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-        
-        .bar {
-            height: 3px;
-            width: 25px;
-            background-color: white;
-            margin: 3px 0;
-            transition: 0.4s;
-        }
-        
-        .current-page {
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: flex;
-            }
-            .nav-list {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                background-color: var(--dark-color);
-                text-align: center;
-            }
-            .nav-list.active {
-                display: flex;
-            }
-            .nav-list li {
-                margin: 15px 0;
-            }
-            
-            .calendar-header {
-                padding: 15px clamp(10px, 3vw, 20px); /* Fluid padding */
-            }
-            
-            .calendar-title {
-                font-size: clamp(1rem, 4vw, 1.2rem); /* Fluid font sizing */
-            }
-            
-            .calendar-nav-btn {
-                width: clamp(28px, 8vw, 36px); /* Fluid sizing */
-                height: clamp(28px, 8vw, 36px);
-            }
-            
-            .calendar-day-number {
-                font-size: clamp(0.75rem, 3vw, 0.9rem); /* Fluid font sizing */
-            }
-            
-            .calendar-events {
-                padding: clamp(15px, 4vw, 20px); /* Fluid padding */
-                max-height: min(400px, 60vh); /* Scales with viewport height */
-            }
-            
-            /* Make event filters scroll horizontally on small screens */
-            .calendar-event-filters {
-                overflow-x: auto;
-                padding-bottom: 5px;
-            }
-            
-            .calendar-event-filters::-webkit-scrollbar {
-                height: 5px;
-            }
-            
-            .calendar-event-filters::-webkit-scrollbar-track {
-                background: #333;
-                border-radius: 4px;
-            }
-            
-            .calendar-event-filters::-webkit-scrollbar-thumb {
-                background: var(--primary-color);
-                border-radius: 4px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .calendar-event {
-                flex-direction: column;
-            }
-            
-            .calendar-event-date {
-                margin-bottom: 8px;
-                min-width: auto;
-            }
-            
-            .calendar-event-details {
-                margin-left: 0;
-            }
-            
-            .calendar-event-filters {
-                flex-wrap: nowrap; /* Allow horizontal scrolling */
-            }
-            
-            /* Make calendar days more compact on very small screens */
-            .calendar-day {
-                padding: 3px 1px;
-            }
-            
-            .calendar-day-number {
-                font-size: clamp(0.7rem, 2.5vw, 0.85rem); /* Even smaller on tiny screens */
-            }
-        }
-        
-        /* Additional responsive optimizations */
-        @media (max-height: 600px) {
-            .calendar-events {
-                max-height: min(350px, 55vh); /* Adjust for short screens */
-            }
-        }
-        
-        @media (max-width: 320px) {
-            /* Extra small screen optimizations */
-            .calendar-weekday {
-                font-size: 0.65rem; /* Smaller weekday labels */
-            }
-            
-            .calendar-event-filters {
-                gap: 5px;
-            }
-            
-            .event-filter-btn {
-                padding: 5px 10px;
-                font-size: 0.75rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <header>
@@ -634,14 +40,16 @@
             </ul>
         </nav>
     </header>
-    
+
+    <div class="hero small">
+        <div class="hero-content fade-in">
+            <h1>Team Calendar</h1>
+            <p>Stay updated with The Aeronauts events and activities</p>
+        </div>
+    </div>
+
     <div class="calendar-page">
         <div class="calendar-wrapper">
-            <div class="page-header">
-                <h1>Team Calendar</h1>
-                <p>Stay updated with The Aeronauts events and activities</p>
-            </div>
-            
             <div class="calendar-main-layout">
                 <div class="calendar-container">
                     <div class="calendar-header">
@@ -653,7 +61,7 @@
                             <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
-                    
+
                     <div class="calendar-weekdays">
                         <div class="calendar-weekday">Sun</div>
                         <div class="calendar-weekday">Mon</div>
@@ -663,367 +71,55 @@
                         <div class="calendar-weekday">Fri</div>
                         <div class="calendar-weekday">Sat</div>
                     </div>
-                    
+
                     <div class="calendar-days" id="calendar-days">
                         <!-- Days will be populated by JavaScript -->
                     </div>
                 </div>
-                
-                <div class="calendar-events-container">
-                    <div class="calendar-event-filters">
-                        <button class="event-filter-btn active" data-filter="all">All Events</button>
-                        <button class="event-filter-btn" data-filter="Robotics">Robotics</button>
-                        <button class="event-filter-btn" data-filter="FIRST">FIRST</button>
-                        <button class="event-filter-btn" id="show-all-dates-btn" style="display:none">Show All Dates</button>
+
+                <!-- Event Details Modal -->
+                <div class="event-modal" id="event-modal">
+                    <div class="event-modal-content">
+                        <span class="event-modal-close" id="modal-close">&times;</span>
+                        <h3 class="event-modal-title" id="modal-title">Event Details</h3>
+                        <div class="event-modal-body" id="modal-body">
+                            <!-- Event details will be populated by JavaScript -->
+                        </div>
                     </div>
-                    
+                </div>
+
+                <div class="calendar-events-container">
                     <div class="calendar-events">
-                        <h3 class="calendar-events-title">
-                            <i class="fas fa-calendar-alt"></i> <span id="events-title-text">Upcoming Events</span>
-                        </h3>
-                        <div class="calendar-event" data-category="Robotics" data-date="2026-1-6">
-                            <span class="calendar-event-date"><b>Jan 6</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">Team Meeting</div>
-                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
-                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
-                            </div>
+                        <h2 class="calendar-events-title" id="events-title-text">Upcoming Events</h2>
+                        <div class="calendar-event-filters">
+                            <button class="event-filter-btn active" data-filter="all">All Events</button>
+                            <button class="event-filter-btn" data-filter="Robotics">Robotics</button>
+                            <button class="event-filter-btn" data-filter="FIRST">FIRST Competition</button>
                         </div>
-                        <div class="calendar-event" data-category="Robotics" data-date="2026-1-13">
-                            <span class="calendar-event-date"><b>Jan 13</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">Team Meeting</div>
-                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
-                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event" data-category="Robotics" data-date="2026-1-20">
-                            <span class="calendar-event-date"><b>Jan 20</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">Team Meeting</div>
-                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
-                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event" data-category="Robotics" data-date="2026-1-27">
-                            <span class="calendar-event-date"><b>Jan 27</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">Team Meeting</div>
-                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
-                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event" data-category="Robotics" data-date="2026-2-3">
-                            <span class="calendar-event-date"><b>Feb 3</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">Team Meeting</div>
-                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
-                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event" data-category="Robotics" data-date="2026-2-10">
-                            <span class="calendar-event-date"><b>Feb 10</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">Team Meeting</div>
-                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
-                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event" data-category="Robotics" data-date="2026-2-17">
-                            <span class="calendar-event-date"><b>Feb 17</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">Team Meeting</div>
-                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
-                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event" data-category="Robotics" data-date="2026-2-24">
-                            <span class="calendar-event-date"><b>Feb 24</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">Team Meeting</div>
-                                <div class="calendar-event-time">4:00 PM - 8:00 PM</div>
-                                <div class="calendar-event-location">Room 196 @ Logan High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event accent" data-category="FIRST" data-date="2026-3-20">
-                            <span class="calendar-event-date"><b>Mar 20</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">FIRST Competition Day 1</div>
-                                <div class="calendar-event-time">All Day</div>
-                                <div class="calendar-event-location">Appleton East High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event accent" data-category="FIRST" data-date="2026-3-21">
-                            <span class="calendar-event-date"><b>Mar 21</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">FIRST Competition Day 2</div>
-                                <div class="calendar-event-time">All Day</div>
-                                <div class="calendar-event-location">Appleton East High School</div>
-                            </div>
-                        </div>
-                        <div class="calendar-event accent" data-category="FIRST" data-date="2026-3-22">
-                            <span class="calendar-event-date"><b>Mar 22</b></span>
-                            <div class="calendar-event-details">
-                                <div class="calendar-event-title">FIRST Competition Day 3</div>
-                                <div class="calendar-event-time">All Day</div>
-                                <div class="calendar-event-location">Appleton East High School</div>
-                            </div>
-                        </div>
+                        <div id="calendar-events-list"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <footer id="contact">
         <h3>La Crosse Robotics | Team 4054</h3>
         <p>School District of La Crosse</p>
         <p>&copy; 2025 The Aeronauts. All Rights Reserved.</p>
     </footer>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Mobile menu toggle
             const mobileMenu = document.getElementById('mobile-menu');
             const navList = document.querySelector('.nav-list');
-            
-            mobileMenu.addEventListener('click', function() {
-                navList.classList.toggle('active');
-            });
-            
-            // Calendar functionality
-            const calendarTitle = document.getElementById('calendar-title');
-            const calendarDays = document.getElementById('calendar-days');
-            const prevMonthBtn = document.getElementById('prev-month');
-            const nextMonthBtn = document.getElementById('next-month');
-            const filterButtons = document.querySelectorAll('.event-filter-btn');
-            const showAllDatesBtn = document.getElementById('show-all-dates-btn');
-            const eventsTitleText = document.getElementById('events-title-text');
-            
-            // Current date - Set to January 2026 to show our events
-            let currentDate = new Date(2026, 0, 1); // January 2026 (months are 0-based)
-            let currentFilter = 'all';
-            let selectedDateFilter = null;
-            
-            // Sample events data - dates that exist in January 2026
-            const sampleEvents = {
-                '2026-1-6': { category: 'Robotics' },
-                '2026-1-13': { category: 'Robotics' },
-                '2026-1-20': { category: 'Robotics' },
-                '2026-1-27': { category: 'Robotics' },
-                '2026-2-3': { category: 'Robotics' },
-                '2026-2-10': { category: 'Robotics' },
-                '2026-2-17': { category: 'Robotics' },
-                '2026-2-24': { category: 'Robotics' },
-                '2026-3-20': { category: 'FIRST' },
-                '2026-3-21': { category: 'FIRST' },
-                '2026-3-22': { category: 'FIRST' },
-            };
-            
-            // Event filtering functionality
-            filterButtons.forEach(button => {
-                if (button.id !== 'show-all-dates-btn') {
-                    button.addEventListener('click', function() {
-                        // Remove active class from all buttons except show-all-dates
-                        filterButtons.forEach(btn => {
-                            if (btn.id !== 'show-all-dates-btn') btn.classList.remove('active');
-                        });
-                        // Add active class to clicked button
-                        this.classList.add('active');
-                        
-                        const filter = this.getAttribute('data-filter');
-                        currentFilter = filter;
-                        selectedDateFilter = null;
-                        showAllDatesBtn.style.display = 'none';
-                        eventsTitleText.textContent = 'Upcoming Events';
-                        filterEvents(filter, null);
-                    });
-                }
-            });
-            
-            // Show all dates button functionality
-            showAllDatesBtn.addEventListener('click', function() {
-                selectedDateFilter = null;
-                showAllDatesBtn.style.display = 'none';
-                eventsTitleText.textContent = 'Upcoming Events';
-                filterEvents(currentFilter, null);
-            });
-            
-            function filterEvents(filter, dateFilter) {
-                const events = document.querySelectorAll('.calendar-event');
-                let visibleCount = 0;
-                
-                events.forEach(event => {
-                    const category = event.getAttribute('data-category');
-                    const eventDate = event.getAttribute('data-date');
-                    
-                    let shouldShow = true;
-                    
-                    if (dateFilter) {
-                        // Show only events for the selected date
-                        shouldShow = eventDate === dateFilter;
-                    } else if (filter !== 'all') {
-                        // Show only events matching the category filter
-                        shouldShow = category === filter;
-                    }
-                    
-                    if (shouldShow) {
-                        event.style.display = 'flex';
-                        visibleCount++;
-                    } else {
-                        event.style.display = 'none';
-                    }
+            if (mobileMenu && navList) {
+                mobileMenu.addEventListener('click', function() {
+                    navList.classList.toggle('active');
                 });
-                
-                // If filtering by date, update the title
-                if (dateFilter) {
-                    const dateObj = new Date(dateFilter);
-                    const options = { month: 'long', day: 'numeric', year: 'numeric' };
-                    eventsTitleText.textContent = `Events on ${dateObj.toLocaleDateString('en-US', options)}`;
-                }
             }
-            
-            // Function to filter events by date
-            function filterEventsByDate(dateString) {
-                selectedDateFilter = dateString;
-                showAllDatesBtn.style.display = 'inline-block';
-                filterEvents(currentFilter, dateString);
-            }
-            
-            // Render the calendar
-            function renderCalendar() {
-                // Clear previous days
-                calendarDays.innerHTML = '';
-                
-                // Set calendar title
-                const monthNames = [
-                    'January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'
-                ];
-                calendarTitle.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-                
-                // Get first day of month and number of days
-                const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-                const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-                const daysInMonth = lastDay.getDate();
-                const startingDayOfWeek = firstDay.getDay();
-                
-                // Previous month days
-                const prevMonthLastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
-                
-                // Calculate number of days for next month grid
-                const totalCells = 42; // 6 rows x 7 columns
-                const daysInNextMonthGrid = totalCells - (daysInMonth + startingDayOfWeek);
-                
-                // Add previous month days
-                for (let i = 0; i < startingDayOfWeek; i++) {
-                    createDayElement(prevMonthLastDay - startingDayOfWeek + i + 1, 'other-month', []);
-                }
-                
-                // Add current month days
-                const today = new Date();
-                const selectedDate = localStorage.getItem('selectedDate') ? new Date(localStorage.getItem('selectedDate')) : null;
-                
-                for (let i = 1; i <= daysInMonth; i++) {
-                    const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
-                    const dateKey = `${dayDate.getFullYear()}-${dayDate.getMonth()+1}-${dayDate.getDate()}`;
-                    const dayEvents = [];
-                    
-                    // Check if there are events for this date
-                    if (sampleEvents[dateKey]) {
-                        dayEvents.push(sampleEvents[dateKey]);
-                    }
-                    
-                    let dayClass = 'calendar-day';
-                    if (i === today.getDate() && 
-                        currentDate.getMonth() === today.getMonth() && 
-                        currentDate.getFullYear() === today.getFullYear()) {
-                        dayClass += ' today';
-                    }
-                    
-                    if (selectedDate && 
-                        i === selectedDate.getDate() && 
-                        currentDate.getMonth() === selectedDate.getMonth() && 
-                        currentDate.getFullYear() === selectedDate.getFullYear()) {
-                        dayClass += ' selected';
-                    }
-                    
-                    createDayElement(i, dayClass, dayEvents, dateKey);
-                }
-                
-                // Add next month days
-                for (let i = 1; i <= daysInNextMonthGrid; i++) {
-                    createDayElement(i, 'other-month', []);
-                }
-            }
-            
-            function createDayElement(dayNumber, className, dayEvents = [], dateKey = '') {
-                const dayElement = document.createElement('div');
-                dayElement.className = className;
-                
-                const dayNumberElement = document.createElement('div');
-                dayNumberElement.className = 'calendar-day-number';
-                dayNumberElement.textContent = dayNumber;
-                dayElement.appendChild(dayNumberElement);
-                
-                // Add event markers
-                if (dayEvents.length > 0) {
-                    const eventMarkers = document.createElement('div');
-                    eventMarkers.className = 'calendar-event-markers';
-                    
-                    dayEvents.forEach(event => {
-                        const eventDot = document.createElement('div');
-                        eventDot.className = `event-dot ${event.category.toLowerCase()}`;
-                        eventMarkers.appendChild(eventDot);
-                    });
-                    
-                    dayElement.appendChild(eventMarkers);
-                }
-                
-                // Add click event
-                if (!className.includes('other-month')) {
-                    dayElement.addEventListener('click', function() {
-                        // Remove selected class from all days
-                        document.querySelectorAll('.calendar-day').forEach(day => {
-                            day.classList.remove('selected');
-                        });
-                        
-                        // Add selected class to clicked day
-                        dayElement.classList.add('selected');
-                        
-                        // Store selected date
-                        const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayNumber);
-                        localStorage.setItem('selectedDate', selectedDate.toISOString());
-                        
-                        // Filter events by this date
-                        if (dateKey && sampleEvents[dateKey]) {
-                            filterEventsByDate(dateKey);
-                        }
-                    });
-                }
-                
-                calendarDays.appendChild(dayElement);
-            }
-            
-            // Navigation event listeners
-            prevMonthBtn.addEventListener('click', function() {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-                selectedDateFilter = null;
-                showAllDatesBtn.style.display = 'none';
-                eventsTitleText.textContent = 'Upcoming Events';
-                renderCalendar();
-            });
-            
-            nextMonthBtn.addEventListener('click', function() {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                selectedDateFilter = null;
-                showAllDatesBtn.style.display = 'none';
-                eventsTitleText.textContent = 'Upcoming Events';
-                renderCalendar();
-            });
-            
-            // Initial setup
-            renderCalendar();
+            // Calendar functionality is handled by script.js
         });
     </script>
 </body>

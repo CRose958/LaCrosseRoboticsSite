@@ -3,15 +3,14 @@
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5859092930525234"
      crossorigin="anonymous"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-REBLDRBN4N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-REBLDRBN4N');
-</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-REBLDRBN4N"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-REBLDRBN4N');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Crosse Robotics | Team 4054 The Aeronauts</title>
@@ -21,39 +20,13 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
-    
-    <style>
-        /* --- Dark Mode Overrides for Home Page --- */
-        body {
-            background-color: #1c1c1c; /* Dark Background */
-            color: #ffffff; /* White Text */
-        }
-
-        /* Make the heading underlines white */
-        h2::after {
-            background: #ffffff;
-        }
-
-        /* Ensure the text inside the 'Startup' cards stays dark/readable */
-        .card {
-            color: #1c1c1c;
-        }
-        .card h3 {
-            color: #1c1c1c;
-        }
-
-        /* Override the light gray background of the Regional Hub section */
-        .regional-hub {
-            background-color: #1c1c1c;
-        }
-    </style>
 </head>
-<body>
+<body class="home-dark">
 
     <header>
         <nav>
             <div class="logo"><a href="index.html">La Crosse <span>Robotics</span></a></div>
-            
+
             <div class="menu-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
@@ -73,21 +46,21 @@
         </div>
     </div>
 
-    <section class="hidden">
+    <section>
         <div class="flex-container">
             <div class="flex-item">
                 <h2>Who We Are</h2>
-                <p>La Crosse Robotics is a high school engineering community centered on the School District of La Crosse’s FIRST Robotics Competition (FRC) team, Team 4054 "The Aeronauts."</p>
+                <p>La Crosse Robotics is a high school engineering community centered on the School District of La Crosse's FIRST Robotics Competition (FRC) team, Team 4054 "The Aeronauts."</p>
                 <p>Our members design, build, and program robots to solve complex annual challenges for the Competitions.</p>
             </div>
             <div class="flex-item">
-                <div style="background: #333; height: 386px; width: 405px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 8px; border: 1px solid #555;">
+                <div class="home-hero-box">
                     <img src="https://imagedelivery.net/CaN6tPHwuX-NOcXEjJG0lg/5ed31984-5b71-4ccc-f2a4-bf70eec00600/public" loading="lazy" alt="Robot Image">
                 </div>
             </div>
         </div>
     </section>
-    <div class="stats-banner hidden">
+    <div class="stats-banner">
         <div class="stats-grid">
             <div class="stat-item">
                 <div class="stat-number" data-target="3">0</div>
@@ -98,13 +71,13 @@
                 <div class="stat-label">Team Number</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" data-target="1">0</div>
-                <div class="stat-label">Mission</div>
+                <div class="stat-number" data-target="14">0</div>
+                <div class="stat-label">Members</div>
             </div>
         </div>
     </div>
 
-    <section class="hidden">
+    <section>
         <h2>Skills for everyone</h2>
         <div class="card-container">
             <div class="card">
@@ -122,7 +95,7 @@
         </div>
     </section>
 
-    <section class="regional-hub hidden">
+    <section class="regional-hub">
         <h2>A Regional STEM Hub</h2>
         <p>Beyond the local team, La Crosse Robotics serves as a pillar for STEM in the region.</p>
         <p>We participate in the major Seven Rivers Regional tournament at the La Crosse Center and foster the Seven Rivers Robotics Coalition to support cooperative competition across the tri-state area.</p>
@@ -133,6 +106,5 @@
         <p>School District of La Crosse</p>
         <p>&copy; 2025 The Aeronauts. All Rights Reserved.</p>
     </footer>
-
 </body>
 </html>

@@ -3,14 +3,14 @@
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5859092930525234"
      crossorigin="anonymous"></script>
-
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-REBLDRBN4N');
-</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-REBLDRBN4N"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-REBLDRBN4N');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery | Team 4054</title>
@@ -20,187 +20,13 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
-
-    <style>
-        /* --- Dark Mode Styles --- */
-        body {
-            background-color: #1c1c1c; 
-            color: #ffffff; 
-        }
-
-        /* --- "Puzzle" (Masonry) Gallery Layout --- */
-        .gallery-grid {
-            column-count: 3;
-            column-gap: 15px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 900px) { .gallery-grid { column-count: 2; } }
-        @media (max-width: 600px) { .gallery-grid { column-count: 1; } }
-
-        .gallery-item {
-            break-inside: avoid-column;
-            margin-bottom: 15px; 
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            background: #333;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: auto; 
-            display: block;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .gallery-item img:hover {
-            transform: scale(1.03);
-        }
-
-        /* --- THE ARCHIVE STYLES --- */
-        .archive-header {
-            text-align: center;
-            margin: 60px 0 30px;
-            font-size: 2.5rem;
-            color: #fff;
-            position: relative;
-        }
-        
-        .archive-header::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background: #8f2b40; 
-            margin: 10px auto 0;
-        }
-
-        /* --- UPDATED CENTERING LOGIC --- */
-        .archive-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center; /* Forces items to center of container */
-            gap: 20px;
-            
-            /* These lines ensure the container itself is centered */
-            max-width: 1000px; 
-            width: fit-content; /* Shrink to fit items so margins work */
-            margin: 0 auto;     /* Auto margins center the shrunk container */
-            
-            padding: 0 20px 60px 20px;
-        }
-
-        .archive-item {
-            background: #2a2a2a;
-            border: 1px solid #444;
-            border-radius: 8px;
-            overflow: hidden; 
-            cursor: pointer;
-            transition: all 0.3s ease;
-            
-            /* Fixed width for uniform cards */
-            width: 220px; 
-            max-width: 100%;
-        }
-
-        .archive-item:hover {
-            transform: translateY(-5px);
-            border-color: #8f2b40;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-        }
-
-        .archive-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* --- Lightbox Styles --- */
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: rgba(0,0,0,0.95);
-        }
-
-        .lightbox-content-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .lightbox-content {
-            max-width: 90%;
-            max-height: 85vh;
-            object-fit: contain;
-            border-radius: 4px;
-            animation: zoom 0.3s;
-        }
-
-        @keyframes zoom {
-            from {transform:scale(0.9); opacity: 0;} 
-            to {transform:scale(1); opacity: 1;}
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            color: #f1f1f1;
-            font-size: 45px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 2002;
-            line-height: 1;
-        }
-
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.4);
-            color: white;
-            border: none;
-            font-size: 2rem;
-            padding: 15px 20px;
-            cursor: pointer;
-            z-index: 2001;
-            transition: 0.3s;
-            border-radius: 8px;
-            user-select: none;
-        }
-
-        .nav-btn:hover { background-color: rgba(255, 255, 255, 0.2); }
-        .prev-btn { left: 10px; }
-        .next-btn { right: 10px; }
-
-        @media (max-width: 600px) {
-             .nav-btn { padding: 10px 15px; font-size: 1.5rem; }
-             .prev-btn { left: 5px; }
-             .next-btn { right: 5px; }
-             .close-btn { right: 15px; top: 10px;}
-        }
-    </style>
 </head>
-<body>
+<body class="photos-dark">
 
     <header>
         <nav>
             <div class="logo"><a href="index.html">La Crosse <span>Robotics</span></a></div>
-            
+
             <div class="menu-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
@@ -236,8 +62,8 @@
 
     <div id="lightbox" class="lightbox">
         <span class="close-btn">&times;</span>
-        <button class="nav-btn prev-btn">&#10094;</button> 
-        <button class="nav-btn next-btn">&#10095;</button> 
+        <button class="nav-btn prev-btn">&#10094;</button>
+        <button class="nav-btn next-btn">&#10095;</button>
         <div class="lightbox-content-wrapper">
              <img class="lightbox-content" id="lightbox-img">
         </div>
