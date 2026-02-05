@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // API Configuration
-    const API_URL = 'https://lacrosse-robotics-api.crose958.workers.dev';
+    const API_URL = 'https://lacrosse-robotics-api.christianrosework.workers.dev';
     
     // Fallback events data in case API fails
     const fallbackEvents = {
