@@ -1,12 +1,9 @@
-name = "lacrosse-robotics-api"
+name = "lacrosse-robotics-site"
 main = "worker/index.js"
-compatibility_date = "2024-01-01"
-workers_dev = true
+compatibility_date = "2026-02-15"
+account_id = "cfb5806341f9c812f37277262ce16c3a"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "lacrosse-robotics-events"
-database_id = "12ff1932-e65c-43d7-87cd-9e153650715b" # Will be filled after creating the database
-
-[vars]
-ALLOWED_ORIGINS = "https://lacrosserobotics.com,http://localhost:8000"
+database_id = "12ff1932-e65c-43d7-87cd-9e153650715b"

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queue Player</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="queue-page">
+  <div id="admin-gate" class="queue-gate">
+    <form class="queue-gate-card">
+      <h2>Player Access</h2>
+      <p>Enter the player password to unlock queue controls.</p>
+      <input id="admin-password" class="queue-input" type="password" placeholder="Password" required />
+      <button class="btn" id="admin-unlock">Unlock</button>
+    </form>
+  </div>
+  <main class="queue-container">
+    <section class="queue-card">
+      <h1>Queue Player</h1>
+      <p class="queue-subtitle">Use this page on the playback computer. Spotify/YouTube embeds may require a click to start audio.</p>
+      <div class="queue-player">
+        <div class="queue-now">Now playing: <span id="now-playing">Loading...</span></div>
+        <iframe
+          id="player-frame"
+          class="queue-embed hidden-player"
+          title="Queue Player"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </section>
+
+    <section class="queue-card" id="admin-controls">
+      <div class="queue-admin">
+        <button class="btn" id="queue-start">Start queue</button>
+        <button class="btn" id="queue-next">Next song</button>
+        <button class="btn btn-outline" id="queue-clear">Clear queue</button>
+      </div>
+      <h2>Queue</h2>
+      <ul id="queue-list" class="queue-list"></ul>
+      <p id="request-status" class="queue-status"></p>
+    </section>
+  </main>
+
+  <script>
+    window.MUSIC_QUEUE_API_BASE = 'https://lacrosse-robotics-site.christianrosework.workers.dev';
+  </script>
+  <script src="music-queue.js"></script>
+</body>
+</html>

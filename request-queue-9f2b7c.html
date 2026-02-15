@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Private Song Requests</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="queue-page">
+  <main class="queue-container">
+    <section class="queue-card">
+      <h1>Private Song Requests</h1>
+      <p class="queue-subtitle">Paste a Spotify track link or a YouTube Music link to request a song. This page is private—share the link only with guests.</p>
+      <form id="song-request-form" class="queue-form">
+        <label class="queue-label" for="requester-name">Your name (optional)</label>
+        <input id="requester-name" class="queue-input" type="text" placeholder="Alex" />
+
+        <label class="queue-label" for="request-pin">Request PIN</label>
+        <input id="request-pin" class="queue-input" type="password" placeholder="Enter PIN" required />
+
+        <label class="queue-label" for="track-input">Spotify or YouTube Music link</label>
+        <input id="track-input" class="queue-input" type="text" placeholder="https://open.spotify.com/track/..." required />
+
+        <label class="queue-label" for="track-title">Song title (optional)</label>
+        <input id="track-title" class="queue-input" type="text" placeholder="Song title (helps display)" />
+
+        <button type="submit" class="btn">Submit request</button>
+        <p id="request-status" class="queue-status"></p>
+      </form>
+    </section>
+
+    <section class="queue-card">
+      <h2>Current queue</h2>
+      <ul id="queue-list" class="queue-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    window.MUSIC_QUEUE_API_BASE = 'https://lacrosse-robotics-site.christianrosework.workers.dev';
+  </script>
+  <script src="music-queue.js"></script>
+</body>
+</html>
