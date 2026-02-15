@@ -14,6 +14,7 @@
   const adminGate = $('#admin-gate');
   const adminPasswordInput = $('#admin-password');
   const adminUnlockButton = $('#admin-unlock');
+  let currentTrackKey = '';
 
   const getAdminToken = () => sessionStorage.getItem('queueAdminToken') || '';
   const getPinToken = () => $('#request-pin')?.value?.trim() || '';
@@ -110,11 +111,18 @@
       nowPlaying.textContent = 'Nothing playing right now.';
       playerFrame.src = '';
       playerFrame.classList.add('hidden-player');
+      currentTrackKey = '';
       return;
     }
 
+    const nextKey = `${playing.provider}:${playing.track_id}`;
     nowPlaying.textContent = formatLabel(playing);
-    playerFrame.src = buildEmbedUrl(playing.provider, playing.track_id);
+
+    if (nextKey !== currentTrackKey) {
+      playerFrame.src = buildEmbedUrl(playing.provider, playing.track_id);
+      currentTrackKey = nextKey;
+    }
+
     playerFrame.classList.remove('hidden-player');
   };
 
