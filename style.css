@@ -2319,3 +2319,248 @@ body.secret-dark p { font-size: 1.2rem; margin-bottom: 40px; }
         align-self: flex-end;
     }
 }
+
+/* ============================================
+   ARCHIVE PAGE STYLES
+   ============================================ */
+
+.archive-page {
+    min-height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+.archive-hero {
+    background: linear-gradient(135deg, #6b1f30 0%, #4a1520 100%);
+    padding: 60px 20px;
+    text-align: center;
+    color: white;
+}
+
+.archive-hero.small {
+    padding: 40px 20px;
+}
+
+.archive-hero h1 {
+    font-size: 3rem;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+}
+
+.archive-hero p {
+    font-size: 1.2rem;
+    margin: 0 0 20px 0;
+    opacity: 0.9;
+}
+
+.hero-actions {
+    margin-top: 20px;
+}
+
+.archive-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.archive-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.archive-stats {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.stat-badge {
+    background: rgba(143, 43, 64, 0.2);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.archive-header .search-box {
+    flex: 1;
+    max-width: 400px;
+}
+
+.archive-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Archive Card */
+.archive-card {
+    background: #2a2a2a;
+    border: 2px solid #3a3a3a;
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+}
+
+.archive-card:hover {
+    border-color: #6b1f30;
+    opacity: 1;
+    transform: translateX(5px);
+    box-shadow: 0 4px 16px rgba(107, 31, 48, 0.3);
+}
+
+.archive-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.archive-card-header h3 {
+    color: #ddd;
+    margin: 0;
+    font-size: 1.4rem;
+    flex: 1;
+    padding-right: 15px;
+}
+
+.archive-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn.restore {
+    background: #4caf50;
+}
+
+.icon-btn.restore:hover {
+    background: #66bb6a;
+    transform: scale(1.15) rotate(180deg);
+}
+
+.archive-card-content {
+    color: #999;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-style: italic;
+}
+
+.archive-card-footer {
+    padding-top: 15px;
+    border-top: 1px solid #3a3a3a;
+}
+
+.archive-dates {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.archive-date {
+    color: #888;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.archive-date.deleted {
+    color: #999;
+}
+
+/* Empty State for Archive */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #888;
+}
+
+.empty-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: #aaa;
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+}
+
+.empty-state p {
+    color: #777;
+    font-size: 1.1rem;
+}
+
+/* Notification variants */
+.notification-success {
+    background: #4caf50;
+}
+
+.notification-error {
+    background: #d32f2f;
+}
+
+/* Responsive Design for Archive Page */
+@media (max-width: 768px) {
+    .archive-hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    .archive-hero p {
+        font-size: 1rem;
+    }
+    
+    .archive-container {
+        padding: 20px 15px;
+    }
+    
+    .archive-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .archive-header .search-box {
+        max-width: 100%;
+    }
+    
+    .stat-badge {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .archive-hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .archive-card {
+        padding: 20px;
+    }
+    
+    .archive-card-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .archive-actions {
+        align-self: flex-end;
+    }
+    
+    .archive-dates {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .empty-icon {
+        font-size: 3rem;
+    }
+}

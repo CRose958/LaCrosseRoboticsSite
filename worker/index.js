@@ -52,6 +52,19 @@ export default {
 			return handleDeleteNote(env, corsHeaders, url);
 		}
 
+		// Deleted notes endpoints
+		if (url.pathname === '/api/deleted-notes' && request.method === 'GET') {
+			return handleGetDeletedNotes(env, corsHeaders);
+		}
+		
+		if (url.pathname.match(/^\/api\/deleted-notes\/\d+\/restore$/) && request.method === 'POST') {
+			return handleRestoreNote(env, corsHeaders, url);
+		}
+		
+		if (url.pathname.match(/^\/api\/deleted-notes\/\d+$/) && request.method === 'DELETE') {
+			return handlePermanentDeleteNote(env, corsHeaders, url);
+		}
+
 		return new Response('Not Found', { status: 404, headers: corsHeaders });
 	},
 };
@@ -299,15 +312,131 @@ async function handleUpdateNote(request, env, corsHeaders, url) {
 }
 
 /**
- * DELETE /api/notes/:id - Delete a note
+ * DELETE /api/notes/:id - Archive a note (move to deleted_notes)
  */
 async function handleDeleteNote(env, corsHeaders, url) {
 	try {
 		const id = url.pathname.split('/').pop();
 
+		// First, get the note to archive
+		const note = await env.DB.prepare('SELECT * FROM notes WHERE id = ?').bind(id).first();
+		
+		if (!note) {
+			return new Response(JSON.stringify({ error: 'Note not found' }), {
+				status: 404,
+				headers: {
+					...corsHeaders,
+					'Content-Type': 'application/json',
+				},
+			});
+		}
+
+		// Insert into deleted_notes
+		await env.DB.prepare(
+			'INSERT INTO deleted_notes (original_id, title, content, created_at, updated_at) VALUES (?, ?, ?, ?, ?)'
+		).bind(note.id, note.title, note.content, note.created_at, note.updated_at).run();
+
+		// Delete from notes
 		await env.DB.prepare('DELETE FROM notes WHERE id = ?').bind(id).run();
 
-		return new Response(JSON.stringify({ success: true, message: 'Note deleted' }), {
+		return new Response(JSON.stringify({ success: true, message: 'Note archived' }), {
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	} catch (error) {
+		return new Response(JSON.stringify({ error: error.message }), {
+			status: 500,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+}
+
+/**
+ * GET /api/deleted-notes - Fetch all deleted notes
+ */
+async function handleGetDeletedNotes(env, corsHeaders) {
+	try {
+		const { results } = await env.DB.prepare(
+			'SELECT * FROM deleted_notes ORDER BY deleted_at DESC'
+		).all();
+
+		return new Response(JSON.stringify(results), {
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	} catch (error) {
+		return new Response(JSON.stringify({ error: error.message }), {
+			status: 500,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+}
+
+/**
+ * POST /api/deleted-notes/:id/restore - Restore a deleted note
+ */
+async function handleRestoreNote(env, corsHeaders, url) {
+	try {
+		const id = url.pathname.split('/')[3]; // Get ID from path
+
+		// Get the deleted note
+		const deletedNote = await env.DB.prepare('SELECT * FROM deleted_notes WHERE id = ?').bind(id).first();
+		
+		if (!deletedNote) {
+			return new Response(JSON.stringify({ error: 'Deleted note not found' }), {
+				status: 404,
+				headers: {
+					...corsHeaders,
+					'Content-Type': 'application/json',
+				},
+			});
+		}
+
+		// Restore to notes table
+		await env.DB.prepare(
+			'INSERT INTO notes (title, content, created_at, updated_at) VALUES (?, ?, ?, ?)'
+		).bind(deletedNote.title, deletedNote.content, deletedNote.created_at, deletedNote.updated_at).run();
+
+		// Remove from deleted_notes
+		await env.DB.prepare('DELETE FROM deleted_notes WHERE id = ?').bind(id).run();
+
+		return new Response(JSON.stringify({ success: true, message: 'Note restored' }), {
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	} catch (error) {
+		return new Response(JSON.stringify({ error: error.message }), {
+			status: 500,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+}
+
+/**
+ * DELETE /api/deleted-notes/:id - Permanently delete a note
+ */
+async function handlePermanentDeleteNote(env, corsHeaders, url) {
+	try {
+		const id = url.pathname.split('/').pop();
+
+		await env.DB.prepare('DELETE FROM deleted_notes WHERE id = ?').bind(id).run();
+
+		return new Response(JSON.stringify({ success: true, message: 'Note permanently deleted' }), {
 			headers: {
 				...corsHeaders,
 				'Content-Type': 'application/json',

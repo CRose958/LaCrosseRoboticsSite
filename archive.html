@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Archive | La Crosse Robotics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/Images/favicon.png">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html">La Crosse <span>Robotics</span></a></div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="photos.html">Photos</a></li>
+                <li><a href="sponsors.html">Sponsors</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="archive-page">
+        <div class="archive-hero small">
+            <h1>🗄️ Notes Archive</h1>
+            <p>Deleted notes are stored here • Restore or permanently delete</p>
+            <div class="hero-actions">
+                <a href="notes.html" class="btn btn-secondary">← Back to Notes</a>
+            </div>
+        </div>
+
+        <div class="archive-container">
+            <div class="archive-header">
+                <div class="archive-stats">
+                    <span id="archive-count" class="stat-badge">0 archived notes</span>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="search-archive" placeholder="Search archived notes...">
+                </div>
+            </div>
+
+            <div id="archive-list" class="archive-list">
+                <div class="loading-spinner">Loading archived notes...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 La Crosse Robotics - Team 4054 The Aeronauts. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Configuration - Update this with your deployed worker URL
+        const API_URL = 'https://lacrosse-robotics-api.YOUR-SUBDOMAIN.workers.dev';
+        
+        let allDeletedNotes = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDeletedNotes();
+            setupEventListeners();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('search-archive').addEventListener('input', filterNotes);
+        }
+
+        // Load all deleted notes from API
+        async function loadDeletedNotes() {
+            try {
+                const response = await fetch(`${API_URL}/api/deleted-notes`);
+                if (!response.ok) throw new Error('Failed to fetch archived notes');
+                
+                allDeletedNotes = await response.json();
+                updateStats();
+                renderNotes(allDeletedNotes);
+            } catch (error) {
+                console.error('Error loading archived notes:', error);
+                document.getElementById('archive-list').innerHTML = `
+                    <div class="error-message">
+                        <p>⚠️ Error loading archived notes</p>
+                        <p class="error-detail">${error.message}</p>
+                        <p class="error-hint">Make sure your worker is deployed and the API_URL is correct.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const count = allDeletedNotes.length;
+            document.getElementById('archive-count').textContent = 
+                `${count} archived note${count !== 1 ? 's' : ''}`;
+        }
+
+        // Render archived notes list
+        function renderNotes(notes) {
+            const archiveList = document.getElementById('archive-list');
+            
+            if (!notes || notes.length === 0) {
+                archiveList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <h3>Archive is empty</h3>
+                        <p>Deleted notes will appear here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            archiveList.innerHTML = notes.map(note => `
+                <div class="archive-card" data-id="${note.id}">
+                    <div class="archive-card-header">
+                        <h3>${escapeHtml(note.title)}</h3>
+                        <div class="archive-actions">
+                            <button onclick="restoreNote(${note.id})" class="icon-btn restore" title="Restore">
+                                ♻️
+                            </button>
+                            <button onclick="permanentDelete(${note.id})" class="icon-btn delete" title="Delete Permanently">
+                                💀
+                            </button>
+                        </div>
+                    </div>
+                    <div class="archive-card-content">
+                        ${escapeHtml(note.content).substring(0, 200)}${note.content.length > 200 ? '...' : ''}
+                    </div>
+                    <div class="archive-card-footer">
+                        <div class="archive-dates">
+                            <span class="archive-date" title="Originally created">
+                                📝 ${formatDate(note.created_at)}
+                            </span>
+                            <span class="archive-date deleted" title="Deleted">
+                                🗑️ ${formatDate(note.deleted_at)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Restore note
+        window.restoreNote = async function(id) {
+            if (!confirm('Are you sure you want to restore this note?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/deleted-notes/${id}/restore`, {
+                    method: 'POST',
+                });
+
+                if (!response.ok) throw new Error('Failed to restore note');
+                
+                await loadDeletedNotes();
+                showNotification('Note restored! ✨', 'success');
+            } catch (error) {
+                console.error('Error restoring note:', error);
+                showNotification('Error restoring note: ' + error.message, 'error');
+            }
+        };
+
+        // Permanent delete
+        window.permanentDelete = async function(id) {
+            if (!confirm('⚠️ PERMANENT DELETE\n\nThis will permanently delete this note forever. This action cannot be undone.\n\nAre you absolutely sure?')) {
+                return;
+            }
+            
+            // Second confirmation
+            if (!confirm('Last chance! Delete this note permanently?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/api/deleted-notes/${id}`, {
+                    method: 'DELETE',
+                });
+
+                if (!response.ok) throw new Error('Failed to delete note permanently');
+                
+                await loadDeletedNotes();
+                showNotification('Note permanently deleted', 'error');
+            } catch (error) {
+                console.error('Error deleting note permanently:', error);
+                showNotification('Error deleting note: ' + error.message, 'error');
+            }
+        };
+
+        // Filter notes by search term
+        function filterNotes(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                renderNotes(allDeletedNotes);
+                return;
+            }
+            
+            const filtered = allDeletedNotes.filter(note => 
+                note.title.toLowerCase().includes(searchTerm) || 
+                note.content.toLowerCase().includes(searchTerm)
+            );
+            
+            renderNotes(filtered);
+        }
+
+        // Utility functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Unknown';
+            
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min${diffMins !== 1 ? 's' : ''} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+            if (diffDays < 30) {
+                const weeks = Math.floor(diffDays / 7);
+                return `${weeks} week${weeks !== 1 ? 's' : ''} ago`;
+            }
+            
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined 
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

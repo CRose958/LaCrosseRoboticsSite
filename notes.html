@@ -31,6 +31,9 @@
         <div class="notes-hero small">
             <h1>Team Notes</h1>
             <p>Internal note-taking system for team members</p>
+            <div class="hero-actions">
+                <a href="archive.html" class="btn btn-secondary">🗄️ View Archive</a>
+            </div>
         </div>
 
         <div class="notes-container">
@@ -211,27 +214,27 @@
             document.querySelector('.note-editor-section').scrollIntoView({ behavior: 'smooth' });
         };
 
-        // Delete note
+        // Delete note (archives it)
         window.deleteNote = async function(id) {
-            if (!confirm('Are you sure you want to delete this note?')) return;
+            if (!confirm('Move this note to the archive?\n\nYou can restore it later from the archive page.')) return;
             
             try {
                 const response = await fetch(`${API_URL}/api/notes/${id}`, {
                     method: 'DELETE',
                 });
 
-                if (!response.ok) throw new Error('Failed to delete note');
+                if (!response.ok) throw new Error('Failed to archive note');
                 
                 await loadNotes();
-                showNotification('Note deleted!');
+                showNotification('Note archived! 📦');
                 
                 // If we were editing this note, clear the form
                 if (currentNoteId === id) {
                     clearForm();
                 }
             } catch (error) {
-                console.error('Error deleting note:', error);
-                alert('Error deleting note: ' + error.message);
+                console.error('Error archiving note:', error);
+                alert('Error archiving note: ' + error.message);
             }
         };
 

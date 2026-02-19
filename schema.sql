@@ -72,3 +72,17 @@ CREATE TABLE IF NOT EXISTS notes (
 
 -- Create index on created_at for faster sorting
 CREATE INDEX IF NOT EXISTS idx_notes_created ON notes(created_at DESC);
+
+-- Create deleted notes archive table
+CREATE TABLE IF NOT EXISTS deleted_notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    original_id INTEGER,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TEXT,
+    updated_at TEXT,
+    deleted_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create index on deleted_at for faster sorting
+CREATE INDEX IF NOT EXISTS idx_deleted_notes_deleted ON deleted_notes(deleted_at DESC);
