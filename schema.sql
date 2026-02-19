@@ -60,3 +60,15 @@ INSERT INTO events (event_date, category, title, time, location) VALUES
 ('2026-5-21', 'Robotics', 'Team Meeting', '4:00 PM - 8:00 PM', 'Room 196 @ Logan High School'),
 ('2026-5-26', 'Robotics', 'Team Meeting', '4:00 PM - 8:00 PM', 'Room 196 @ Logan High School'),
 ('2026-5-28', 'Robotics', 'Team Meeting', '4:00 PM - 8:00 PM', 'Room 196 @ Logan High School');
+
+-- Create notes table
+CREATE TABLE IF NOT EXISTS notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create index on created_at for faster sorting
+CREATE INDEX IF NOT EXISTS idx_notes_created ON notes(created_at DESC);

@@ -35,6 +35,23 @@ export default {
 			return handleDeleteEvent(env, corsHeaders, url);
 		}
 
+		// Notes endpoints
+		if (url.pathname === '/api/notes' && request.method === 'GET') {
+			return handleGetNotes(env, corsHeaders);
+		}
+		
+		if (url.pathname === '/api/notes' && request.method === 'POST') {
+			return handleCreateNote(request, env, corsHeaders);
+		}
+		
+		if (url.pathname.match(/^\/api\/notes\/\d+$/) && request.method === 'PUT') {
+			return handleUpdateNote(request, env, corsHeaders, url);
+		}
+		
+		if (url.pathname.match(/^\/api\/notes\/\d+$/) && request.method === 'DELETE') {
+			return handleDeleteNote(env, corsHeaders, url);
+		}
+
 		return new Response('Not Found', { status: 404, headers: corsHeaders });
 	},
 };
@@ -157,6 +174,140 @@ async function handleDeleteEvent(env, corsHeaders, url) {
 		await env.DB.prepare('DELETE FROM events WHERE id = ?').bind(id).run();
 
 		return new Response(JSON.stringify({ success: true, message: 'Event deleted' }), {
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	} catch (error) {
+		return new Response(JSON.stringify({ error: error.message }), {
+			status: 500,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+}
+
+/**
+ * GET /api/notes - Fetch all notes
+ */
+async function handleGetNotes(env, corsHeaders) {
+	try {
+		const { results } = await env.DB.prepare(
+			'SELECT * FROM notes ORDER BY updated_at DESC'
+		).all();
+
+		return new Response(JSON.stringify(results), {
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	} catch (error) {
+		return new Response(JSON.stringify({ error: error.message }), {
+			status: 500,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+}
+
+/**
+ * POST /api/notes - Create a new note
+ */
+async function handleCreateNote(request, env, corsHeaders) {
+	try {
+		const body = await request.json();
+		const { title, content } = body;
+
+		// Validate required fields
+		if (!title || !content) {
+			return new Response(JSON.stringify({ error: 'title and content are required' }), {
+				status: 400,
+				headers: {
+					...corsHeaders,
+					'Content-Type': 'application/json',
+				},
+			});
+		}
+
+		const result = await env.DB.prepare(
+			'INSERT INTO notes (title, content) VALUES (?, ?)'
+		).bind(title, content).run();
+
+		return new Response(JSON.stringify({ success: true, message: 'Note created', id: result.meta.last_row_id }), {
+			status: 201,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	} catch (error) {
+		return new Response(JSON.stringify({ error: error.message }), {
+			status: 500,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+}
+
+/**
+ * PUT /api/notes/:id - Update a note
+ */
+async function handleUpdateNote(request, env, corsHeaders, url) {
+	try {
+		const id = url.pathname.split('/').pop();
+		const body = await request.json();
+		const { title, content } = body;
+
+		// Validate required fields
+		if (!title || !content) {
+			return new Response(JSON.stringify({ error: 'title and content are required' }), {
+				status: 400,
+				headers: {
+					...corsHeaders,
+					'Content-Type': 'application/json',
+				},
+			});
+		}
+
+		await env.DB.prepare(
+			'UPDATE notes SET title = ?, content = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
+		).bind(title, content, id).run();
+
+		return new Response(JSON.stringify({ success: true, message: 'Note updated' }), {
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	} catch (error) {
+		return new Response(JSON.stringify({ error: error.message }), {
+			status: 500,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+}
+
+/**
+ * DELETE /api/notes/:id - Delete a note
+ */
+async function handleDeleteNote(env, corsHeaders, url) {
+	try {
+		const id = url.pathname.split('/').pop();
+
+		await env.DB.prepare('DELETE FROM notes WHERE id = ?').bind(id).run();
+
+		return new Response(JSON.stringify({ success: true, message: 'Note deleted' }), {
 			headers: {
 				...corsHeaders,
 				'Content-Type': 'application/json',
